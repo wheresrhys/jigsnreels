@@ -6,62 +6,58 @@ var express = require('express'),
     tunes = require('./routes/tunes'),
     sets = require('./routes/sets'),
     scraper = require('./routes/scraper');
-    
-
 
 var app = express();
 
-app.configure(function () {
-    app.set('port', process.env.PORT);
-    app.use(express.logger('dev'));  /* ''default'', 'short', 'tiny', 'dev' */
-    app.use(express.bodyParser());
-    app.use(app.router);
-    app.use(express.static(path.join(__dirname.substr(0, __dirname.lastIndexOf('/')), 'public')));
+// set up templating
+var swig = require('swig');
 
-});
+app.engine('html', swig.renderFile);
+app.set('view engine', 'html');
+app.set('views', __dirname + '/../client');
+swig.setDefaults({ cache: false });
 
-app.get('/rest/performances', performances.fetchAll);
-app.get('/rest/performances/:id', performances.findById);
-app.post('/rest/performances', performances.add);
-app.put('/rest/performances/:id', performances.update);
-// app.del('/rest/performances/:id', performances.deletePerformance);
 
-app.get('/rest/tunes', tunes.fetchAll);
-app.get('/rest/tunes/:id', tunes.findById);
-app.post('/rest/tunes', tunes.add);
-app.put('/rest/tunes/:id', tunes.update);
-// app.del('/rest/tunes/:id', tunes.deleteTune);
+app.set('port', process.env.PORT);
+// app.use(express.logger('dev'));  /* ''default'', 'short', 'tiny', 'dev' */
+app.use(express.static(path.join(__dirname.substr(0, __dirname.lastIndexOf('/')), 'public')));
 
-app.get('/rest/sets', sets.fetchAll);
-app.get('/rest/sets/:id', sets.findById);
-app.post('/rest/sets', sets.add);
-app.put('/rest/sets/:id', sets.update);
+var api = express.Router();
 
-app.get('/rest/scraper', scraper.getNew);
+api.use(require('body-parser').json());
 
-function parseIndex (req, res, next) {
-    var fs = require('fs');
-    fs.readFile(path.join(__dirname.substr(0, __dirname.lastIndexOf('/')), 'public/index.html'), 'utf8', function (err, data) {
-        if (err) {
-            throw err;
-        }
-        res.send(data.replace(/\{\{env\}\}/g, process.env.ENV));
+api.get('/performances', performances.fetchAll);
+api.get('/performances/:id', performances.findById);
+api.post('/performances', performances.add);
+api.put('/performances/:id', performances.update);
+// api.del('/performances/:id', performances.deletePerformance);
+
+api.get('/tunes', tunes.fetchAll);
+api.get('/tunes/:id', tunes.findById);
+api.post('/tunes', tunes.add);
+api.put('/tunes/:id', tunes.update);
+// api.del('/tunes/:id', tunes.deleteTune);
+
+api.get('/sets', sets.fetchAll);
+api.get('/sets/:id', sets.findById);
+api.post('/sets', sets.add);
+api.put('/sets/:id', sets.update);
+
+api.get('/scraper', scraper.getNew);
+
+app.use('/api', api);
+
+function index (req, res, next) {
+    res.render('index', {
+        env: process.env.ENV
     });
 }
 
-app.get('/', parseIndex).get('/index.html', parseIndex);
+app.get('/', index)
+    .get('/index.html', index)
+    .get('/tunes*', index)
+    .get('/sets*', index);
 
-
-function preventDeepLink (req, res, next){
-    res.writeHead(301, {
-        Location: '/'
-    });
-    res.end();
-}
-
-app.get('/tunes*', preventDeepLink)
-    .get('/sets*', preventDeepLink);
-
-http.createServer(app).listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + app.get('port'));
+app.listen(process.env.PORT, function() {
+    console.log('Listening on ' + process.env.PORT);
 });
