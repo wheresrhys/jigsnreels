@@ -11,6 +11,7 @@
   "private": true,
   "main": "server/app.js",
   "dependencies": {
+    "body-parser": "^1.9.2",
     "express": "^4.0",
     "mongoose": "^3.5.5",
     "mu": "~0.5.2",
