@@ -1,0 +1,3 @@
+describe('models/transition', function () {
+	
+});

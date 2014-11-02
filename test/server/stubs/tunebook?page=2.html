@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="google-site-verification" content="tErkJMHTx-YqFqLuT4fWHFUmH2CZ-IsBFjeOmpLh62Q">
+<title>The tunebook of wheresrhys on The Session</title>
+<link rel="subresource" href="/js/global-min.js">
+<link rel="stylesheet" href="/css/global.20130817.css">
+<!--[if (lt IE 9) & (!IEMobile) & (gt IE 6)]>
+<link rel="stylesheet" href="/css/legacy.css">
+<script>
+if (document.documentElement.clientWidth > 960) {
+	document.write('<link rel="stylesheet" href="/css/logo.css">');
+}
+</script>
+<![endif]-->
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" type="image/vnd.microsoft.icon">
+<link rel="search" type="application/opensearchdescription+xml" href="http://thesession.org/opensearch.xml" title="The Session">
+<link rel="apple-touch-startup-image" href="/apple-touch-startup-320.png">
+</head>
+<body>
+
+<header role="banner">
+
+<div class="inverted strip top" id="top">
+<div class="contents">
+<a href="#nav" rel="contents" title="menu" class="icon button aside">&#9660;</a>
+<div class="membership">
+<a href="/members/61738" class="profile">Your profile</a>
+</div><!-- /.membership -->
+</div><!-- /.contents -->
+</div><!-- /.inverted.strip.top#top-->
+
+<div class="logo">
+<a href="/" rel="start" class="ribbon"><span class="the">The</span> <span class="session">Session</span></a>
+</div><!-- /.logo -->
+
+</header><!-- /@banner -->
+
+<div class="main">
+<main role="main">
+<div class="contents">
+
+
+<a class="download action button aside" rel="nofollow" href="/members/61738/tunebook/abc?orderby=name&amp;page=1">Download ABC</a>
+
+<h1><a href="/members/61738">wheresrhys</a>’s tunebook</h1>
+<p class="pagination">Order by
+<a href="?orderby=type">tune type</a></p>
+
+
+<form method="post" class="prose" action="/members/61738/tunebook">
+<ul class="manifest">
+<li>
+<input type="checkbox" name="tune[10999]" class="aside">
+<a href="/tunes/3" class="manifest-item-title">Tune-3</a>
+<span class="manifest-item-extra">(<a href="/members/61738/tunebook/jigs">jig</a>)</span><!--- /.manifest-item-extra -->
+</li>
+<li>
+<input type="checkbox" name="tune[11754]" class="aside">
+<a href="/tunes/4" class="manifest-item-title">Tune-4</a>
+<span class="manifest-item-extra">(<a href="/members/61738/tunebook/jigs">jig</a>)</span><!--- /.manifest-item-extra -->
+</li>
+
+</ul><!-- /.manifest -->
+<button type="submit" name="remove" class="aside action remove tunebook">remove from tunebook</button>
+</form>
+<br>
+<div class="pagination">
+Page 1 of 3
+<a href="?page=2" rel="next" class="icon button">&rarr;</a>
+</div>
+
+
+<div class="actions">
+<a class="action button print" rel="nofollow" href="/members/61738/tunebook/settings?print=true">print</a>
+<a class="action button music" rel="nofollow" href="/members/61738/tunebook/settings">sheet music</a>
+</div><!-- /.actions -->
+
+</div><!-- /.contents -->
+</main><!-- /@main -->
+</div><!-- /.main -->
+
+<div class="navigation" id="nav">
+<nav role="navigation">
+<ul class="site menu">
+<li><a href="/tunes">Tunes</a></li>
+<li><a href="/recordings">Recordings</a></li>
+<li><a href="/sessions">Sessions</a></li>
+<li><a href="/events">Events</a></li>
+<li><a href="/discussions">Discussions</a></li>
+</ul><!-- /.site.menu -->
+
+<div class="siteinfo">
+<ul class="menu discrete">
+<li><a href="/help" rel="help">help</a></li>
+<li><a href="/contact">contact</a></li>
+<li><a href="/links">links</a></li>
+</ul><!-- /.menu.discrete -->
+</div><!-- /.siteinfo -->
+</nav><!-- /@navigation -->
+</div><!-- /.navigation#nav -->
+
+
+<div class="inverted strip bottom">
+<div class="contents">
+<a href="#top" class="icon button aside" title="top">&#9650;</a>
+
+<form method="post" action="/logout?redirect=%2Fmembers%2F61738%2Ftunebook">
+<button type="submit">Log out</button>
+</form>
+</div><!-- /.contents -->
+</div><!-- /.inverted.strip.bottom -->
+
+<script src="/js/global-min.js"></script>
+<script>
+(function (win , doc) {
+	if (doc.querySelectorAll && win.addEventListener) {
+		var ticks = doc.querySelectorAll('input[type="checkbox"]'), total = ticks.length, i;
+		var target = doc.querySelector('form.prose');
+		var widget = doc.createElement('div'), label = doc.createElement('label'), tick = doc.createElement('input'), text = doc.createTextNode('select all');
+		tick.setAttribute('type', 'checkbox');
+		widget.style.textAlign = 'right';
+		label.appendChild(text);
+		label.appendChild(tick);
+		widget.appendChild(label);
+		tick.addEventListener('click', function (ev) {
+			var checked = this.checked;
+			for (i = 0; i < total; i = i + 1) {
+				if (checked) {
+					ticks[i].checked = true;
+				} else {
+					ticks[i].checked = false;
+				}
+			}
+		});
+		target.insertBefore(widget, target.firstChild);
+	}
+}(this, this.document));
+</script>
+</body>
+</html>

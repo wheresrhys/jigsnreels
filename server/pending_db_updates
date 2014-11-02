@@ -1,0 +1,10 @@
+db.tunes.find().forEach(function (item) {
+    var id = item._id;
+   item.performances.forEach(function (perf) {
+       perf.tune = id;
+   });
+   item.arrangements.forEach(function (arr){
+       arr.tune = id;
+   });
+   db.tunes.save(item);
+});

@@ -1,0 +1,19 @@
+{
+    "shell": {
+        "restartProd": {
+            "command": "forever restart dist/server.js"
+        },
+        "addFiles": {
+            "command": "git add ."
+        },
+        "removeFiles": {
+            "command": "git add -u"
+        },
+        "commit": {
+            "command": "git commit -m ''"
+        },
+        "status": {
+            "command": "git status"
+        }
+    }
+}

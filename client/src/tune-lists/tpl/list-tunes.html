@@ -1,0 +1,72 @@
+<div ng-controller="listTunes">
+
+  <div class="navbar navbar-fixed-top navbar-inverse">
+      <div class="navbar-inner" >
+          <div class="container-fluid tune-list-header">
+           <h1 class="brand">Tune practice list for {{pageState.instrument}} <small>({{counts.toScratch.now}}&nbsp;<small>({{counts.toScratch.past}})</small> up to scratch<span class="icon-plus" ng-click="summaryCollapsed = !summaryCollapsed"></span>)</small></h2>
+            
+            <input
+                type ="search"
+                placeholder="search by tune name"
+                j-select-on-click
+                ng-model="searchTerm"
+                ng-change="search()"]>
+            </input>
+            <input
+                type ="search"
+                placeholder="search by tune mode"
+                j-select-on-click
+                ng-model="filterMode"
+                ng-change="filter()"]>
+            </input>
+            <select
+                   ng-model="filterRhythm"
+                   ng-options="opt for opt in dropdowns.rhythm"
+                   ng-change="filter()" >
+                   <option value=""> -- search by rhythm -- </option>
+            </select>
+            <div class="collapse" collapse="summaryCollapsed">
+              <table class="tune-standard-summary table" >
+                <tr>
+                  <td><strong>All:</strong>{{counts[0]}}</td>
+                  <td><strong>1:</strong>{{counts[1].now}}&nbsp;<small>({{counts[1].past}})</small></td>
+                  <td><strong>2:</strong>{{counts[2].now}}&nbsp;<small>({{counts[2].past}})</small></td>
+                  <td><strong>3:</strong>{{counts[3].now}}&nbsp;<small>({{counts[3].past}})</small></td>
+                  <td><strong>4:</strong>{{counts[4].now}}&nbsp;<small>({{counts[4].past}})</small></td>
+                  <td><strong>5:</strong>{{counts[5].now}}&nbsp;<small>({{counts[5].past}})</small></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+      </div>
+  </div>
+
+  <div>
+    
+   
+    <table class="table list-tunes table-striped">
+        <thead>
+            <tr>
+                <th colspan="2">Tune</th>
+                <th>Performance</th>
+                <th>Last practiced</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="tune-row" ng-repeat="tune in tunes">
+                <td j-tune-heading data-tune="tune" data-stats="true"></td>
+                <td j-draw-score 
+                  tune="{{tune.scoreGenerator}}" 
+                  snippet="true"
+                  ng-click="expandTune()"
+                  ></td>
+                <td j-performance-rater data-ratee="tune" data-callback="update"></td>
+                <td>{{tune.daysSinceLastPractice}} days ago</td>
+            </tr>
+        </tbody>
+
+  
+    </table>
+  </div>
+</div>
+    

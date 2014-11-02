@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html class="no-js {{env}}"> 
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Jigs n Reels {{env}}</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <!-- <link rel="stylesheet" href="../lib/sass-bootstrap/bootstrap-2.3.2.css"> -->
+        
+        <!-- <link rel="stylesheet" href="../lib/sass-bootstrap/bootstrap-responsive-2.3.2.css"> -->
+        <link rel="stylesheet" href="/styles/main.css">
+    </head>
+    <body class="{{pageState.instrument || 'all'}} {{pageState.section}}{{pageState.subsection}}">
+        <div ng-include src=" ' /src/common/tpl/top-nav.html ' "></div>
+        <div ng-include src=" ' /src/tune-lists/tpl/new-tunes.html ' "></div>
+        <div ng-view></div>
+    
+    <script src="/bundle.js"></script>
+    <!-- endbuild -->
+</body>
+</html>

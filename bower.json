@@ -1,0 +1,13 @@
+{
+  "name": "jigs n reels",
+  "dependencies": {
+    "lodash": "*",
+    "text": "*",
+    "abcjs": "https://abcjs.googlecode.com/files/abcjs_basic_1.8-min.js",
+    "liquidMetal": "https://github.com/rmm5t/liquidmetal.git",
+    "swig": "~1.4.2"
+  },
+  "devDependencies": {
+    "indexeddb-shim": "https://github.com/axemclion/IndexedDBShim.git"
+  }
+}

@@ -1,0 +1,53 @@
+<div ng-controller="listSets">
+
+  <div class="navbar navbar-fixed-top navbar-inverse">
+      <div class="navbar-inner" >
+          <div class="container-fluid tune-list-header">
+           <h1 class="brand">Set list for {{pageState.instrument}} 
+          </div>
+      </div>
+  </div>
+
+  <div>
+    <fieldset>
+    <label>Pick a tune</label><select
+             ng-model="selectedTune"
+             ng-options="opt as opt.name for opt in arrangements"
+             ng-change="selectTune()">
+      </select>
+      <button ng-click="saveSet()">Save</button>
+      <button ng-click="undo()">Undo</button>
+      <ul>
+        <li ng-repeat="tune in selectedTunes">{{tune.name}}</li>
+      </ul>
+    </fieldset>
+   
+    <table class="table list-sets table-striped">
+        <thead>
+            <tr>
+                <!-- <th>Name</th> -->
+                <th>Tunes</th>
+                <th>Rate</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="set-row" ng-repeat="set in sets" ng-class="{ 'expanded': $index == selectedIndex }">
+                <!-- <th>{{set.set.name}}</th> -->
+                <td class="set-tunes">
+                  <div ng-repeat="tune in set.tunes" ng-click="expandRow($parent.$index)">
+                    <div class="tune-heading">{{tune.tune.name}}</div>
+                    <div ng-if="$parent.$index == selectedIndex" j-draw-score 
+                    tune="{{tune.scoreGenerator}}" 
+                    snippet="true"
+                    ng-click="expandTune()"
+                    ></div>
+                    <div ng-if="$parent.$index == selectedIndex" j-performance-rater data-ratee="tune" data-callback="practice"></div>
+                  </div>
+                </td>
+                <td j-performance-rater data-ratee="set" data-callback="practiceAll"></div>></td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+</div>
+    
