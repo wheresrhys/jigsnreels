@@ -11,7 +11,11 @@ function tpl () {
 
 function js () {
 	return gulp.src('./client/main.js')
-		.pipe(require('gulp-browserify')({debug:true}))
+		.pipe(require('gulp-browserify')({
+			debug:true,
+			transform: ['debowerify', require('swigify')()],
+			exclude: ['underscore', 'jquery']
+		}))
 		.pipe(require('gulp-uglify')())
 		.pipe(gulp.dest('./public'));
 }
