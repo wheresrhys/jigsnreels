@@ -4,7 +4,9 @@
     "abcjs": "https://abcjs.googlecode.com/files/abcjs_basic_1.8-min.js",
     "liquidMetal": "https://github.com/rmm5t/liquidmetal.git",
     "swig": "~1.4.2",
-    "exoskeleton": "~0.7.0"
+    "exoskeleton": "~0.7.0",
+    "Backbone.NativeView": "https://github.com/akre54/Backbone.NativeView.git#~0.3.2",
+    "Backbone.NativeAjax": "https://github.com/akre54/Backbone.NativeAjax.git#~0.2.0"
   },
   "devDependencies": {
     "indexeddb-shim": "https://github.com/axemclion/IndexedDBShim.git"

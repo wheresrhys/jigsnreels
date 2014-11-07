@@ -19,5 +19,5 @@ var URLs = {
 // Helper for accessing the URL list. Think of it as something similar
 // to Rails' URL helpers.
 exports.url = function(type) {
-  URLs[type] && URLs[type].apply(this, [].slice.call(arguments, 1));
+  return URLs[type] && URLs[type].apply(this, [].slice.call(arguments, 1));
 };

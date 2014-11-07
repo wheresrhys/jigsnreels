@@ -1,6 +1,5 @@
-var app = require('../scaffolding/app');
-
 module.exports = function () {
-    app.sets.fetch();
-    new require('components/set-list/view')(app.sets);
+    var sets = require('../collections/sets');
+    sets.fetch();
+    new (require('../components/set-list/view'))(sets, document.querySelector('main'));
 };

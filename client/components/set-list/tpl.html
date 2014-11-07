@@ -1,0 +1,32 @@
+    <ol class="set-list">
+        {% for set in sets %}
+        <li>
+    </ol>
+        <a class='new' href='#'>New tune</a>
+        <a class='view-switch newTunes' href='#'>Go to new tunes view</a>
+        <a class='view-switch practice' href='#'>Go to practice view</a>
+        <a class='view-switch unrated' href='#'>Go to unrated view</a>
+        <input class="search" data-datum="long_name" placeholder="Type to filter by name" />
+        <input class="filter" data-datum="root" placeholder="Type to filter by key" />
+        <input class="filter" data-datum="rhythm" placeholder="Type to filter by rhythm" />
+        <input class="filter" data-datum="mode" placeholder="Type to filter by mode" />
+        <table >
+            <thead>
+                
+                <th data-datum="long_name">Name</th>
+                <th data-datum="rhythm"class="filterable" >Rhythm</th>
+<!--                <th data-datum="lowest_note" class="filterable" >Lowest</th>
+                <th data-datum="highest_note" class="filterable" >Highest</th>-->
+                <th data-datum="key" class="filterable">Key</th>
+                <th data-datum="rating">Rating</th>
+                <th data-datum="popularity">Popularity</th>
+                <th data-datum="difficulty">Difficulty</th>
+                <th data-datum="whistle">Standard</th>
+                <th>Best</th>
+<!--                <th data-datum="ear">Ear</th>-->
+                <th data-datum="special_attention">Special</th>
+                <th>Last practiced</th>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>

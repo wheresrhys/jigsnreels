@@ -1,15 +1,36 @@
+var swig = require('swig/index');
 var proto = {
     events: {
-        "click .expand" : "expand",
-//      "click thead th ": "sort",
-        "click .view-switch": "viewSwitch",
-//      "click .new ": "newTune",
-        "keyup .filter" :  "filterTunes",
-        "keyup .search" :  "searchTunes"
+//         "click .expand" : "expand",
+// //      "click thead th ": "sort",
+//         "click .view-switch": "viewSwitch",
+// //      "click .new ": "newTune",
+//         "keyup .filter" :  "filterTunes",
+//         "keyup .search" :  "searchTunes"
     },
 
     
-    initialize: function(sets) {
+    initialize: function(sets, el) {
+        this.sets = sets;
+        this.parent = el;
+        this.render();
+    },
+    render: function () {
+        var frag = document.createDocumentFragment();
+        frag.appendChild(document.createElement('div'));
+        frag = frag.firstChild;
+        frag.innerHTML = swig.render(require('./tpl.html'), this.sets);
+        if (this.el.tagName === frag.firstChild.tagName && this.el.className === frag.firstChild.className) {
+            this.el.innerHTML = '';
+            while(frag.firstChild.firstChild) {
+                this.el.appendChild(frag.firstChild.firstChild);
+            }
+        } else {
+            this.setElement(frag.firstChild);
+            this.parent.appendChild(this.el);
+        }
+        return this;
+    } 
         // var that = this,
         //     masteredTuneCount,
         //     onceMasteredTuneCount,
@@ -64,12 +85,8 @@ var proto = {
         // this.$rootFilter = this.$el.find(".filter[data-datum=root]");
         
         // return this;
-    },
-    
-    render: function() {
-    }
 };
 
 
 
-module.exports = require('exoskeleton').View.extend(proto);
+module.exports = require('exoskeleton').NativeView.extend(proto);

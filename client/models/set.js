@@ -1,4 +1,4 @@
 'use strict';
 
-module.exports = require('BB').Model.extend({
+module.exports = require('exoskeleton').Model.extend({
 }, {});
