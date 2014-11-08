@@ -14,6 +14,8 @@
 // app.sets = new require('collections/sets');
 // BookStore.Articles = new Articles;
 
+window.jlog = console.log.bind(console);
+
 // We'll use this <body> reference to put some views in it below.
 var body = document.body;
 

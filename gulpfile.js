@@ -54,5 +54,5 @@ gulp.task('default', ['tpl', 'js', 'sass']);
 gulp.task('watch', function() {
 	gulp.watch('./client/**/*.scss', ['sass']);
 	gulp.watch('./client/**/*.js', ['js']);
-	gulp.watch('./client/**/*.html', ['tpl']);
+	gulp.watch('./client/**/*.html', ['tpl', 'js']);
 });

@@ -1,6 +1,7 @@
     <ol class="set-list">
         {% for set in sets %}
-        <li>
+        <li>{{ set.name }}</li>
+        {% endfor %}
     </ol>
         <a class='new' href='#'>New tune</a>
         <a class='view-switch newTunes' href='#'>Go to new tunes view</a>
