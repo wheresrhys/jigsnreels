@@ -1,12 +1,5 @@
-var Presenter = function (options, collection) {
-  if (this instanceof require('exoskeleton').Collection) {
-    return this.presenter || (this.presenter = new Presenter(options, this));
-  }
-  this.options = options ? options : {};
-  this.collection = collection;
-}
-
-Presenter.prototype.toJSON = function () {
+module.exports = require('../scaffolding/presenter').extend({
+  toJSON: function () {
     return {
         locals: {
             sets: this.collection.models.map(function (model) {
@@ -17,6 +10,5 @@ Presenter.prototype.toJSON = function () {
             // })
         }
     }         
-}
-
-module.exports = Presenter;
+  }
+});
