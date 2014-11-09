@@ -12,15 +12,15 @@ module.exports = require('exoskeleton').Router.extend({
 	}
 	// init: ,
 	// tunes : function(instrument) {
-	// 	JNR.app._setInstrument(instrument);
-	// 	JNR.app.loadView('tunes');
+	//	JNR.app._setInstrument(instrument);
+	//	JNR.app.loadView('tunes');
 	// },
 	// sets : function(instrument) {
-	// 	JNR.app._setInstrument(instrument);
-	// 	JNR.app.loadView("sets");
+	//	JNR.app._setInstrument(instrument);
+	//	JNR.app.loadView("sets");
 	// },
 	// setBuilder: function(instrument) {
-	// 	JNR.app._setInstrument(instrument);
-	// 	JNR.app.loadView("set-builder");
+	//	JNR.app._setInstrument(instrument);
+	//	JNR.app.loadView("set-builder");
 	// }
 });

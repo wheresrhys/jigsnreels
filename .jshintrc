@@ -1,7 +1,6 @@
 {
     "node": true,
     "browser": true,
-    "es5": true,
     "bitwise": true,
     "curly": true,
     "eqeqeq": true,
@@ -21,24 +20,15 @@
     "multistr": true,
     "evil": true,
     "globals": {
-        "define": false,
-        "require": false,
         "sinon": false,
-        "waitsFor": false,
         "describe": false,
         "jasmine": false,
         "beforeEach": false,
         "afterEach": false,
-        "runs": false,
-        "waits": false,
         "expect": false,
         "it": false,
-        "spyOn": false,
-        "Helpers": true,
-        "inject": false,
         "xit": false,
         "xdescribe": false,
-        "done": false,
-        "angular": true
+        "done": false
     }
 }

@@ -1,3 +1,4 @@
+'use strict';
 // App boot script
 // ===============
 //
@@ -14,8 +15,6 @@
 // app.sets = new require('collections/sets');
 // BookStore.Articles = new Articles;
 
-window.jlog = console.log.bind(console);
-
 // We'll use this <body> reference to put some views in it below.
 var body = document.body;
 
@@ -29,7 +28,6 @@ require('Backbone.NativeView');
 // body.appendChild(document.createElement('main'));
 // var footer = new require('components/footer')();
 // body.appendChild(footer.render().el);
-
 
 // var menu = new MainMenu;
 // $body.append(menu.render().el);
