@@ -19,6 +19,7 @@
     "expr": true,
     "multistr": true,
     "evil": true,
+    "asi": true,
     "globals": {
         "sinon": false,
         "describe": false,

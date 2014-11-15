@@ -26,7 +26,9 @@ var proto = {
 		frag.innerHTML = swig.render(this.tpl, {
 			locals: {
 				set: this.set.Presenter({persist: true}).toJSON(),
-				tunes: this.allTunes.Presenter({persist: false}).toJSON().tunes
+				tunes: this.allTunes.Presenter({
+					by: 'rhythm'
+				}).toJSON()
 			}
 		});
 		if (this.el.tagName === frag.firstChild.tagName && this.el.className === frag.firstChild.className) {
@@ -41,8 +43,8 @@ var proto = {
 		return this;
 	},
 
-	appendTune: function () {
-		var select = this.el.querySelector('.set-builder__tune-selector');
+	appendTune: function (ev) {
+		var select = ev.delegateTarget;
 		this.set.appendTune(select.children[select.selectedIndex].value);
 	}
 };

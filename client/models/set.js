@@ -10,7 +10,7 @@ module.exports = require('exoskeleton').Model.extend({
     },
     appendTune: function (tuneId) {
         this.attributes.tunes.push(tunes.filter(function (tune) {
-            return tune.attributes._id === tuneId;
+            return tune.get('_id') === tuneId;
         })[0]);
         this.trigger('change');
     }

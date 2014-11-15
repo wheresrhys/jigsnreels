@@ -1,15 +1,17 @@
-<div  class="set-builder">
-<form>
-<select class="set-builder__tune-selector">
-    <option value=""> --- pick a tune --- </option>
-    {% for tune in tunes %}
-    <option value="{{tune._id}}">{{ tune.name }}</option>
+<div class="set-builder">
+    <form>
+    {% for type in tunes.types %}
+        <select class="set-builder__tune-selector">
+            <option value=""> --- pick a {{ type }} --- </option>
+            {% for tune in tunes.tunes[type] %}
+            <option value="{{ tune.get('_id') }}">{{ tune.get('name') }} ({{ tune.get('keys') }})</option>
+            {% endfor %}
+        </select>
     {% endfor %}
-</select>
-</form>
-<ol>
-    {% for tune in set.tunes %}
-    <li>{{ tune.name }}</li>
-    {% endfor %}
-</ol>
+    </form>
+    <ol>
+        {% for tune in set.tunes %}
+        <li>{{ tune.name }}</li>
+        {% endfor %}
+    </ol>
 </div>

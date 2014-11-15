@@ -6,34 +6,21 @@ var SetModel = require('../models/set');
 var TuneModel = require('../models/tune');
 
 exports.fetchAll = function (req, res) {
-	SetModel.find({}, function (err, sets) {
+	SetModel.findQ({}).then(function (sets) {
 		return Promise.all(sets.map(function (set) {
 			return Promise.all(set.tunes.map(function (arr) {
-				return new Promise(function (resolve, reject) {
-					TuneModel.findOne({
-						_id: new ObjectId(tune._id)
-					}, function (err, tune) {
-						if (err) {
-							reject(err);
-						} else {
-							resolve(tune);
-						}
-					});
-				}).then(function (tune) {
-					arr.name = tune.name
-					return arr;
-				});
+				return TuneModel.findOneQ({
+					_id: new ObjectId(tune._id)
+				})
 			})).then(function (tunes) {
 				set.tunes = tunes
 				return set;
 			});
-
 		})).then(function (sets) {
 			res.send(sets);    
 		}).catch(function (err) {
 			res.setStatus(500).send(err);
 		});
-		
 	});
 };
 
@@ -46,8 +33,10 @@ exports.findById = function (req, res) {
 };
 
 exports.add = function (req, res) {
-	SetModel.create(req.body, function (err, result) {
+	SetModel.createQ(req.body).then(function (result) {
 		res.send(result);
+	}).catch(function (err) {
+		res.setStatus(500).send(err);
 	});
 };
 

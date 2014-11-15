@@ -4,7 +4,7 @@ var Presenter = function (options, data) {
 	options = options || {};
 	
 	if (this instanceof BB.Collection || this instanceof BB.Model) {
-		if (options.persist) {
+		if (this.isPersistable && options.persist) {
 			return this.presenter || (this.presenter = new this.Presenter(options, this));	
 		} 
 		return new this.Presenter(options, this);

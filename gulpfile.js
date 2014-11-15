@@ -15,8 +15,8 @@ gulp.task('jshint', function () {
 		.pipe(jshint())
 		.pipe(jshint.reporter('default', { verbose: true }))
 		.pipe(jshint.reporter(require('jshint-stylish')))
-		.pipe(jshint.reporter('fail'))
-		.pipe(require('gulp-jscs')());
+		.pipe(jshint.reporter('fail'));
+		// .pipe(require('gulp-jscs')());
 });
 
 gulp.task('js', function () {

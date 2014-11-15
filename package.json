@@ -31,7 +31,7 @@
     "swig": "^1.4.2"
   },
   "devDependencies": {
-    "browserify": "^3.46.1",
+    "browserify": "^6.0",
     "browserify-shim": "^3.8.0",
     "debowerify": "^0.9.1",
     "del": "^0.1.3",

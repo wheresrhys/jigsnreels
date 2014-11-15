@@ -171,8 +171,6 @@ TuneGetter.prototype = {
     }
 };
 
-
-
 exports.init = function() {
     var getter = new TuneGetter();
 

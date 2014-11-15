@@ -1,9 +1,11 @@
-var mongoose = require('mongoose-q')(require('mongoose')),
-    arrangementSchema = require('./arrangement');
+var mongoose = require('mongoose-q')(require('mongoose'));
+var arrangementSchema = require('./arrangement');
+var transitionSchema = require('./transition');
 
 var setSchema = mongoose.Schema({
     name: String,
-    tunes: [arrangementSchema]
+    tunes: [mongoose.Schema.Types.ObjectId],
+    transitions: [mongoose.Schema.Types.ObjectId]
 });
 
 
