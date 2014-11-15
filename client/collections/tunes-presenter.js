@@ -1,5 +1,11 @@
-var realName = function (tune) {
-	return tune.get('name').replace(/^(The|A) +/, '');
+var sortName = function (tune) {
+	return tune.get('name').replace(/^(The|A) +/i, '').toLowerCase();
+};
+
+var logTuneNames =function (tunes) {
+	console.log(tunes && tunes.map(function (tune) {
+		return tune.get('name')
+	}));
 }
 
 module.exports = require('../scaffolding/presenter').extend({
@@ -14,12 +20,11 @@ module.exports = require('../scaffolding/presenter').extend({
 			var hash = {};
 			var by = this.options.by;
 			this.collection.models.sort(function (a, b) {
-				return realName(a) > realName(b);
+				return sortName(a) > sortName(b) ? 1: -1;
 			}).forEach(function (tune) {
 				tune.get(by + 's').forEach(function (group) {
 					hash[group] ? hash[group].push(tune) : (hash[group] = [tune]);	
 				});
-				
 			});
 			json.tunes = hash;
 			json.types = Object.keys(hash).sort();
