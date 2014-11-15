@@ -55,8 +55,8 @@ function index (req, res, next) {
 
 app.get('/', index)
     .get('/index.html', index)
-    .get('/tunes*', index)
-    .get('/sets*', index);
+    .get('/tune*', index)
+    .get('/set*', index);
 
 app.listen(process.env.PORT, function() {
     console.log('Listening on ' + process.env.PORT);

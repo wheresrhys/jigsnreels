@@ -1,0 +1,15 @@
+<div  class="set-builder">
+<form>
+<select class="set-builder__tune-selector">
+    <option value=""> --- pick a tune --- </option>
+    {% for tune in tunes %}
+    <option value="{{tune._id}}">{{ tune.name }}</option>
+    {% endfor %}
+</select>
+</form>
+<ol>
+    {% for tune in set.tunes %}
+    <li>{{ tune.name }}</li>
+    {% endfor %}
+</ol>
+</div>

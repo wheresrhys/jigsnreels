@@ -29,6 +29,7 @@
         "it": false,
         "xit": false,
         "xdescribe": false,
-        "done": false
+        "done": false,
+        "Promise": false
     }
 }

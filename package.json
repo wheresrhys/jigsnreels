@@ -12,18 +12,19 @@
   "main": "server/app.js",
   "dependencies": {
     "body-parser": "^1.9.2",
+    "es6-promise": "^2.0.0",
     "express": "^4.0",
-    "mongoose": "^3.5.5",
-    "passport": "~0.1.17",
-    "passport-local": "~0.1.6",
-    "request": "^2.27.0",
-    "swig": "^1.4.2",
     "gulp": "^3.8.9",
     "gulp-browserify": "^0.5.0",
     "gulp-csso": "^0.2.9",
     "gulp-sass": "^1.2.0",
     "gulp-swig": "^0.7.4",
-    "gulp-uglify": "^1.0.1"
+    "gulp-uglify": "^1.0.1",
+    "mongoose": "^3.5.5",
+    "passport": "~0.1.17",
+    "passport-local": "~0.1.6",
+    "request": "^2.27.0",
+    "swig": "^1.4.2"
   },
   "devDependencies": {
     "browserify": "^3.46.1",

@@ -1,10 +1,11 @@
 module.exports = require('exoskeleton').Router.extend({
 	routes: {
 		'': function () {
-			this.navigate('sets/', {trigger: true});
+			this.navigate('sets', {trigger: true});
 		},
 		// 'tunes/' : 'tunes',
-		'sets/': require('../controllers/set-list')//,
+		'sets': require('../controllers/set-list'),
+		'set-builder': require('../controllers/set-builder')//,
 		// 'set-builder/': 'setBuilder',
 		// 'tunes/:instrument' : 'tunes',
 		// 'sets/:instrument' : 'sets',
