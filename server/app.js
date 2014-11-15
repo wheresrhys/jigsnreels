@@ -1,11 +1,11 @@
-var express = require('express'),
-    db = require('./models/_dbConnection'),
-    path = require('path'),
-    http = require('http'),
-    performances = require('./routes/performances'),
-    tunes = require('./routes/tunes'),
-    sets = require('./routes/sets'),
-    scraper = require('./routes/scraper');
+var express = require('express');
+var db = require('./models/_dbConnection');
+var path = require('path');
+var http = require('http');
+var performances = require('./routes/performances');
+var tunes = require('./routes/tunes');
+var sets = require('./routes/sets');
+var scraper = require('./lib/scraper');
 
 var app = express();
 
@@ -43,7 +43,8 @@ api.get('/sets/:id', sets.findById);
 api.post('/sets', sets.add);
 api.put('/sets/:id', sets.update);
 
-api.get('/scraper', scraper.getNew);
+
+// api.get('/scraper', scraper.getNew);
 
 app.use('/api', api);
 
@@ -61,3 +62,5 @@ app.get('/', index)
 app.listen(process.env.PORT, function() {
     console.log('Listening on ' + process.env.PORT);
 });
+
+scraper.init();

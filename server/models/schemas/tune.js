@@ -1,41 +1,36 @@
-var mongoose = require('mongoose'),
-    arrangementSchema = require('./arrangement'),
-    performanceSchema = require('./performance');
+// var mongoose = require('mongoose');
+var mongoose = require('mongoose-q')(require('mongoose'));
+// var mongooseQ = require('mongoose-q')(mongoose);
+var arrangementSchema = require('./arrangement');
+var performanceSchema = require('./performance');
 
 var tuneSchema = mongoose.Schema({
     sessionId: Number,
     name: String,
-    arrangements: [arrangementSchema],
+    abcId: mongoose.Schema.Types.ObjectId,
+    abc: String,
+    arrangements: [mongoose.Schema.Types.ObjectId],
     alternativeNames: [String],
-    meter: String,
-    mode: String,
-    rhythm: String,
+    meters: [String],
+    keys: [String],    
+    rhythms: [String],
     rating: {type: Number, 'default': -1},
     popularity: {type: Number, 'default': -1},
-    performances: [performanceSchema],
-    notes: String
+    performances: [mongoose.Schema.Types.ObjectId],
+    author: {type: String, 'default': 'trad arr.'}
 });
 
 
-tuneSchema.statics.createNewFromSession = function (tune, callback) {
+tuneSchema.statics.createNewFromSession = function (tune) {
     var self = this;
-    this.findOne({sessionId: tune.sessionId }, function (err, foundTune) {
-        if (!foundTune) {
-            foundTune = self.create(tune, function (err, newTune) {
-                callback(newTune);
-            });
-            
-        } else if (!foundTune.arrangements.length) {
-            callback(foundTune);
-        } else {
-            callback();
-        }
+    return this.findOneQ({sessionId: tune.sessionId }).then(function (foundTune) {
+        return foundTune ? Promise.resolve(foundTune) : self.createQ(tune);
     });
 };
 
 
 tuneSchema.statics._flush = function () {
-    this.find({}, function (e,recs) {
+    return this.findQ({}).then(function (recs) {
         recs.forEach(function(rec) {
             rec.remove();
         });

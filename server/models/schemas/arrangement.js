@@ -1,12 +1,12 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose-q')(require('mongoose'));
 
 module.exports = mongoose.Schema({
     abc: String,
-    highestNote: String,
-    lowestNote: String,
-    variants: String,
+    variants: [String],
+    meter: String,
+    mode: String,    
     root: String,
+    rhythm: String,
     author: {type: String, 'default': 'thesession'},
-    src: mongoose.Schema.ObjectId,
     tune: mongoose.Schema.Types.ObjectId
 });
