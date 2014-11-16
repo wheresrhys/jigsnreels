@@ -3,14 +3,14 @@
     <li>
         <h2>{{ set.name }}</h2>
         <ol>
-            {% for tune in set.tuness %}
-            <li></li>
+            {% for tuneIndex, tune in set.tunes %}
+            <li>{{ tune.name }}, {{ set.keys[tuneIndex] }} {{tune.rhythms[0] }}</li>
             {% endfor %}
         </ol>
     </li>
     {% endfor %}
 </ol>
-    <a class='new' href='#'>New tune</a>
+    <!-- <a class='new' href='#'>New tune</a>
     <a class='view-switch newTunes' href='#'>Go to new tunes view</a>
     <a class='view-switch practice' href='#'>Go to practice view</a>
     <a class='view-switch unrated' href='#'>Go to unrated view</a>
@@ -38,3 +38,4 @@
         <tbody>
         </tbody>
     </table>
+ -->

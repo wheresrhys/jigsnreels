@@ -11,7 +11,17 @@ module.exports = BB.Model.extend({
     Presenter: require('./set-presenter'),
     defaults: {
         tunes: [],
-        keys: []
+        keys: [],
+        name: ''
+    },
+    parse: function (resp) {
+        if (typeof resp.tunes[0] === 'object') {
+            tunes.add(resp.tunes);
+            resp.tunes = resp.tunes.map(function (tune) {
+                return tune._id;
+            })
+        }
+        return resp;
     },
     appendTune: function (tuneId) {
         var tune = tunes.filter(function (tune) {

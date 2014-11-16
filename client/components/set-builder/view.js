@@ -4,6 +4,7 @@ var proto = {
 	events: {
         'change .set-builder__tune-selector': 'appendTune',
         'change .set-builder__tune__key-selector': 'changeKey',
+        'change .set-builder__set-name': 'addName',
         'submit .set-builder__form': 'save'
 	},
 
@@ -50,6 +51,9 @@ var proto = {
 		this.set.changeTuneKey(select.children[select.selectedIndex].value, select.parentNode.dataset.tuneId);
 	},
 
+	addName: function (ev) {
+		this.set.set('name', ev.delegateTarget.value);
+	},
 	save: function (ev) {
 		ev.preventDefault();
 		this.set.save();

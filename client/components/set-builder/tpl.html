@@ -8,23 +8,25 @@
                 {% endfor %}
             </select>
         {% endfor %}
-        
-        <ol>
-            {% for tuneIndex, tune in set.tunes %}
-            <li data-tune-id="{{ tune._id }}">{{ tune.name }}
-                {% if tune.keys.length > 1 %}
-                    <select class="set-builder__tune__key-selector">
-                        {% for key in tune.keys %}
-                        <option value="{{ key }}" {% if key === set.keys[tuneIndex] %} selected {% endif %}>{{ key }}</option>
-                        {% endfor %}
-                    </select>
-                {% else %}
-                    {{ tune.keys[0] }}
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ol>
+        {% if set.tunes.length %}
+            <ol>
+                {% for tuneIndex, tune in set.tunes %}
+                <li data-tune-id="{{ tune._id }}">{{ tune.name }}
+                    {% if tune.keys.length > 1 %}
+                        <select class="set-builder__tune__key-selector">
+                            {% for key in tune.keys %}
+                            <option value="{{ key }}" {% if key === set.keys[tuneIndex] %} selected {% endif %}>{{ key }}</option>
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                        {{ tune.keys[0] }}
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+            <input class="set-builder__set-name" value="{{set.name}}">
 
-        <input type="submit" value="save set">
+            <input type="submit" value="save set">
+        {% endif %}
     </form>
 </div>

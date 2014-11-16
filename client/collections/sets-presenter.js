@@ -3,7 +3,7 @@ module.exports = require('../scaffolding/presenter').extend({
 	toJSON: function (standalone) {
 		var json = {
 			sets: this.collection.models.slice(0, this.options.count).map(function (model) {
-				return model.attributes;
+				return model.Presenter().toJSON();
 			})
 			// .map(function (model) {
 			//     return new
