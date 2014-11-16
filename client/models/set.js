@@ -18,7 +18,7 @@ module.exports = BB.Model.extend({
 
     parse: function (resp) {
         if (typeof resp.tunes[0] === 'object') {
-            tunes.add(resp.tunes);
+            tunes.add(resp.tunes, {parse: true});
             resp.tunes = resp.tunes.map(function (tune) {
                 return tune._id;
             })

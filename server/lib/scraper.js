@@ -4,7 +4,6 @@ var request = require('request-then');
 var mongoose = require('mongoose-q');
 var Arrangement = require('../models/arrangement');
 var Tune = require('../models/tune');
-var tuneSchema = require('../models/schemas/tune');
 var debug = require('debug')('scraper')
 
 

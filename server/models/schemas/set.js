@@ -1,6 +1,6 @@
 var mongoose = require('mongoose-q')(require('mongoose'));
-var arrangementSchema = require('./arrangement');
 var transitionSchema = require('./transition');
+var TuneModel = require('../tune');
 
 var setSchema = mongoose.Schema({
     name: String,
@@ -8,33 +8,22 @@ var setSchema = mongoose.Schema({
     keys: [String]
 });
 
+setSchema.statics.addTunes = function (set) {
+    return Promise.all(set.tunes.map(function (tuneId) {
+        return TuneModel.findOneQ({
+            _id: tuneId
+        })
+    })).then(function (tunes) {
+        set = set.toObject();
+        set.tunes = tunes;
+        return set;
+    });
+}
 
-// tuneSchema.statics.createNewFromSession = function (tune, callback) {
-//     var self = this;
-//     this.findOne({sessionId: tune.sessionId }, function (err, foundTune) {
-//         if (!foundTune) {
-//             foundTune = self.create(tune, function (err, newTune) {
-//                 callback(newTune);
-//             });
-            
-//         } else if (!foundTune.arrangements.length) {
-//             callback(foundTune);
-//         } else {
-//             callback();
-//         }
-//     });
-// };
-
-
-// tuneSchema.statics._flush = function () {
-//     this.find({}, function (e,recs) {
-//         recs.forEach(function(rec) {
-//             rec.remove();
-//         });
-//     });
-// };
-
-// tuneSchema.index({ id: 1});
-// tuneSchema.index({ sessionId: 1});
+setSchema.statics.getWithTunes = function (setId) {
+    return this.findOneQ({
+        _id: setId
+    }).then(this.addTunes)
+}
 
 module.exports = setSchema;

@@ -2,7 +2,7 @@ var express = require('express');
 var db = require('./models/_dbConnection');
 var path = require('path');
 var http = require('http');
-var performances = require('./routes/performances');
+var practices = require('./routes/practices');
 var tunes = require('./routes/tunes');
 var sets = require('./routes/sets');
 var scraper = require('./lib/scraper');
@@ -26,10 +26,10 @@ var api = express.Router();
 
 api.use(require('body-parser').json());
 
-api.get('/performances', performances.fetchAll);
-api.get('/performances/:id', performances.findById);
-api.post('/performances', performances.add);
-api.put('/performances/:id', performances.update);
+api.get('/practices', practices.fetchAll);
+api.get('/practices/:id', practices.findById);
+api.post('/practices', practices.add);
+api.put('/practices/:id', practices.update);
 // api.del('/performances/:id', performances.deletePerformance);
 
 api.get('/tunes', tunes.fetchAll);
@@ -61,7 +61,8 @@ function index (req, res, next) {
 app.get('/', index)
     .get('/index.html', index)
     .get('/tune*', index)
-    .get('/set*', index);
+    .get('/set*', index)
+    .get('/practice*', index);
 
 app.listen(process.env.PORT, function() {
     console.log('Listening on ' + process.env.PORT);

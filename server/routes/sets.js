@@ -5,22 +5,9 @@ var ObjectId = mongoose.Types.ObjectId;
 var SetModel = require('../models/set');
 var TuneModel = require('../models/tune');
 
-var addTunesToSet = function (set) {
-	return Promise.all(set.tunes.map(function (tuneId) {
-
-		return TuneModel.findOneQ({
-			_id: new ObjectId(tuneId)
-		})
-	})).then(function (tunes) {
-		set = set.toObject();
-		set.tunes = tunes;
-		return set;
-	});
-}
-
 exports.fetchAll = function (req, res) {
 	SetModel.findQ({}).then(function (sets) {
-		return Promise.all(sets.map(addTunesToSet)).then(function (sets) {
+		Promise.all(sets.map(SetModel.addTunes)).then(function (sets) {
 			res.send(sets);    
 		}).catch(function (err) {
 			res.setStatus(500).send(err);
