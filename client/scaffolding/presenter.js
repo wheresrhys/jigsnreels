@@ -10,7 +10,7 @@ var Presenter = function (options, data) {
 		return new this.Presenter(options, this);
 	}
 	
-	this.options = options ? options : {};
+	this.options = options || {};
 
 	if (data instanceof BB.Collection) {
 		this.collection = data;

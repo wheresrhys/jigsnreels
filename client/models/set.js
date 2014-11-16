@@ -9,11 +9,13 @@ module.exports = BB.Model.extend({
     },
 
     Presenter: require('./set-presenter'),
+    
     defaults: {
         tunes: [],
         keys: [],
         name: ''
     },
+
     parse: function (resp) {
         if (typeof resp.tunes[0] === 'object') {
             tunes.add(resp.tunes);

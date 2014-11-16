@@ -1,8 +1,0 @@
-{
-    "uglify": {
-        "dist": {
-            "src": "./public/bundle.js",
-            "dest": "./dist/public/bundle.js"
-        }
-    }
-}

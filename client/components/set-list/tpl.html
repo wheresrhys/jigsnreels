@@ -4,7 +4,7 @@
         <h2>{{ set.name }}</h2>
         <ol>
             {% for tuneIndex, tune in set.tunes %}
-            <li>{{ tune.name }}, {{ set.keys[tuneIndex] }} {{tune.rhythms[0] }}</li>
+            <li><a href="http://thesession.org/tunes/{{ tune.sessionId }}">{{ tune.name }}, {{ set.keys[tuneIndex] }} {{tune.rhythms[0] }}</a></li>
             {% endfor %}
         </ol>
     </li>

@@ -1,7 +1,7 @@
 module.exports = require('../scaffolding/presenter').extend({
 	
 	toJSON: function (standalone) {
-		var json = this.model.attributes;
+		var json = this.model.toJSON();
         if (standalone) {
             return {
                 locals: json
