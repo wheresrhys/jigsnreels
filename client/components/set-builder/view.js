@@ -2,12 +2,9 @@ var swig = require('swig/index');
 var proto = {
 	tpl: require('./tpl.html'),
 	events: {
-        'change .set-builder__tune-selector': 'appendTune'
-// //      "click thead th ": "sort",
-//         "click .view-switch": "viewSwitch",
-// //      "click .new ": "newTune",
-//         "keyup .filter" :  "filterTunes",
-//         "keyup .search" :  "searchTunes"
+        'change .set-builder__tune-selector': 'appendTune',
+        'change .set-builder__tune__key-selector': 'changeKey',
+        'submit .set-builder__form': 'save'
 	},
 
 	initialize: function (tunes, el) {
@@ -46,6 +43,16 @@ var proto = {
 	appendTune: function (ev) {
 		var select = ev.delegateTarget;
 		this.set.appendTune(select.children[select.selectedIndex].value);
+	},
+
+	changeKey: function (ev) {
+		var select = ev.delegateTarget;
+		this.set.changeTuneKey(select.children[select.selectedIndex].value, select.parentNode.dataset.tuneId);
+	},
+
+	save: function (ev) {
+		ev.preventDefault();
+		this.set.save();
 	}
 };
 

@@ -5,7 +5,7 @@ var transitionSchema = require('./transition');
 var setSchema = mongoose.Schema({
     name: String,
     tunes: [mongoose.Schema.Types.ObjectId],
-    transitions: [mongoose.Schema.Types.ObjectId]
+    keys: [String]
 });
 
 

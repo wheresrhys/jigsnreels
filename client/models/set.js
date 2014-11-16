@@ -2,16 +2,27 @@
 
 var tunes = require('../collections/tunes');
 
-module.exports = require('exoskeleton').Model.extend({
-    
+var BB = require('exoskeleton');
+module.exports = BB.Model.extend({
+    url: function () {
+        return require('../scaffolding/api').url('sets', this.id);
+    },
+
     Presenter: require('./set-presenter'),
     defaults: {
-        tunes: []
+        tunes: [],
+        keys: []
     },
     appendTune: function (tuneId) {
-        this.attributes.tunes.push(tunes.filter(function (tune) {
+        var tune = tunes.filter(function (tune) {
             return tune.get('_id') === tuneId;
-        })[0]);
+        })[0];
+        this.attributes.tunes.push(tuneId);
+        this.attributes.keys.push(tune.get('keys')[0]);
+        this.trigger('change');
+    },
+    changeTuneKey: function (newKey, tuneId) {
+        this.attributes.keys[this.get('tunes').indexOf(tuneId)] = newKey;
         this.trigger('change');
     }
 }, {});

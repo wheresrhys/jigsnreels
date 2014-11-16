@@ -1,17 +1,30 @@
 <div class="set-builder">
-    <form>
-    {% for type in tunes.types %}
-        <select class="set-builder__tune-selector">
-            <option value=""> --- pick a {{ type }} --- </option>
-            {% for tune in tunes.tunes[type] %}
-            <option value="{{ tune.get('_id') }}">{{ tune.get('name') }} ({{ tune.get('keys') }})</option>
-            {% endfor %}
-        </select>
-    {% endfor %}
-    </form>
-    <ol>
-        {% for tune in set.tunes %}
-        <li>{{ tune.name }}</li>
+    <form class="set-builder__form">
+        {% for type in tunes.types %}
+            <select class="set-builder__tune-selector">
+                <option value=""> --- pick a {{ type }} --- </option>
+                {% for tune in tunes.tunes[type] %}
+                <option value="{{ tune.get('_id') }}">{{ tune.get('name') }} ({{ tune.get('keys') }})</option>
+                {% endfor %}
+            </select>
         {% endfor %}
-    </ol>
+        
+        <ol>
+            {% for tuneIndex, tune in set.tunes %}
+            <li data-tune-id="{{ tune._id }}">{{ tune.name }}
+                {% if tune.keys.length > 1 %}
+                    <select class="set-builder__tune__key-selector">
+                        {% for key in tune.keys %}
+                        <option value="{{ key }}" {% if key === set.keys[tuneIndex] %} selected {% endif %}>{{ key }}</option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    {{ tune.keys[0] }}
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ol>
+
+        <input type="submit" value="save set">
+    </form>
 </div>

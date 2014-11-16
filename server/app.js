@@ -62,5 +62,6 @@ app.get('/', index)
 app.listen(process.env.PORT, function() {
     console.log('Listening on ' + process.env.PORT);
 });
-
-scraper.init();
+if (!process.env.NO_SCRAPE) {
+    scraper.init();
+}

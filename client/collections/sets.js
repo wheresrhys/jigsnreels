@@ -1,5 +1,5 @@
 var Sets = require('exoskeleton').Collection.extend({
-	url: require('../scaffolding/api').url('sets'),
+    url: require('../scaffolding/api').url('sets'),
 	model: require('../models/set'),
 	Presenter: require('./sets-presenter')
 }, {});

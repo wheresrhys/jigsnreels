@@ -2,14 +2,14 @@
 
 // List of API URLs.
 var URLs = {
-	tunes: function () {
-		return '/api/tunes';
+	tunes: function (id) {
+		return '/api/tunes' + (id ? '/' + id : '');
 	},
 	// tune: function(id) {
 	//   return '/api/tunes/'+ id;
 	// },
-	sets: function () {
-		return '/api/sets';
+	sets: function (id) {
+		return '/api/sets' + (id ? '/' + id : '');
 	},
 	performances: function (user) {
 		return '/api/performances/' + user;

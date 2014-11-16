@@ -25,7 +25,7 @@ gulp.task('js', function () {
 		.pipe(require('gulp-browserify')({
 			basedir: __dirname + '/client',
 			debug: true,
-			transform: ['debowerify', require('swigify')()],
+			transform: ['debowerify', require('swigify')({compress: null})],
 			exclude: ['underscore', 'jquery'],
 			shim: {
 				abcjs: {
