@@ -42,7 +42,7 @@ TuneGetter.prototype = {
         var self = this;
 
         debug('fetching first page');
-        return request('http://thesession.org/members/61738/tunebook').then(function(res) {
+        var job = request('http://thesession.org/members/61738/tunebook').then(function(res) {
             var page = res.body;
             var promises = [];
 
@@ -61,11 +61,15 @@ TuneGetter.prototype = {
             return Promise.all(promises).then(function (pages) {
                 return [].concat.apply([], pages);
             });
-        }).catch(function (err) {
+        })
+
+
+        job.catch(function (err) {
             debug(err);
             setTimeout(function () {throw err})
         });
 
+        return job;
 
     },
 
@@ -171,14 +175,21 @@ TuneGetter.prototype = {
     }
 };
 
-exports.init = function() {
-    var getter = new TuneGetter();
+var getter;
 
-    getter.getNewTunes();
+exports.init = function() {
+    if (getter) {
+        return getter.getNewTunes();
+    }
+    getter = new TuneGetter();
+
+    
 
     setInterval(function () {
         getter.getNewTunes();
     }, 1000 * 60 * 60)
+
+    return getter.getNewTunes();
 };
 
 // exports.setCallback = function(callback) {

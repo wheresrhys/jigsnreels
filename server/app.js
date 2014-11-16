@@ -44,7 +44,11 @@ api.post('/sets', sets.add);
 api.put('/sets/:id', sets.update);
 
 
-// api.get('/scraper', scraper.getNew);
+api.get('/scraper', function (req, res) {
+    scraper.init().then(function (job) {
+        res.send(job)
+    });
+});
 
 app.use('/api', api);
 
