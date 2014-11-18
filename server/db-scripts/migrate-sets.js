@@ -43,8 +43,7 @@ db.oldsets.find().forEach(function (set) {
         if (isMandoSet(sessionTunes)) {
             db.practices.insert({
                 type: 'set',
-                srcId: db.sets.find().sort( { _id : -1 } ).limit(1)[0]._id,
-                stickyness: 0
+                srcId: db.sets.find().sort( { _id : -1 } ).limit(1)[0]._id
             }); 
         }
     } else {

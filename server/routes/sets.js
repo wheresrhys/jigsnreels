@@ -25,8 +25,9 @@ exports.findById = function (req, res) {
 
 exports.add = function (req, res) {
 	SetModel.createQ(req.body).then(function (set) {
-		console.log('set', typeof set.tunes[0],  set.tunes[0]);
-		res.send(set);
+		SetModel.addPractice(set).then(function (set) {
+			res.send(set);	
+		});
 	}).catch(function (err) {
 		res.setStatus(500).send(err);
 		setTimeout(function () {throw err})
@@ -41,7 +42,6 @@ exports.update = function (req, res) {
 		SetModel.findOneQ({
 			_id: new ObjectId(req.params.id)
 		}).then(addTunesToSet).then(function (set) {
-
 			res.send(set);
 		});
 	}).catch(function (err) {

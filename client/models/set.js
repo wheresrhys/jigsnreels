@@ -1,9 +1,8 @@
 'use strict';
+var allTunes = require('../collections/tunes');
+var practices = require('../collections/practices');
 
-var tunes = require('../collections/tunes');
-
-var BB = require('exoskeleton');
-module.exports = BB.Model.extend({
+module.exports = require('exoskeleton').Model.extend({
     url: function () {
         return require('../scaffolding/api').url('sets', this.id);
     },
@@ -18,19 +17,29 @@ module.exports = BB.Model.extend({
 
     parse: function (resp) {
         if (typeof resp.tunes[0] === 'object') {
-            tunes.add(resp.tunes, {parse: true});
+            allTunes.add(resp.tunes, {parse: true});
             resp.tunes = resp.tunes.map(function (tune) {
                 return tune._id;
             })
         }
+        if (resp.practice) {
+            practices.add(resp.practice, {parse: true});
+            delete resp.practice;
+        }
         return resp;
     },
     appendTune: function (tuneId) {
-        var tune = tunes.filter(function (tune) {
+        var tune = allTunes.filter(function (tune) {
             return tune.get('_id') === tuneId;
         })[0];
-        this.attributes.tunes.push(tuneId);
-        this.attributes.keys.push(tune.get('keys')[0]);
+        
+        var tunes = this.get('tunes').length ? this.get('tunes') : [];
+        var keys = this.get('keys').length ? this.get('keys') : [];
+
+        tunes.push(tuneId);
+        keys.push(tune.get('keys')[0]);
+        this.set('tunes', tunes);
+        this.set('keys', keys);
         this.trigger('change');
     },
     changeTuneKey: function (newKey, tuneId) {

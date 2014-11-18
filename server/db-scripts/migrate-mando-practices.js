@@ -25,7 +25,7 @@ db.oldperformances.find({
         practices.push({
             type: 'tune',
             srcId: newTune._id,
-            stickyness: 0
+            stickiness: 0
         })
     }
 });
@@ -40,8 +40,7 @@ practices.forEach(function (practice) {
         }).length()) {
             set.tunes.forEach(function (tuneId) {
                 if (tuneId.equals(practice.srcId)) {
-                    unique = false;
-                    
+                    unique = false; 
                 }
             });
         }

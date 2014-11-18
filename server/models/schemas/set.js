@@ -1,6 +1,7 @@
 var mongoose = require('mongoose-q')(require('mongoose'));
 var transitionSchema = require('./transition');
 var TuneModel = require('../tune');
+var PracticeModel = require('../practice');
 
 var setSchema = mongoose.Schema({
     name: String,
@@ -17,6 +18,19 @@ setSchema.statics.addTunes = function (set) {
         set = set.toObject();
         set.tunes = tunes;
         return set;
+    });
+}
+
+setSchema.statics.addPractice = function (set) {
+    return PracticeModel.findOneQ({srcId: this._id }).then(function (foundPractice) {
+        return (foundPractice ? Promise.resolve(foundPractice) : PracticeModel.createQ({
+            srcId: set._id,
+            type: 'set'
+        })).then(function (practice) {
+            set = set.toObject();
+            set.practice = practice;
+            return set;
+        });
     });
 }
 

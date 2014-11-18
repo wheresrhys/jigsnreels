@@ -3,13 +3,13 @@
         {% if type === 'set' %}
             <ol class="practice__set">
                 {% for tuneIndex, tune in src.tunes %}
-                <li>{{ tune.name }}, {{ set.keys[tuneIndex] }} {{tune.rhythms[0] }}
+                <li>{{ tune.name }}, {{ src.keys[tuneIndex] }} {{tune.rhythms[0] }}
                 <a href="http://thesession.org/tunes/{{ tune.sessionId }}">abc</a></li>
                 {% endfor %}
             </ol>
             <button class="practice__set__edit">edit</button>
         {% else %}
-            <p>{{ src.name }} <a href="http://thesession.org/tunes/{{ src.sessionId }}">abc</a></p>
+            <p>{{ src.name }}, {{ src.keys[0] }} {{src.rhythms[0] }} <a href="http://thesession.org/tunes/{{ src.sessionId }}">abc</a></p>
         {% endif %}
     </div>
     <button class="practice__actions__good">good</button>

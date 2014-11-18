@@ -1,4 +1,6 @@
 var swig = require('swig/index');
+var SetModel = require('../../models/set');
+
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
 	events: {
@@ -11,16 +13,16 @@ module.exports = require('../../scaffolding/view').extend({
 	initialize: function (tunes, el) {
 		this.allTunes = tunes;
 		this.parent = el;
-		this.set = new (require('../../models/set'))();
-		this.listenTo(this.allTunes, 'sync', this.render.bind(this));
-		this.listenTo(this.set, 'change', this.render.bind(this));
-		this.render();
+		this.render = this.render.bind(this);
+		this.freshSet = this.freshSet.bind(this);
+		this.listenTo(this.allTunes, 'sync', this.render);
+		this.freshSet();
 	},
 
 	render: function () {
 		this.renderToDom(swig.render(this.tpl, {
 			locals: {
-				set: this.set.Presenter({persist: true}).toJSON(),
+				set: this.set.Presenter().toJSON(),
 				tunes: this.allTunes.Presenter({
 					by: 'rhythm'
 				}).toJSON()
@@ -44,5 +46,13 @@ module.exports = require('../../scaffolding/view').extend({
 	save: function (ev) {
 		ev.preventDefault();
 		this.set.save();
+	},
+
+	freshSet: function () {
+		this.set && this.stopListening(this.set, 'change');
+		this.set = new SetModel();
+		this.listenToOnce(this.set, 'sync', this.freshSet);
+		this.listenTo(this.set, 'change', this.render);
+		this.render();		
 	}
 });
