@@ -38,9 +38,12 @@ practices.forEach(function (practice) {
             srcId: set._id,
             type: 'set'
         }).length()) {
-            if (set.tunes.indexOf(practice.srcId) > -1) {
-                unique = false;
-            }
+            set.tunes.forEach(function (tuneId) {
+                if (tuneId.equals(practice.srcId)) {
+                    unique = false;
+                    
+                }
+            });
         }
     })
     if (unique) {
