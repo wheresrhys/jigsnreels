@@ -9,14 +9,15 @@ module.exports = require('../../scaffolding/view').extend({
 //         "keyup .filter" :  "filterTunes",
 //         "keyup .search" :  "searchTunes"
 	},
-	initialize: function (sets, el) {
-		this.sets = sets;
+	initialize: function (practice, el) {
+		this.practice = practice;
 		this.parent = el;
-		this.listenTo(this.sets, 'sync', this.render.bind(this));
+		this.listenTo(this.practice, 'sync', this.render.bind(this));
 		this.render();
 	},
 
 	render: function () {
-		this.renderToDom(swig.render(this.tpl, this.sets.Presenter().toJSON(true)));
+		this.renderToDom(swig.render(this.tpl, this.practice.Presenter().toJSON(true)))
+		return this;
 	}
 });

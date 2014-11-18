@@ -1,0 +1,18 @@
+<li class="practice" data-practice-id={{ _id }}>
+    <div class="practice__subject">
+        {% if type === 'set' %}
+            <ol class="practice__set">
+                {% for tuneIndex, tune in src.tunes %}
+                <li>{{ tune.name }}, {{ set.keys[tuneIndex] }} {{tune.rhythms[0] }}
+                <a href="http://thesession.org/tunes/{{ tune.sessionId }}">abc</a></li>
+                {% endfor %}
+            </ol>
+            <button class="practice__set__edit">edit</button>
+        {% else %}
+            <p>{{ src.name }} <a href="http://thesession.org/tunes/{{ src.sessionId }}">abc</a></p>
+        {% endif %}
+    </div>
+    <button class="practice__actions__good">good</button>
+    <button class="practice__actions__bad">bad</button>
+    <button class="practice__actions__skip">skip</button>
+</li>

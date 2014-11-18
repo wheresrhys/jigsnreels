@@ -1,5 +1,5 @@
 var swig = require('swig/index');
-var proto = {
+module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
 	events: {
         'change .set-builder__tune-selector': 'appendTune',
@@ -18,27 +18,14 @@ var proto = {
 	},
 
 	render: function () {
-		var frag = document.createDocumentFragment();
-		frag.appendChild(document.createElement('div'));
-		frag = frag.firstChild;
-		frag.innerHTML = swig.render(this.tpl, {
+		this.renderToDom(swig.render(this.tpl, {
 			locals: {
 				set: this.set.Presenter({persist: true}).toJSON(),
 				tunes: this.allTunes.Presenter({
 					by: 'rhythm'
 				}).toJSON()
 			}
-		});
-		if (this.el.tagName === frag.firstChild.tagName && this.el.className === frag.firstChild.className) {
-			this.el.innerHTML = '';
-			while (frag.firstChild.firstChild) {
-				this.el.appendChild(frag.firstChild.firstChild);
-			}
-		} else {
-			this.setElement(frag.firstChild);
-			this.parent.appendChild(this.el);
-		}
-		return this;
+		}));
 	},
 
 	appendTune: function (ev) {
@@ -58,6 +45,4 @@ var proto = {
 		ev.preventDefault();
 		this.set.save();
 	}
-};
-
-module.exports = require('exoskeleton').NativeView.extend(proto);
+});
