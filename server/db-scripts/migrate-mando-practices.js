@@ -1,4 +1,3 @@
-load('/Users/wheresrhys/Sites/jigsnreels/server/db-scripts/reset-tunes.js')
 var practices = [];
 
 db.oldperformances.find({
@@ -18,7 +17,7 @@ db.oldperformances.find({
     if (perf.best > 2 || 
         ( (perf.best > 0 || tune.popularity === 3) && tune.rating > 3 ) || 
         tune.rating === 5 ) {
-        var newTune = db.tunes.findOne({sessionId: tune.sessionId});
+        var newTune = db.tunes.findOne({oldId: tune._id});
         if (!newTune) {
             return db.dodgyPerfs.insert(perf); 
         }

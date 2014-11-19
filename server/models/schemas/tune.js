@@ -5,18 +5,16 @@ var arrangementSchema = require('./arrangement');
 var performanceSchema = require('./performance');
 
 var tuneSchema = mongoose.Schema({
-    sessionId: Number,
+    sessionId: {type: Number, 'default': 0},
+    oldId: mongoose.Schema.Types.ObjectId,
     name: String,
     abcId: mongoose.Schema.Types.ObjectId,
     abc: String,
     arrangements: [mongoose.Schema.Types.ObjectId],
-    alternativeNames: [String],
     meters: [String],
     keys: [String],    
     rhythms: [String],
     quality: {type: Number, 'default': -1},
-    popularity: {type: Number, 'default': -1},
-    performances: [mongoose.Schema.Types.ObjectId],
     author: {type: String, 'default': 'trad arr.'}
 });
 
@@ -38,6 +36,6 @@ tuneSchema.statics._flush = function () {
 };
 
 tuneSchema.index({ id: 1});
-tuneSchema.index({ sessionId: 1});
+// tuneSchema.index({ sessionId: 1});
 
 module.exports = tuneSchema;
