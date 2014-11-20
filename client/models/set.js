@@ -24,6 +24,7 @@ module.exports = require('exoskeleton').Model.extend({
             })
         }
         if (resp.practice) {
+            practices = require('../collections/practices');
             practices.add(resp.practice, {parse: true});
             delete resp.practice;
         }

@@ -15,6 +15,7 @@ module.exports = BB.Model.extend({
     parse: function (resp) {
         if (resp.src) {
             if (resp.type === 'set') {
+                sets = require('../collections/sets');
                 sets.add(resp.src, {parse: true});    
             } else if (resp.type === 'tune') {
                 tunes.add(resp.src, {parse: true});    
