@@ -1,19 +1,14 @@
 'use strict';
-// App boot script
-// ===============
-//
-// Presuming that we're not using browserify to illustrate the point.
 
-// Main app class.
+function isInternalLink(el) {
 
-// JNR.app._setInstrument(instrument);
-
-// The user using the app.
-// app.User = new require('scaffolding/user')();
-
-// // Shared collections.
-// app.sets = new require('collections/sets');
-// BookStore.Articles = new Articles;
+    while (el.parentNode !== document) {
+        if (el.matches('a[href^="/"]')) {
+            return true;
+        }
+        el = el.parentNode;
+    }
+}
 
 // We'll use this <body> reference to put some views in it below.
 var body = document.body;
@@ -40,7 +35,24 @@ require('Backbone.NativeView');
 // 
 
 // The router. We usually don't need to keep a reference to it.
-new (require('./scaffolding/router'))();
+var router = new (require('./scaffolding/router'))();
+
+router.on('route', function () {
+    console.log('route', arguments);
+})
+
+// Globally capture clicks. If they are internal and not in the pass
+// through list, route them through Backbone's navigate method.
+document.body.addEventListener('click', function (ev) {
+    if (isInternalLink(ev.target)) {
+        if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) {
+            return;
+        }
+        ev.preventDefault();
+        router.navigate(ev.target.getAttribute('href'), { trigger: true })
+        return false;
+    }
+});
 
 // Kick off the router code.
 Backbone.history.start({pushState: true});

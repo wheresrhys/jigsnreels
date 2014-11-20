@@ -22,6 +22,7 @@ var tuneSchema = mongoose.Schema({
 tuneSchema.statics.createNewFromSession = function (tune) {
     var self = this;
     return this.findOneQ({sessionId: tune.sessionId }).then(function (foundTune) {
+        console.log(foundTune);
         return foundTune ? Promise.resolve(foundTune) : self.createQ(tune);
     });
 };

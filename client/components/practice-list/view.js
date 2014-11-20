@@ -14,7 +14,7 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	render: function () {
-		this.renderToDom(swig.render(this.tpl, this.practices.Presenter().toJSON(true)));
+		this.renderToDom(swig.render(this.tpl, this.practices.Presenter().toJSON(true)), true);
 		var list = this.el.querySelector('.practice-list__list');
 
 		this.practices.models.forEach(function (practice) {

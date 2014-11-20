@@ -6,7 +6,7 @@ module.exports = require('exoskeleton').NativeView.extend({
         frag.innerHTML = html;
         return frag;
     },
-    attachDom: function (frag) {
+    attachDom: function (frag, destructive) {
         if (this.el.tagName === frag.firstChild.tagName && this.el.className === frag.firstChild.className) {
             this.el.innerHTML = '';
             while (frag.firstChild.firstChild) {
@@ -14,10 +14,11 @@ module.exports = require('exoskeleton').NativeView.extend({
             }
         } else {
             this.setElement(frag.firstChild);
+            destructive && (this.parent.innerHTML = '');
             this.parent.appendChild(this.el);
         }        
     },
-    renderToDom: function (html) {
-        this.attachDom(this.buildDom(html));
+    renderToDom: function (html, destructive) {
+        this.attachDom(this.buildDom(html), destructive);
     },
 });

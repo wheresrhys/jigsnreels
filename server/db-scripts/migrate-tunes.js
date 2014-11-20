@@ -13,7 +13,6 @@ db.oldtunes.find().forEach(function (oldTune) {
     }
     db.tunes.save(newTune);
   } else {
-    print(oldTune.name)
     newTune = {
       sessionId: 0,
       oldId: oldTune._id,

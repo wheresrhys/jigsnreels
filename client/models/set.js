@@ -3,6 +3,7 @@ var allTunes = require('../collections/tunes');
 var practices = require('../collections/practices');
 
 module.exports = require('exoskeleton').Model.extend({
+    idAttribute: '_id',
     url: function () {
         return require('../scaffolding/api').url('sets', this.id);
     },

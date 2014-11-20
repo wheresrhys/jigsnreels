@@ -5,6 +5,7 @@ var sets = require('../collections/sets');
 
 var BB = require('exoskeleton');
 module.exports = BB.Model.extend({
+    idAttribute: '_id',
     url: function () {
         return require('../scaffolding/api').url('practices', this.id);
     },

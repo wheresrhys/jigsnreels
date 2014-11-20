@@ -7,7 +7,7 @@
                 <a href="http://thesession.org/tunes/{{ tune.sessionId }}">abc</a></li>
                 {% endfor %}
             </ol>
-            <button class="practice__set__edit">edit</button>
+            <a href="/set-editor/{{src._id}}" class="practice__set__edit">edit</a>
         {% else %}
             <p>{{ src.name }}, {{ src.keys[0] }} {{src.rhythms[0] }} <a href="http://thesession.org/tunes/{{ src.sessionId }}">abc</a></p>
         {% endif %}

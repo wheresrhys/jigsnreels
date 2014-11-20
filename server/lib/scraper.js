@@ -33,7 +33,6 @@ var TuneGetter = function() {
 };
 
 
-
 TuneGetter.prototype = {
 
     getNewTunes: function () {
@@ -181,8 +180,6 @@ exports.init = function() {
         return getter.getNewTunes();
     }
     getter = new TuneGetter();
-
-    
 
     setInterval(function () {
         getter.getNewTunes();

@@ -15,24 +15,38 @@ module.exports = require('../scaffolding/presenter').extend({
 	toJSON: function (standalone) {
 		
 		var json = {};
+		var models = this.collection.models.sort(function (a, b) {
+			return sortName(a) > sortName(b) ? 1: -1;
+		})
+		var self = this;
+
+			
 
 		if (this.options.by) {
 			var hash = {};
 			var by = this.options.by;
-			this.collection.models.sort(function (a, b) {
-				return sortName(a) > sortName(b) ? 1: -1;
-			}).forEach(function (tune) {
+			models.forEach(function (tune) {
 				tune.get(by + 's').forEach(function (group) {
 					hash[group] ? hash[group].push(tune) : (hash[group] = [tune]);	
 				});
 			});
 			json.tunes = hash;
 			json.types = Object.keys(hash).sort();
+			if (this.options.sort) {
+				Object.keys(hash).forEach(function (key) {
+					hash[key] = hash[key].sort(self.options.sort).map(function (model) {
+						return model.attributes;
+					});
+				})
+			}
 		} else {
 
 			json.tunes = this.collection.models.slice().map(function (model) {
 				return model.attributes;
 			});
+			if (this.options.sort) {
+				json.tunes = json.tunes.sort(this.options.sort)
+			}
 		}
 
 		if (standalone) {

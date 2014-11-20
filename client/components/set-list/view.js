@@ -17,6 +17,6 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	render: function () {
-		this.renderToDom(swig.render(this.tpl, this.sets.Presenter().toJSON(true)));
+		this.renderToDom(swig.render(this.tpl, this.sets.Presenter().toJSON(true)), true);
 	}
 });
