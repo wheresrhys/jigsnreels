@@ -1,5 +1,5 @@
 function isInternalLink(el) {
-	while (el.parentNode !== document) {
+	while (el.parentNode && el.parentNode !== document) {
 		if (el.matches('a[href^="/"]')) {
 			return true;
 		}

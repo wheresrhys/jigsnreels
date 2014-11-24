@@ -10,7 +10,8 @@ module.exports = require('../../scaffolding/view').extend({
         'change .set-editor__tune__key-selector': 'changeKey',
         'change .set-editor__set-name': 'addName',
         'submit .set-editor__form': 'save',
-        'click .set-editor__delete': 'delete'
+        'click .set-editor__delete': 'delete',
+        'click .set-editor__tune__delete': 'deleteTune'
 	},
 
 	initialize: function (tunesPromise, el, id) {
@@ -41,6 +42,11 @@ module.exports = require('../../scaffolding/view').extend({
 	appendTune: function (ev) {
 		var select = ev.delegateTarget;
 		this.set.appendTune(select.children[select.selectedIndex].value);
+	},
+
+	deleteTune: function (ev) {
+		ev.preventDefault();
+		this.set.removeTune(ev.delegateTarget.parentNode.dataset.tuneId);
 	},
 
 	changeKey: function (ev) {
