@@ -1,23 +1,24 @@
 var swig = require('swig/index');
 var SetModel = require('../../models/set');
 var allSets = require('../../collections/sets');
+var allTunes = require('../../collections/tunes');
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
 	events: {
-        'change .set-builder__tune-selector': 'appendTune',
-        'change .set-builder__tune__key-selector': 'changeKey',
-        'change .set-builder__set-name': 'addName',
-        'submit .set-builder__form': 'save'
+        'change .set-editor__tune-selector': 'appendTune',
+        'change .set-editor__tune__key-selector': 'changeKey',
+        'change .set-editor__set-name': 'addName',
+        'submit .set-editor__form': 'save'
 	},
 
-	initialize: function (tunes, el, id) {
+	initialize: function (tunesPromise, el, id) {
 		this.isEditing = !!id;
-		this.allTunes = tunes;
+		this.tunesPromise = tunesPromise;
 		this.parent = el;
 		this.render = this.render.bind(this);
 		this.freshSet = this.freshSet.bind(this);
-		this.listenTo(this.allTunes, 'sync', this.render);
+		this.tunesPromise.then(this.render);
 		this.freshSet(id);
 	},
 
@@ -25,7 +26,7 @@ module.exports = require('../../scaffolding/view').extend({
 		this.renderToDom(swig.render(this.tpl, {
 			locals: {
 				set: this.set.Presenter().toJSON(),
-				tunes: this.allTunes.Presenter({
+				tunes: allTunes.Presenter({
 					by: 'rhythm',
 					sort: function (a, b) {
 						return a.get('keys')[0].charAt(0) > b.get('keys')[0].charAt(0) ? 1 : -1;
@@ -54,22 +55,32 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	freshSet: function (id) {
-		if (!this.isEditing || id) {
+		var self = this;
+		if (!this.isEditing || typeof id === 'string') {
 			this.set && this.stopListening(this.set, 'change');
-			if (id) {
+			if (typeof id === 'string') {
 				this.set = allSets.models.filter(function (model) {
 					return model.get('_id') === id;
 				})[0];
 				if (this.set) {
 					this.listenToOnce(this.set, 'sync', function () {
-						console.log('saved');
+						require('../../scaffolding/router').navigate('/practice', { trigger: true })
 					});	
+					this.listenTo(this.set, 'change', this.render);
+				} else {
+					this.set = new SetModel()
+					Promise.all([this.set.set({_id: id}).fetch(), this.tunesPromise]).then(function () {
+						self.render();
+						self.listenToOnce(self.set, 'sync', function () {
+							require('../../scaffolding/router').navigate('/practice', { trigger: true });
+						});
+					});
 				}
 			} else {
 				this.set = new SetModel();
 				this.listenToOnce(this.set, 'sync', this.freshSet);
+				this.listenTo(this.set, 'change', this.render);
 			}
-			this.set && this.listenTo(this.set, 'change', this.render);
 			this.render();		
 		}
 	}

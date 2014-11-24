@@ -41,7 +41,7 @@ exports.update = function (req, res) {
 	}, req.body, {}).then(function (num, result) {
 		SetModel.findOneQ({
 			_id: new ObjectId(req.params.id)
-		}).then(addTunesToSet).then(function (set) {
+		}).then(SetModel.addTunes).then(function (set) {
 			res.send(set);
 		});
 	}).catch(function (err) {
