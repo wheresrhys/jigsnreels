@@ -4,8 +4,7 @@ var request = require('request-then');
 var mongoose = require('mongoose-q');
 var Arrangement = require('../models/arrangement');
 var Tune = require('../models/tune');
-var debug = require('debug')('scraper')
-
+var debug = require('debug')('scraper');
 
 var groupByPopularity = function (arr) {
     var o = {};
@@ -34,13 +33,24 @@ var TuneGetter = function() {
 
 
 TuneGetter.prototype = {
-
+    request: function (url) {
+        return new Promise(function (resolve, reject) {
+            setTimeout(function () {
+                var r = request(url).catch(function (err) {
+                    debug(format('request to %s failed', url));
+                }) 
+                r.then(resolve, reject)   
+            }, 10 * this.count++)
+        })
+    },
     getNewTunes: function () {
+        this.count = 0;
         var pageCount;
         var self = this;
 
         debug('fetching first page');
-        var job = request('http://thesession.org/members/61738/tunebook').then(function(res) {
+
+        var job = this.request('https://thesession.org/members/61738/tunebook').then(function(res) {
             var page = res.body;
             var promises = [];
 
@@ -51,7 +61,7 @@ TuneGetter.prototype = {
 
                 while (pageCount > 1) {
                     debug('fetching ' +  pageCount + ' page');
-                    promises.push(request('http://thesession.org/members/61738/tunebook?page=' + pageCount).then(self.processTuneList));
+                    promises.push(self.request('https://thesession.org/members/61738/tunebook?page=' + pageCount).then(self.processTuneList));
                     pageCount--;
                 }
             }
@@ -59,7 +69,7 @@ TuneGetter.prototype = {
             return Promise.all(promises).then(function (pages) {
                 return [].concat.apply([], pages);
             });
-        })
+        });
 
 
         job.catch(function (err) {
@@ -72,8 +82,9 @@ TuneGetter.prototype = {
     },
 
     processTuneList: function (res) {
+        require('fs').writeFile('resp.html', res.body)
         var tunes = [];
-        res.body.replace(/\/tunes\/(\d+)\" class=\"manifest__item__title\">([^<]+)<\/a>/g, function($0, $1, $2) {
+        res.body.replace(/<a href="\/tunes\/(\d+)\">([^<]+)<\/a>/g, function($0, $1, $2) {
             debug('retrieved tune listing %s, %s from thesession', $1, $2);
             tunes.push({
                 sessionId: +$1,
@@ -88,6 +99,7 @@ TuneGetter.prototype = {
         var self = this;
 
         return Tune.createNewFromSession(tune).then(function(newTune) {
+
             if (newTune.arrangements.length) {
                 debug('full details already exist for tune %s, %s', newTune.sessionId, newTune.name);
                 return newTune;  
@@ -101,8 +113,10 @@ TuneGetter.prototype = {
     retrieveTuneInfo: function (tune) {
         debug('retrieving full details for tune %s, %s', tune.sessionId, tune.name);
         var self = this;
-        return request('http://www.thesession.org/tunes/' + tune.sessionId + '/abc').then(function(res) {
+
+        return this.request('https://thesession.org/tunes/' + tune.sessionId + '/abc').then(function(res) {
             var arrs = res.body;
+            
             arrs = arrs.split(/X: \d+\r\n/);
             arrs.shift(); // get rid of the intial empty string
             if (!arrs.length) {
@@ -167,9 +181,9 @@ TuneGetter.prototype = {
                 });
 
             });
-
+        }).then(function (err) {
+            debug(tune, err);
         });
-
     }
 };
 
@@ -187,11 +201,3 @@ exports.init = function() {
 
     return getter.getNewTunes();
 };
-
-// exports.setCallback = function(callback) {
-//     this.callback = callback;
-// };
-
-// exports._TuneGetter = TuneGetter;
-//TuneGetter.prototype.retrieveTuneInfo({sessionId: 4239});
-//exports.getNew();
