@@ -30,6 +30,13 @@ module.exports = require('exoskeleton').Model.extend({
         }
         return resp;
     },
+    tuneNames: function () {
+        return this.get('tunes').map(function (tuneId) {
+            return allTunes.filter(function (tune) {
+                return tune.get('_id') === tuneId;
+            })[0].get('name');
+        });
+    },
     appendTune: function (tuneId) {
         var tune = allTunes.filter(function (tune) {
             return tune.get('_id') === tuneId;

@@ -34,6 +34,12 @@ setSchema.statics.addPractice = function (set) {
     });
 }
 
+setSchema.statics.cleanRemove = function (set) {
+    return PracticeModel.removeQ({srcId: set._id }).then(function () {
+        return set.removeQ();
+    });    
+}
+
 setSchema.statics.getWithTunes = function (setId) {
     return this.findOneQ({
         _id: setId

@@ -27,9 +27,9 @@ exports.fetchAll = function (req, res) {
     PracticeModel.findQ({}).then(function (practices) {
         Promise.all(practices.map(addResourceToPractice)).then(function (practices) {
             res.send(practices);    
-        }).catch(function (err) {
-            res.setStatus(500).send(err);
-        });
+        })
+    }).catch(function (err) {
+        res.setStatus(500).send(err);
     });
 };
 

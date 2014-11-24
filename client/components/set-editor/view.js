@@ -9,7 +9,8 @@ module.exports = require('../../scaffolding/view').extend({
         'change .set-editor__tune-selector': 'appendTune',
         'change .set-editor__tune__key-selector': 'changeKey',
         'change .set-editor__set-name': 'addName',
-        'submit .set-editor__form': 'save'
+        'submit .set-editor__form': 'save',
+        'click .set-editor__delete': 'delete'
 	},
 
 	initialize: function (tunesPromise, el, id) {
@@ -26,6 +27,7 @@ module.exports = require('../../scaffolding/view').extend({
 		this.renderToDom(swig.render(this.tpl, {
 			locals: {
 				set: this.set.Presenter().toJSON(),
+				isEditing: this.isEditing,
 				tunes: allTunes.Presenter({
 					by: 'rhythm',
 					sort: function (a, b) {
@@ -52,6 +54,11 @@ module.exports = require('../../scaffolding/view').extend({
 	save: function (ev) {
 		ev.preventDefault();
 		this.set.save();
+	},
+	delete: function (ev) {
+		if (confirm('Are you sure you want to delete the set ' + this.set.get('name').toUpperCase() + ': ' + this.set.tuneNames().join(', '))) {
+			this.set.destroy();
+		}
 	},
 
 	freshSet: function (id) {

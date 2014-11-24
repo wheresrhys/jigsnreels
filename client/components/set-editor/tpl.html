@@ -26,7 +26,13 @@
             </ol>
             <input class="set-editor__set-name" value="{{set.name}}">
 
-            <input type="submit" value="save set">
+            
+            {% if isEditing %}
+            <input type="submit" value="save changes">
+            <input class="set-editor__delete" type="button" value="delete set">
+            {% else %}
+            <input type="submit" value="save new set">
+            {% endif %}
         {% endif %}
     </form>
 </div>

@@ -50,16 +50,12 @@ exports.update = function (req, res) {
 };
 
 exports.delete = function (req, res) {
-	// Set.findOne({
-	//     _id: new ObjectId(req.params.id)
-	// }, function (err, tune) {
-	//     tune.performances.forEach(function (rec) {
-	//         rec.remove();
-	//     });
-	//     tune.arrangements.forEach(function (rec) {
-	//         rec.remove();
-	//     });
-	//     tune.remove();
-	// });
+	SetModel.findOneQ({
+		_id: new ObjectId(req.params.id)
+	})
+	.then(SetModel.cleanRemove)
+	.then(function (set) {
+		res.send({});
+	});
 
 };

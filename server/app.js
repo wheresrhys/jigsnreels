@@ -42,6 +42,7 @@ api.get('/sets', sets.fetchAll);
 api.get('/sets/:id', sets.findById);
 api.post('/sets', sets.add);
 api.put('/sets/:id', sets.update);
+api.delete('/sets/:id', sets.delete);
 
 
 api.get('/scraper', function (req, res) {
