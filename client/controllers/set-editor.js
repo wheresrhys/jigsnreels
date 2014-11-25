@@ -1,4 +1,8 @@
+var tunePromise;
+
 module.exports = function (id) {
 	var tunes = require('../collections/tunes');
-	new (require('../components/set-editor/view'))(tunes.fetch(), document.querySelector('main'), id);
+    tunePromise = tunePromise || tunes.fetch();
+	var view = new (require('../components/set-editor/view'))(tunePromise, document.querySelector('main'), id);
+    view.setAsCurrentPage();
 };

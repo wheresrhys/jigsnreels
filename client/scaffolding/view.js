@@ -1,3 +1,5 @@
+var currentPageView;
+
 module.exports = require('exoskeleton').NativeView.extend({
     buildDom: function (html) {
         var frag = document.createDocumentFragment();
@@ -21,4 +23,13 @@ module.exports = require('exoskeleton').NativeView.extend({
     renderToDom: function (html, destructive) {
         this.attachDom(this.buildDom(html), destructive);
     },
+
+    simpleDestroy: function () {
+        this.stopListening();
+        this.el.parentNode && this.el.parentNode.removeChild(this.el); 
+    },
+    setAsCurrentPage: function () {
+        currentPageView && currentPageView.destroy();
+        currentPageView = this;
+    }
 });

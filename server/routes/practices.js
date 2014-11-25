@@ -54,7 +54,11 @@ exports.update = function (req) {
 };
 
 exports.delete = function (req, res) {
-    PracticeModel.remove({
+    PracticeModel.removeQ({
         _id: new ObjectId(req.params.id)
+    }).then(function () {
+        res.send({});
+    }, function () {
+        res.send({});
     });
 };

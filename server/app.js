@@ -30,7 +30,7 @@ api.get('/practices', practices.fetchAll);
 api.get('/practices/:id', practices.findById);
 api.post('/practices', practices.add);
 api.put('/practices/:id', practices.update);
-// api.del('/performances/:id', performances.deletePerformance);
+api.delete('/practices/:id', practices.delete);
 
 api.get('/tunes', tunes.fetchAll);
 api.get('/tunes/:id', tunes.findById);

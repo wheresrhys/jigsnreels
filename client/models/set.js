@@ -56,12 +56,14 @@ module.exports = require('exoskeleton').Model.extend({
         var pos = tunes.indexOf(tuneId);
         this.get('tunes').splice(pos, 1);
         this.get('keys').splice(pos, 1);
-        // this.set('tunes', );
-        // this.set('keys', );
         this.trigger('change');
     },
     changeTuneKey: function (newKey, tuneId) {
         this.attributes.keys[this.get('tunes').indexOf(tuneId)] = newKey;
         this.trigger('change');
+    },
+    delete: function () {
+        var id = this.get('_id');
+        this.destroy();
     }
 }, {});

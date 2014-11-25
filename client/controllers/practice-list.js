@@ -1,5 +1,8 @@
+var practicesPromise;
+
 module.exports = function () {
 	var practices = require('../collections/practices');
-	practices.fetch({parse: true});
-	new (require('../components/practice-list/view'))(practices, document.querySelector('main'));
+	practicesPromise = practicesPromise || practices.fetch({parse: true});
+	var view = new (require('../components/practice-list/view'))(practicesPromise, document.querySelector('main'));    
+    view.setAsCurrentPage();
 };

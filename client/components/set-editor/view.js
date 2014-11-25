@@ -21,6 +21,7 @@ module.exports = require('../../scaffolding/view').extend({
 		this.render = this.render.bind(this);
 		this.freshSet = this.freshSet.bind(this);
 		this.tunesPromise.then(this.render);
+		this.destroy = this.simpleDestroy.bind(this);
 		this.freshSet(id);
 	},
 
@@ -62,8 +63,8 @@ module.exports = require('../../scaffolding/view').extend({
 		this.set.save();
 	},
 	delete: function (ev) {
-		if (confirm('Are you sure you want to delete the set ' + this.set.get('name').toUpperCase() + ': ' + this.set.tuneNames().join(', '))) {
-			this.set.destroy();
+		if (window.confirm('Are you sure you want to delete the set ' + this.set.get('name').toUpperCase() + ': ' + this.set.tuneNames().join(', '))) {
+			this.set.delete();
 		}
 	},
 
