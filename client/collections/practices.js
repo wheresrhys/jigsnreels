@@ -1,6 +1,6 @@
 
 // keep an accurate enough reference to the current time;
-var now;
+var now = new Date();
 
 setTimeout(function () {
 	now = new Date();
@@ -22,17 +22,18 @@ var Practices = require('exoskeleton').Collection.extend({
 		});
 		this.listenTo(sets, 'destroy', this.removeForSrc.bind(this));
 		this.on('change', function () {
-			//self.sort();
+			self.sort();
 		})
 	},
 	comparator: function (practice) {
-		var timeAgo = now - new Date(practice.get('lastPracticed')) / (24 * 60 * 60 * 1000);
+		var timeAgo = (now - new Date(practice.get('lastPracticed'))) / (24 * 60 * 60 * 1000);
 		if (isNaN(timeAgo)) {
-			timeAgo = 30;
+			return 0;
 		}
-		return -timeAgo / 2 + 
-			3 * practice.get('lastPracticeQuality') +
+		var score = (-timeAgo / 2) + 
+			1 * practice.get('lastPracticeQuality') +
 			-1 * practice.get('stickiness');	
+		return score;
 	},
 	removeForSrc: function (src) {
 		this.models.forEach(function (practice) {

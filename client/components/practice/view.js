@@ -22,7 +22,7 @@ module.exports = require('../../scaffolding/view').extend({
 		return this;
 	},
 	doPractice: function (ev) {
-		this.practice.doPractice(ev.delegateTarget.className.replace('practice__actions__', ''))
+		this.practice.doPractice(ev.delegateTarget.dataset.practiceType)
 		this.destroy();
 	}
 
