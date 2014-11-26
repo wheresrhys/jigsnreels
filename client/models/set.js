@@ -1,6 +1,5 @@
 'use strict';
 var allTunes = require('../collections/tunes');
-var practices = require('../collections/practices');
 
 module.exports = require('exoskeleton').Model.extend({
     idAttribute: '_id',
@@ -24,8 +23,7 @@ module.exports = require('exoskeleton').Model.extend({
             })
         }
         if (resp.practice) {
-            practices = require('../collections/practices');
-            practices.add(resp.practice, {parse: true});
+            this.trigger('newPractice', resp.practice);
             delete resp.practice;
         }
         return resp;
