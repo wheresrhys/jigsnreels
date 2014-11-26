@@ -1,9 +1,10 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose-q')(require('mongoose'));
 
 module.exports = mongoose.Schema({
     type: String,
     srcId: mongoose.Schema.Types.ObjectId,
-    lastPracticed: Number,
+    lastPracticed: Date,
     stickiness: {type: Number, default: 0},
-    completnness: {type: Number, default: 0}
+    completeness: {type: Number, default: 0},
+    lastPracticeQuality: {type: Number, default: 0}
 });

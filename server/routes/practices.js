@@ -6,59 +6,69 @@ var TuneModel = require('../models/tune');
 
 
 var addResourceToPractice = function (practice) {
-    practice = practice.toObject();
-    if (practice.type === 'set') {
-        return SetModel.getWithTunes(practice.srcId).then(function (set) {
-            practice.src = set;
-            return practice;
-        });
-    } else if (practice.type === 'tune') {
-        return TuneModel.findQ({
-            _id: practice.srcId
-        }).then(function (tune) {
-            practice.src = tune;
-            return practice;
-        });
-    }
+	practice = practice.toObject();
+	if (practice.type === 'set') {
+		return SetModel.getWithTunes(practice.srcId).then(function (set) {
+			practice.src = set;
+			return practice;
+		});
+	} else if (practice.type === 'tune') {
+		return TuneModel.findQ({
+			_id: practice.srcId
+		}).then(function (tune) {
+			practice.src = tune;
+			return practice;
+		});
+	}
 }
 
 
 exports.fetchAll = function (req, res) {
-    PracticeModel.findQ({}).then(function (practices) {
-        Promise.all(practices.map(addResourceToPractice)).then(function (practices) {
-            res.send(practices);    
-        })
-    }).catch(function (err) {
-        res.setStatus(500).send(err);
-    });
+	PracticeModel.findQ({}).then(function (practices) {
+		Promise.all(practices.map(addResourceToPractice)).then(function (practices) {
+			res.send(practices);    
+		})
+	}).catch(function (err) {
+		res.setStatus(500).send(err);
+	});
 };
 
 exports.findById = function (req, res) {
-    PracticeModel.findOne({
-        _id: new ObjectId(req.params.id)
-    }, function (err, result) {
-        res.send(result);
-    });
+	PracticeModel.findOne({
+		_id: new ObjectId(req.params.id)
+	}, function (err, result) {
+		res.send(result);
+	});
 };
 
 exports.add = function (req, res) {
-    PracticeModel.create(req.body, function (err, result) {
-        res.send(result);
-    });
+	PracticeModel.create(req.body, function (err, result) {
+		res.send(result);
+	});
 };
 
-exports.update = function (req) {
-    PracticeModel.update({
-        _id: new ObjectId(req.params.id)
-    }, req.body);
+
+exports.update = function (req, res) {
+	delete req.body._id;
+	req.body.lastPracticed = new Date(req.body.lastPracticed);
+	console.log(req.body);
+	PracticeModel.updateQ({
+		_id: new ObjectId(req.params.id)
+	}, req.body, {}).then(function (result) {
+		res.send(result);
+	}, function (err) {
+		console.log(err);
+	}).catch(function (err) {
+		res.setStatus(500).send(err);
+	});
 };
 
 exports.delete = function (req, res) {
-    PracticeModel.removeQ({
-        _id: new ObjectId(req.params.id)
-    }).then(function () {
-        res.send({});
-    }, function () {
-        res.send({});
-    });
+	PracticeModel.removeQ({
+		_id: new ObjectId(req.params.id)
+	}).then(function () {
+		res.send({});
+	}, function () {
+		res.send({});
+	});
 };

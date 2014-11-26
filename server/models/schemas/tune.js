@@ -2,7 +2,6 @@
 var mongoose = require('mongoose-q')(require('mongoose'));
 // var mongooseQ = require('mongoose-q')(mongoose);
 var arrangementSchema = require('./arrangement');
-var performanceSchema = require('./performance');
 
 var tuneSchema = mongoose.Schema({
     sessionId: {type: Number, 'default': 0},
