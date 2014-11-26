@@ -26,6 +26,7 @@ module.exports = BB.Model.extend({
 	},
 	doPractice: function (type) {
 		var score;
+		var oldScore = this.get('lastPracticeQuality');
 		if (type === 'good') {
 			score = 1
 		} else if (type === 'skip') {
@@ -33,7 +34,16 @@ module.exports = BB.Model.extend({
 		} else {
 			score = -1;
 		}
-		this.set('lastPracticeQuality', score)
+
+		if (score + oldScore === -2) {
+			this.set('stickiness', Math.min(this.get('stickiness') + 0.25, 3));
+		} else if (score > 1){
+			this.set('stickiness', this.get('stickiness') > 1 ? 1 : 0);
+		} else {
+			this.set('stickiness', Math.max(0, Math.min(this.get('stickiness') -0.5, 1)));
+		}
+
+		this.set('lastPracticeQuality', score);
 		this.set('lastPracticed', new Date().toISOString());
 		this.save();
 	}

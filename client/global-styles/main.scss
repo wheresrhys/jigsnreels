@@ -1,0 +1,35 @@
+$font-color: #333;
+$lines: #d7d7d7;
+$neutral-bg: #f7f7f7;
+$strong-bg: #e7e7e7;
+$set-font-color: #306;
+$tune-font-color: #530;
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, SansSerif;
+    color: $font-color;
+    font-size: 14px;
+}
+
+@mixin uiList {
+    list-style: none;
+    > li {
+        border-bottom: 1px solid $lines;
+        &:nth-child(2n) {
+            background: $neutral-bg;
+        }
+    }
+}
+
+@mixin uiListStrongItem {
+    border-top: 1px solid $lines;
+    border-bottom: 2px solid $lines;
+}
+
+@media screen and (max-width: 300px) {
+    .the {
+        display: none;
+    }
+}

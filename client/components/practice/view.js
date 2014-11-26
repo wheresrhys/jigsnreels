@@ -2,9 +2,9 @@ var swig = require('swig/index');
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
 	events: {
-		'click .practice__actions__good': 'doPractice',
-		'click .practice__actions__bad': 'doPractice',
-		'click .practice__actions__skip': 'doPractice'
+		'click .practice__good': 'doPractice',
+		'click .practice__bad': 'doPractice',
+		'click .practice__skip': 'doPractice'
 	},
 	initialize: function (practice, el, parentView) {
 		this.practice = practice;

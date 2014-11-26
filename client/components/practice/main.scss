@@ -1,0 +1,105 @@
+li.practice--sticky {
+    @include uiListStrongItem();
+}
+.practice--set {
+    .practice__subject__header {
+        padding: 10px;
+        border-bottom: 1px solid $lines;
+        position: relative;
+        box-sizing: border-box;
+        padding-right: 30px;
+    }
+    .practice__subject__name {
+        color: $set-font-color;
+    }
+}
+
+.practice__set__edit {
+    position: absolute;
+    top: 2px;
+    right: 5px;   
+}
+
+.practice--tune {
+    padding: 10px;
+}
+
+.practice--tune .practice__subject__name, 
+.practice__set__tune-name {
+    color: $tune-font-color
+}
+
+.practice {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: stretch;//flex-start;
+}
+
+.practice__subject {
+    order: 0;
+    flex: 1 1 auto;
+    align-self: auto;
+}
+
+.practice__actions {
+    order: 0;
+    flex: 0 1.3 auto;
+    align-self: auto;
+    width: 100px;
+    min-width: 40px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: stretch;//flex-start;
+}
+
+.practice__action {
+    border: none;
+    outline: none;
+    order: 0;
+    flex: 1 1 auto;
+    align-self: auto;
+    color: white;
+    cursor: pointer;
+    min-height: 35px;
+}
+
+.practice__good {
+    background: #2a0;
+}
+.practice__bad {
+    background: #b00;
+}
+.practice__skip {
+    background: #27d;
+}
+
+.practice__set {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: stretch;//flex-start;
+
+    > li {
+        order: 0;
+        flex: 1 1 auto;
+        align-self: auto;
+        list-style: none;
+        max-width: 300px;
+        box-sizing: border-box;
+        border-left: 1px solid $lines;
+        padding: 10px;
+
+        &:first-child {
+            border-left: none;
+        }
+    }
+}
+

@@ -5,7 +5,7 @@ gulp.task('clean', function () {
 });
 
 gulp.task('tpl', function  () {
-	return gulp.src('client/**/*.html')
+	return gulp.src('client/index.html')
 		.pipe(gulp.dest('./public'));
 });
 

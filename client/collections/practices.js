@@ -16,20 +16,23 @@ var Practices = require('exoskeleton').Collection.extend({
 	initialize: function () {
 		var self = this;
 		this.listenTo(sets, 'newPractice', function () {
+			// this
 			console.log(arguments);
 			// this.removeForSrc.bind(this)
 		});
 		this.listenTo(sets, 'destroy', this.removeForSrc.bind(this));
 		this.on('change', function () {
-			self.sort();
+			//self.sort();
 		})
 	},
 	comparator: function (practice) {
-		var timeAgo = now - new Date(practice.get('lastPracticed'));
+		var timeAgo = now - new Date(practice.get('lastPracticed')) / (24 * 60 * 60 * 1000);
 		if (isNaN(timeAgo)) {
-			timeAgo = 365 * 60 * 60 * 1000;
+			timeAgo = 30;
 		}
-		return -timeAgo * (1 - practice.get('lastPracticeQuality'));	
+		return -timeAgo / 2 + 
+			3 * practice.get('lastPracticeQuality') +
+			-1 * practice.get('stickiness');	
 	},
 	removeForSrc: function (src) {
 		this.models.forEach(function (practice) {

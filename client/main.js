@@ -18,6 +18,14 @@ Backbone.Deferred = function () {
 	obj.promise = p;
 	return obj;
 };  
+
+var swig = require('swig/index');
+
+swig.setFilter('deTheify', function (input) {
+	return input.replace(/^The /, function () {
+		return '<span class="the">The </span>';
+	})
+});
 // // Views that will exist regardless of what URL you are.
 // var header = new require('components/header')();
 // body.appendChild(header.render().el);

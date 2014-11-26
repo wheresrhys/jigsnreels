@@ -51,13 +51,14 @@ exports.add = function (req, res) {
 exports.update = function (req, res) {
 	delete req.body._id;
 	req.body.lastPracticed = new Date(req.body.lastPracticed);
-	console.log(req.body);
 	PracticeModel.updateQ({
 		_id: new ObjectId(req.params.id)
-	}, req.body, {}).then(function (result) {
-		res.send(result);
-	}, function (err) {
-		console.log(err);
+	}, req.body, {}).then(function () {
+		PracticeModel.findOneQ({
+			_id: new ObjectId(req.params.id)
+		}).then(function (set) {
+			res.send(set);
+		});
 	}).catch(function (err) {
 		res.setStatus(500).send(err);
 	});
