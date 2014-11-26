@@ -5,9 +5,6 @@ var URLs = {
 	tunes: function (id) {
 		return '/api/tunes' + (id ? '/' + id : '');
 	},
-	// tune: function(id) {
-	//   return '/api/tunes/'+ id;
-	// },
 	sets: function (id) {
 		return '/api/sets' + (id ? '/' + id : '');
 	},
@@ -16,8 +13,6 @@ var URLs = {
 	}
 };
 
-// Helper for accessing the URL list. Think of it as something similar
-// to Rails' URL helpers.
 exports.url = function (type) {
 	return URLs[type] && URLs[type].apply(this, [].slice.call(arguments, 1));
 };

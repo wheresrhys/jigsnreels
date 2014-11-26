@@ -15,17 +15,18 @@ var Router = require('exoskeleton').Router.extend({
 		// 'tunes/' : 'tunes',
 		'practice': 'practice',
 		'sets': 'sets',
-		'set-editor(/:id)': 'set-editor'
+		'set-editor(/:id)': 'set-editor',
+		'tune-editor(/:id)': 'tune-editor'
 	},
 	'practice': require('../controllers/practice-list'),
 	'sets': require('../controllers/set-list'),
-	'set-editor': require('../controllers/set-editor')
+	'set-editor': require('../controllers/set-editor'),
+	'tune-editor': require('../controllers/tune-editor')
 });
 
 var router = new Router();
 
-// Globally capture clicks. If they are internal and not in the pass
-// through list, route them through Backbone's navigate method.
+// Globally capture internal clicks
 document.body.addEventListener('click', function (ev) {
 	if (isInternalLink(ev.target)) {
 		if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) {

@@ -1,0 +1,25 @@
+<div class="tune-editor">
+	<form class="tune-editor__form">
+<!-- 
+
+    sessionId: {type: Number, 'default': 0},
+    oldId: mongoose.Schema.Types.ObjectId,
+    name: String,
+    abcId: mongoose.Schema.Types.ObjectId,
+    abc: String,
+    arrangements: [mongoose.Schema.Types.ObjectId],
+    meters: [String],
+    keys: [String],    
+    rhythms: [String],
+    quality: {type: Number, 'default': -1},
+    author: {type: String, 'default': 'trad arr.'},
+    genre: {type: String, 'default': 'trad'}
+		 -->
+			{% if isEditing %}
+			<input type="submit" value="save changes">
+			<input class="tune-editor__delete" type="button" value="delete tune">
+			{% else %}
+			<input type="submit" value="save new tune">
+			{% endif %}
+	</form>
+</div>

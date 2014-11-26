@@ -14,7 +14,8 @@ var tuneSchema = mongoose.Schema({
     keys: [String],    
     rhythms: [String],
     quality: {type: Number, 'default': -1},
-    author: {type: String, 'default': 'trad arr.'}
+    author: {type: String, 'default': 'trad arr.'},
+    genre: {type: String, 'default': 'trad'}
 });
 
 
