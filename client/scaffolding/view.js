@@ -2,9 +2,7 @@ var currentPageView;
 
 module.exports = require('exoskeleton').NativeView.extend({
     buildDom: function (html) {
-        var frag = document.createDocumentFragment();
-        frag.appendChild(document.createElement('div'));
-        frag = frag.firstChild;
+        var frag = document.createElement('div');
         frag.innerHTML = html;
         return frag;
     },
@@ -16,8 +14,8 @@ module.exports = require('exoskeleton').NativeView.extend({
             }
         } else {
             this.setElement(frag.firstChild);
-            destructive && (this.parent.innerHTML = '');
-            this.parent.appendChild(this.el);
+            destructive && (this.parentEl.innerHTML = '');
+            this.parentEl.appendChild(this.el);
         }        
     },
     renderToDom: function (html, destructive) {

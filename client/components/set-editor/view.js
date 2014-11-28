@@ -14,15 +14,15 @@ module.exports = require('../../scaffolding/view').extend({
         'click .set-editor__tune__delete': 'deleteTune'
 	},
 
-	initialize: function (tunesPromise, el, id) {
-		this.isEditing = !!id;
-		this.tunesPromise = tunesPromise;
-		this.parent = el;
+	initialize: function (opts) {
+		this.isEditing = !!opts.id;
+		this.tunesPromise = opts.tunesPromise;
+		this.parentEl = opts.parentEl;
 		this.render = this.render.bind(this);
 		this.freshSet = this.freshSet.bind(this);
 		this.tunesPromise.then(this.render);
 		this.destroy = this.simpleDestroy.bind(this);
-		this.freshSet(id);
+		this.freshSet(opts.id);
 	},
 
 	render: function () {

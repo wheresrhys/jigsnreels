@@ -1,0 +1,6 @@
+<span class="btn btn-large btn-{{colourings[rating.value]}} {{ratee.performance.standard == rating.value ? 'current' : ''}} {{ratee.performance.best == rating.value ? 'best' : ''}}" 
+        ng-repeat="rating in dropdowns.playback"       
+        type="checkbox"
+        tooltip="{{rating.label}}"
+        tooltip-placement="bottom"
+        ng-click="updatePerformance(rating.value)"></span>

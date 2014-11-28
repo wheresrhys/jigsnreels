@@ -29,7 +29,7 @@ li.practice--sticky {
     color: $tune-font-color
 }
 
-.practice {
+.practice__basics {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -149,5 +149,9 @@ li.practice--sticky {
             border-left: none;
         }
     }
+}
+
+.practice__abc {
+    white-space: pre;
 }
 

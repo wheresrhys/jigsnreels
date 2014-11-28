@@ -32,7 +32,7 @@ var Practices = require('exoskeleton').Collection.extend({
 		self.models.splice(self.models.indexOf(practice), 1);
 		this.models.some(function (compare, index) {
 			if (compare.score > score) {
-				self.models.splice(index, 1, [practice]);
+				self.models.splice(index, 1, practice);
 				return true;
 			}
 		}) || this.models.push(practice);	
