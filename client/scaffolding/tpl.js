@@ -15,5 +15,5 @@ swig.setFilter('deTheify', function (input) {
 });
 
 swig.setFilter('daysAgo', function (input) {
-    return Math.round(new Date(now - input).getTime() / day) + 'd ago';
+    return Math.round(new Date(now - input).getTime() / day) + 'd';
 });

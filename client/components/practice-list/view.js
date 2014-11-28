@@ -14,7 +14,7 @@ module.exports = require('../../scaffolding/view').extend({
 		this.destroy = this.simpleDestroy.bind(this);
 		var self = this;
 		practicesPromise.then(function (){
-			self.listenTo(self.practices, 'sync', self.render);
+			self.listenTo(self.practices, 'practiced', self.append);
 			self.render();
 		});
 
@@ -22,14 +22,18 @@ module.exports = require('../../scaffolding/view').extend({
 
 	render: function () {
 		this.renderToDom(swig.render(this.tpl, this.practices.Presenter().toJSON(true)), true);
-		var list = this.el.querySelector('.practice-list__list');
+		this.listEl = this.el.querySelector('.practice-list__list');
 		var self = this;
-		this.practices.models.forEach(function (practice) {
+		this.practices.models.slice(0, 10).forEach(function (practice) {
 			setTimeout(function () {
-				new practiceView(practice, list, self).render();	
+				new practiceView(practice, self.listEl, self).render();	
 			});
 		});
 
 		return this;
+	},
+
+	append: function () {
+		new practiceView(this.practices.models[9], this.listEl, this).render();
 	}
 });

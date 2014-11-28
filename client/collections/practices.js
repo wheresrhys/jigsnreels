@@ -21,9 +21,21 @@ var Practices = require('exoskeleton').Collection.extend({
 			// this.removeForSrc.bind(this)
 		});
 		this.listenTo(sets, 'destroy', this.removeForSrc.bind(this));
-		this.on('change', function () {
-			self.sort();
-		})
+		this.on('practiced', function (practice) {
+			console.log(practice);
+			self.reInsert(practice);
+		});
+	},
+	reInsert: function (practice) {
+		var score = this.comparator(practice);
+		var self = this;
+		self.models.splice(self.models.indexOf(practice), 1);
+		this.models.some(function (compare, index) {
+			if (compare.score > score) {
+				self.models.splice(index, 1, [practice]);
+				return true;
+			}
+		}) || this.models.push(practice);	
 	},
 	comparator: function (practice) {
 		var timeAgo = (now - new Date(practice.get('lastPracticed'))) / (24 * 60 * 60 * 1000);
@@ -33,6 +45,7 @@ var Practices = require('exoskeleton').Collection.extend({
 		var score = (-timeAgo / 2) + 
 			1 * practice.get('lastPracticeQuality') +
 			-1 * practice.get('stickiness');	
+		practice.score = score;
 		return score;
 	},
 	removeForSrc: function (src) {

@@ -45,6 +45,7 @@ module.exports = BB.Model.extend({
 
 		this.set('lastPracticeQuality', score);
 		this.set('lastPracticed', new Date().toISOString());
+		this.trigger('practiced', this);
 		this.save();
 	}
 });
