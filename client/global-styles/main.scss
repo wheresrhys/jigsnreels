@@ -13,6 +13,18 @@ $tune-font-color: #530;
     font-size: 14px;
 }
 
+body {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+@media screen and (min-width: 802px) {
+    body {
+        border-right: 1px solid $lines;
+        border-left: 1px solid $lines;        
+    }        
+}
+
 @mixin uiList {
     list-style: none;
     > li {

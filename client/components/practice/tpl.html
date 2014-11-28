@@ -21,10 +21,11 @@
             <p>{{ src.keys[0] }} {{src.rhythms[0] }} <a href="http://thesession.org/tunes/{{ src.sessionId }}">abc</a></p>
         {% endif %}
     </div>
-    {% if lastPracticed %}<p class="practice__stats">{{ lastPracticeQuality }} on {{ lastPracticed | date('Y-m-d') }}</p>{% endif %}
+
     <div class="practice__actions">
-        <button class="practice__action practice__good" data-practice-type="good">good</button>
-        <button class="practice__action practice__bad" data-practice-type="bad">bad</button>
-        <button class="practice__action practice__skip" data-practice-type="skip">skip</button>
+        {% if lastPracticed %}<p class="practice__stats practice__stats--{{ lastPracticeQuality }}">{{ lastPracticed | daysAgo }}</p>{% endif %}
+        <button class="practice__action practice__good" data-practice-type="good"><i></i></button>
+        <button class="practice__action practice__bad" data-practice-type="bad"><i></i></button>
+        <button class="practice__action practice__skip" data-practice-type="skip"><i></i></button>
     </div>
 </li>

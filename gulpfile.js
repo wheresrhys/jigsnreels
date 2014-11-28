@@ -9,6 +9,11 @@ gulp.task('tpl', function  () {
 		.pipe(gulp.dest('./public'));
 });
 
+gulp.task('img', function  () {
+	return gulp.src('client/global-styles/**/*.svg')
+		.pipe(gulp.dest('./public'));
+});
+
 gulp.task('jshint', function () {
 	var jshint = require('gulp-jshint');
 	return gulp.src('client/**/*.js')
@@ -52,7 +57,7 @@ gulp.task('sass', function () {
 
 // gulp.task('clean-build', ['clean'], ['tpl', 'js', 'sass']);
 
-gulp.task('default', ['tpl', 'js', 'sass']);
+gulp.task('default', ['tpl', 'js', 'sass', 'img']);
 
 gulp.task('watch', function() {
 	gulp.watch('./client/**/*.scss', ['sass']);

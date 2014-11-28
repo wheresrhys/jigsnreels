@@ -2,9 +2,6 @@
 
 require('es6-promise').polyfill();
 
-// We'll use this <body> reference to put some views in it below.
-var body = document.body;
-
 var Backbone = require('exoskeleton');
 require('Backbone.NativeAjax');
 require('Backbone.NativeView');
@@ -19,13 +16,11 @@ Backbone.Deferred = function () {
 	return obj;
 };  
 
-var swig = require('swig/index');
+require('./scaffolding/tpl');
 
-swig.setFilter('deTheify', function (input) {
-	return input.replace(/^The /, function () {
-		return '<span class="the">The </span>';
-	})
-});
+
+// We'll use this <body> reference to put some views in it below.
+var body = document.body;
 // // Views that will exist regardless of what URL you are.
 // var header = new require('components/header')();
 // body.appendChild(header.render().el);
