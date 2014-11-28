@@ -6,42 +6,54 @@ $set-font-color: #306;
 $tune-font-color: #530;
 
 * {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, Helvetica, SansSerif;
-    color: $font-color;
-    font-size: 14px;
+	margin: 0;
+	padding: 0;
+	font-family: Arial, Helvetica, SansSerif;
+	color: $font-color;
+	font-size: 14px;
 }
 
 body {
-    max-width: 800px;
-    margin: 0 auto;
+	max-width: 800px;
+	margin: 0 auto;
 }
 
 @media screen and (min-width: 802px) {
-    body {
-        border-right: 1px solid $lines;
-        border-left: 1px solid $lines;        
-    }        
+	body {
+		border-right: 1px solid $lines;
+		border-left: 1px solid $lines;        
+	}        
 }
 
 @mixin uiList {
-    list-style: none;
-    > li {
-        border-bottom: 1px solid $lines;
-        &:nth-child(2n) {
-            background: $neutral-bg;
-        }
-    }
+	list-style: none;
+	
+	> li {
+		background: #fff;
+		border-bottom: 1px solid $lines;
+		&:nth-child(2n) {
+			background: $neutral-bg;
+		}
+	}
+
+	&.alt {
+		> li {
+		background: $neutral-bg;
+		
+			&:nth-child(2n) {
+				background: #fff;
+			}
+		}
+	}
 }
 
 @mixin uiListStrongItem {
-    border-top: 1px solid $lines;
-    border-bottom: 2px solid $lines;
+	border-top: 1px solid $lines;
+	border-bottom: 2px solid $lines;
 }
 
 @media screen and (max-width: 300px) {
-    .the {
-        display: none;
-    }
+	.the {
+		display: none;
+	}
 }
