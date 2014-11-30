@@ -5,6 +5,24 @@ $strong-bg: #e7e7e7;
 $set-font-color: #306;
 $tune-font-color: #530;
 
+html:not([data-environment="development"]){
+	padding-top: 30px;
+	&::before {
+		display: block;
+		background: red;
+		content: 'PRODUCTION';
+		text-align: center;
+		font-weight: bold;
+		font-size: 20px;
+		height: 30px;
+		line-height: 30px;
+		position: fixed;
+		top: 0;
+		width: 100%;
+		z-index: 1;
+	}
+}
+
 * {
 	margin: 0;
 	padding: 0;

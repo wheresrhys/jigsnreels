@@ -11,7 +11,6 @@ var abcConf = {
 	paddingleft: 0
 }
 
-
 module.exports = require('../../scaffolding/view').extend({
 	
 	events: {
