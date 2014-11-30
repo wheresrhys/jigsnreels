@@ -7,7 +7,7 @@ module.exports = require('../../scaffolding/view').extend({
 		'click .piece__practice--good': 'practice',
 		'click .piece__practice--bad': 'practice',
 		'click .piece__practice--skip': 'practice',
-		'click .practice__view-abc': 'viewAbc',
+		'click .piece__view-abc': 'viewAbc',
 	},
 	initialize: function (opts) {
 		this.piece = opts.piece;
@@ -23,7 +23,7 @@ module.exports = require('../../scaffolding/view').extend({
 
 	render: function () {
 		this.renderToDom(swig.render(this.tpl, this.piece.Presenter().toJSON(true)))
-		this.abcEl = this.el.querySelector('.practice__abc');
+		this.abcEl = this.el.querySelector('.piece__abc');
 		return this;
 	},
 	practice: function (ev) {
