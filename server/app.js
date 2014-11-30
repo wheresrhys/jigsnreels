@@ -14,13 +14,14 @@ var swig = require('swig');
 
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
-app.set('views', __dirname + '/../client');
+app.set('views', require('path').join(__dirname, '../public'));
 swig.setDefaults({ cache: false });
 
 
 app.set('port', process.env.PORT);
 // app.use(express.logger('dev'));  /* ''default'', 'short', 'tiny', 'dev' */
-app.use(express.static(path.join(__dirname.substr(0, __dirname.lastIndexOf('/')), 'public')));
+// console.log(path.join(__dirname.substr(0, __dirname.lastIndexOf('/'))));
+app.use('/', express.static(require('path').join(__dirname, '../public')));
 
 var api = express.Router();
 
@@ -63,7 +64,7 @@ app.get('/', index)
     .get('/index.html', index)
     .get('/tune*', index)
     .get('/set*', index)
-    .get('/practice*', index);
+    .get('/practice', index);
 
 app.listen(process.env.PORT, function() {
     console.log('Listening on ' + process.env.PORT);
