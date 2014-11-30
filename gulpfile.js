@@ -36,6 +36,10 @@ gulp.task('js', function () {
 				abc: {
 					path: './bower_components/abcjs/bin/abcjs_basic_1.9-min.js',
 					exports: 'ABCJS'
+				},
+				backbone: {
+					path: './bower_components/exoskeleton/exoskeleton.js',
+					exports: 'Backbone'
 				}
 			}
 		}))

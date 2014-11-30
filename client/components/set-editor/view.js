@@ -2,6 +2,7 @@ var swig = require('swig/index');
 var SetModel = require('../../data/models/set');
 var allSets = require('../../data/collections/sets');
 var allTunes = require('../../data/collections/tunes');
+var AbcViewer = require('../abc-viewer/view')
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
@@ -11,7 +12,8 @@ module.exports = require('../../scaffolding/view').extend({
         'change .set-editor__set-name': 'addName',
         'submit .set-editor__form': 'save',
         'click .set-editor__delete': 'delete',
-        'click .set-editor__tune__delete': 'deleteTune'
+        'click .set-editor__tune__delete': 'deleteTune',
+        'click .set-editor__tune__view': 'viewTune'
 	},
 
 	initialize: function (opts) {
@@ -38,11 +40,30 @@ module.exports = require('../../scaffolding/view').extend({
 				}).toJSON()
 			}
 		}), true);
+		this.abcEl = this.el.querySelector('.set-editor__abc-viewer');
 	},
 
 	appendTune: function (ev) {
 		var select = ev.delegateTarget;
-		this.set.appendTune(select.children[select.selectedIndex].value);
+		var tuneId = select.children[select.selectedIndex].value;
+		this.set.appendTune(tuneId);
+		this.abcViewer = new AbcViewer({
+			tuneId: tuneId,
+			parentEl: this.abcEl, 
+			parentView: this,
+			isDismissable: true
+		});
+	},
+
+	viewTune: function (ev) {
+		ev.preventDefault();
+		this.abcViewer && this.abcViewer.destroy();
+		this.abcViewer = new AbcViewer({
+			tuneId: ev.delegateTarget.parentNode.dataset.tuneId,
+			parentEl: this.abcEl, 
+			parentView: this,
+			isDismissable: true
+		});
 	},
 
 	deleteTune: function (ev) {
