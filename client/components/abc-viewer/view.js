@@ -41,7 +41,7 @@ module.exports = require('../../scaffolding/view').extend({
 		var abc = this.opts.snippetOnly ? this.getSnippet() : this.tune.get('abc');
 		var self = this;
 		setTimeout(function () {
-			ABCJS.renderAbc(self.el.querySelector('.abc-viewer__score'), abc, {}, abcConf, {});
+			ABC.renderAbc(self.el.querySelector('.abc-viewer__score'), abc, {}, abcConf, {});
 		});
 		// if (self.snippetOnly) {
 		//     snippetsStore.cacheScore(self.arrangement, self.el[0].innerHTML);
