@@ -2,7 +2,7 @@
 
 var swig = require('swig/index');
 var allTunes = require('../../collections/tunes');
-var ABCJS = require('abcjs');
+var ABC = require('abc');
 var abcConf = {
 	scale: 0.6,
 	paddingtop: 0,

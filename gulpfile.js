@@ -33,8 +33,8 @@ gulp.task('js', function () {
 			transform: ['debowerify', require('swigify')({compress: null})],
 			exclude: ['underscore', 'jquery'],
 			shim: {
-				abcjs: {
-					path: './bower_components/abcjs/index.js',
+				abc: {
+					path: './bower_components/abcjs/bin/abcjs_basic_1.9-min.js',
 					exports: 'ABCJS'
 				},
 				backbone: {
