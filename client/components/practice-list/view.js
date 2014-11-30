@@ -1,5 +1,5 @@
 var swig = require('swig/index');
-var practiceView = require('../practice/view');
+var PracticeView = require('../practice/view');
 var practices = require('../../collections/practices');
 
 module.exports = require('../../scaffolding/view').extend({
@@ -13,12 +13,13 @@ module.exports = require('../../scaffolding/view').extend({
 		this.length = 20;
 		this.render = this.render.bind(this);
 		this.destroy = this.simpleDestroy.bind(this);
+		this.enforceUniqueAbc = this.enforceUniqueAbc.bind(this);
+		this.appendModel = this.appendModel.bind(this);
 		var self = this;
 		opts.practicesPromise.then(function (){
 			self.listenTo(self.practices, 'practiced', self.append);
 			self.render();
 		});
-
 	},
 
 	render: function () {
@@ -27,23 +28,29 @@ module.exports = require('../../scaffolding/view').extend({
 		var self = this;
 		this.practices.models.slice(0, this.length).forEach(function (practice) {
 			setTimeout(function () {
-				new practiceView({
-					practice: practice, 
-					parentEl: self.listEl,
-					parentView: self
-				}).render();	
+				self.appendModel(practice);
 			});
 		});
 
 		return this;
 	},
 
-	append: function () {
-		this.listEl.classList.toggle('alt');
-		new practiceView({
-			practice: this.practices.models[this.length - 1], 
+	appendModel: function (model) {
+		var practiceView = new PracticeView({
+			practice: model, 
 			parentEl: this.listEl,
 			parentView: this
-		}).render();
+		}).render();	
+		this.listenTo(practiceView, 'abc-open', this.enforceUniqueAbc);
+	},
+
+	enforceUniqueAbc: function (practice) {
+		this.abcViewer && this.abcViewer.destroy();
+		this.abcViewer = practice.abcViewer;
+	},
+
+	append: function () {
+		this.listEl.classList.toggle('alt');
+		this.appendModel(this.practices.models[this.length - 1]);
 	}
 });

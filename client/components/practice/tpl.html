@@ -11,7 +11,7 @@
                 <ol class="practice__set">
                     {% for tuneIndex, tune in src.tunes %}
                     <li><h4 class="practice__set__tune-name">{{ tune.name | deTheify | safe }}</h4>{{ src.keys[tuneIndex] }} {{tune.rhythms[0] }}
-                    <button class="practice__view-abc" data-tune-id="{{ tune._id }}">abc</button></li>
+                    <button class="practice__view-abc" data-tune-id="{{ tune._id }}"></button></li>
                     {% endfor %}
                 </ol>
                 
@@ -19,7 +19,7 @@
                 {% if src.name %}
                     <h3 class="practice__subject__name">{{ src.name | deTheify | safe }}</h3>
                 {% endif %}
-                <p>{{ src.keys[0] }} {{src.rhythms[0] }} <button class="practice__view-abc" data-tune-id="{{ src._id }}">abc</button></p>
+                <p>{{ src.keys[0] }} {{src.rhythms[0] }} <button class="practice__view-abc" data-tune-id="{{ src._id }}"></button></p>
             {% endif %}
         </div>
 

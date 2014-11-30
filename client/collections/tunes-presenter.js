@@ -27,6 +27,7 @@ module.exports = require('../scaffolding/presenter').extend({
 			var by = this.options.by;
 			models.forEach(function (tune) {
 				tune.get(by + 's').forEach(function (group) {
+					group = group.toLowerCase();
 					hash[group] ? hash[group].push(tune) : (hash[group] = [tune]);	
 				});
 			});

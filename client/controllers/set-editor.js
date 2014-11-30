@@ -1,10 +1,10 @@
-var tunePromise;
+var tunesPromise;
 
 module.exports = function (id) {
 	var tunes = require('../collections/tunes');
-    tunePromise = tunePromise || tunes.fetch();
+    tunesPromise = tunesPromise || tunes.fetch();
 	var view = new (require('../components/set-editor/view'))({
-        tunePromise: tunePromise,
+        tunesPromise: tunesPromise,
         parentEl: document.querySelector('main'), 
         id: id
     });

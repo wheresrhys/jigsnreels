@@ -151,7 +151,15 @@ li.practice--sticky {
     }
 }
 
-.practice__abc {
-    white-space: pre;
+.practice__view-abc {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    height: 20px;
+    display: inline-block;
+    width: 20px;
+    background: url('img/ic_score.svg') no-repeat;
+    background-size: 20px;
+    position: relative;
+    top: 5px;    
 }
-

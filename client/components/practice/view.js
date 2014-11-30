@@ -34,11 +34,17 @@ module.exports = require('../../scaffolding/view').extend({
 		this.abcViewer = new AbcViewer({
 			tuneId: ev.delegateTarget.dataset.tuneId,
 			parentEl: this.abcEl, 
-			parentView: this
-		});  
+			parentView: this,
+			isDismissable: true
+		});
+		this.trigger('abc-open', this);
+	},
+	closeAbc: function () {
+		this.abcViewer && this.abcViewer.destroy();
+		delete this.abcViewer;
 	},
 	destroy: function () {
-		this.abcViewer && this.abcViewer.destroy();
+		this.closeAbc();
 		this.simpleDestroy();
 	}
 
