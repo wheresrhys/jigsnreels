@@ -54,6 +54,8 @@ gulp.task('sass', function () {
 		.pipe(gulp.dest('./public'));
 } );
 
+gulp.task('test', ['jshint']);
+
 
 // gulp.task('clean-build', ['clean'], ['tpl', 'js', 'sass']);
 
