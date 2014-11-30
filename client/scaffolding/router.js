@@ -7,7 +7,7 @@ function isInternalLink(el) {
 	}
 }
 
-var Router = require('exoskeleton').Router.extend({
+var Router = require('backbone-es6').Router.extend({
 	routes: {
 		'': function () {
 			this.navigate('practice', {trigger: true});
@@ -38,6 +38,6 @@ document.body.addEventListener('click', function (ev) {
 });
 
 // Kick off the router code.
-require('exoskeleton').history.start({pushState: true});
+require('backbone-es6').history.start({pushState: true});
 
 module.exports = router;

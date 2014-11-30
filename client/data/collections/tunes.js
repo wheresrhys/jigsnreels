@@ -1,4 +1,4 @@
-var Tunes = require('exoskeleton').Collection.extend({
+var Tunes = require('backbone-es6').Collection.extend({
     name: 'tunes',
 	url: require('../../scaffolding/api').url('tunes'),
 	model: require('../models/tune'),

@@ -1,4 +1,4 @@
-var BB = require('exoskeleton');
+var BB = require('backbone-es6');
 
 var Presenter = function (options, data) {
 	options = options || {};

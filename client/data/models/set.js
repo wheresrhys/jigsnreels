@@ -1,7 +1,7 @@
 'use strict';
 var allTunes = require('../collections/tunes');
 
-module.exports = require('exoskeleton').Model.extend({
+module.exports = require('backbone-es6').Model.extend({
     idAttribute: '_id',
     url: function () {
         return require('../../scaffolding/api').url('sets', this.id);

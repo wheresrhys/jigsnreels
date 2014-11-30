@@ -4,9 +4,9 @@ var AbcViewer = require('../abc-viewer/view');
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
 	events: {
-		'click .practice__good': 'practice',
-		'click .practice__bad': 'practice',
-		'click .practice__skip': 'practice',
+		'click .piece__practice--good': 'practice',
+		'click .piece__practice--bad': 'practice',
+		'click .piece__practice--skip': 'practice',
 		'click .practice__view-abc': 'viewAbc',
 	},
 	initialize: function (opts) {

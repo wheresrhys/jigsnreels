@@ -7,7 +7,7 @@ setTimeout(function () {
 }, 1000);
 
 var sets = require('./sets');
-var Pieces = require('exoskeleton').Collection.extend({
+var Pieces = require('backbone-es6').Collection.extend({
 	name: 'pieces',
 	url: require('../../scaffolding/api').url('pieces'),
 	model: require('../models/piece'),

@@ -3,7 +3,7 @@
 var tunes = require('../collections/tunes');
 var sets = require('../collections/sets');
 
-var BB = require('exoskeleton');
+var BB = require('backbone-es6');
 module.exports = BB.Model.extend({
 	idAttribute: '_id',
 	url: function () {

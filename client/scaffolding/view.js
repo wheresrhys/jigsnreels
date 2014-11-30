@@ -1,6 +1,6 @@
 var currentPageView;
 
-module.exports = require('exoskeleton').NativeView.extend({
+module.exports = require('backbone-es6').NativeView.extend({
     buildDom: function (html) {
         var frag = document.createElement('div');
         frag.innerHTML = html;

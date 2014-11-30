@@ -1,23 +1,6 @@
 'use strict';
 
-require('es6-promise').polyfill();
-
-var Backbone = require('exoskeleton');
-require('Backbone.NativeAjax');
-require('Backbone.NativeView');
-
-Backbone.Deferred = function () {
-	var obj = {};
-	var p = new Promise(function (resolve, reject) {
-		obj.resolve = resolve;
-		obj.reject = reject;
-	});
-	obj.promise = p;
-	return obj;
-};  
-
 require('./scaffolding/tpl');
-
 
 // We'll use this <body> reference to put some views in it below.
 var body = document.body;
