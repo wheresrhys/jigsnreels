@@ -1,6 +1,6 @@
 var swig = require('swig/index');
 var PracticeView = require('../practice/view');
-var practices = require('../../collections/practices');
+var practices = require('../../data/collections/practices');
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),

@@ -10,7 +10,7 @@ function isInternalLink(el) {
 var Router = require('exoskeleton').Router.extend({
 	routes: {
 		'': function () {
-			this.navigate('sets', {trigger: true});
+			this.navigate('practice', {trigger: true});
 		},
 		// 'tunes/' : 'tunes',
 		'practice': 'practice',

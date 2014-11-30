@@ -1,4 +1,4 @@
-module.exports = require('../scaffolding/presenter').extend({
+module.exports = require('../../scaffolding/presenter').extend({
 	
 	toJSON: function (standalone) {
 		var json = {

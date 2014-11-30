@@ -1,6 +1,6 @@
 var tunes = require('../collections/tunes');
 
-module.exports = require('../scaffolding/presenter').extend({
+module.exports = require('../../scaffolding/presenter').extend({
 	isPersistable: true,
 	toJSON: function (standalone) {
 		var json = this.model.toJSON();

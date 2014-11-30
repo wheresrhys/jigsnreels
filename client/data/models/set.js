@@ -4,7 +4,7 @@ var allTunes = require('../collections/tunes');
 module.exports = require('exoskeleton').Model.extend({
     idAttribute: '_id',
     url: function () {
-        return require('../scaffolding/api').url('sets', this.id);
+        return require('../../scaffolding/api').url('sets', this.id);
     },
 
     Presenter: require('./set-presenter'),

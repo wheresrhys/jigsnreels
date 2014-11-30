@@ -8,7 +8,7 @@ var logTuneNames =function (tunes) {
 	}));
 }
 
-module.exports = require('../scaffolding/presenter').extend({
+module.exports = require('../../scaffolding/presenter').extend({
 	construct: function () {
 
 	},

@@ -1,7 +1,7 @@
 var swig = require('swig/index');
-var SetModel = require('../../models/set');
-var allSets = require('../../collections/sets');
-var allTunes = require('../../collections/tunes');
+var SetModel = require('../../data/models/set');
+var allSets = require('../../data/collections/sets');
+var allTunes = require('../../data/collections/tunes');
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),

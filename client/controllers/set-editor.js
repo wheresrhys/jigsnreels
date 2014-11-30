@@ -1,7 +1,7 @@
 var tunesPromise;
 
 module.exports = function (id) {
-	var tunes = require('../collections/tunes');
+	var tunes = require('../data/collections/tunes');
     tunesPromise = tunesPromise || tunes.fetch();
 	var view = new (require('../components/set-editor/view'))({
         tunesPromise: tunesPromise,

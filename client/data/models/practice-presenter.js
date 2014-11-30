@@ -1,7 +1,7 @@
 var tunes = require('../collections/tunes');
 var sets = require('../collections/sets');
 
-module.exports = require('../scaffolding/presenter').extend({
+module.exports = require('../../scaffolding/presenter').extend({
 	isPersistable: true,
 	construct: function () {
 		var self = this;
