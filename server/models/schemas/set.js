@@ -1,7 +1,7 @@
 var mongoose = require('mongoose-q')(require('mongoose'));
 var transitionSchema = require('./transition');
 var TuneModel = require('../tune');
-var PracticeModel = require('../practice');
+var PieceModel = require('../piece');
 
 var setSchema = mongoose.Schema({
     name: String,
@@ -21,21 +21,21 @@ setSchema.statics.addTunes = function (set) {
     });
 }
 
-setSchema.statics.addPractice = function (set) {
-    return PracticeModel.findOneQ({srcId: this._id }).then(function (foundPractice) {
-        return (foundPractice ? Promise.resolve(foundPractice) : PracticeModel.createQ({
+setSchema.statics.addPiece = function (set) {
+    return PieceModel.findOneQ({srcId: this._id }).then(function (foundPiece) {
+        return (foundPiece ? Promise.resolve(foundPiece) : PieceModel.createQ({
             srcId: set._id,
             type: 'set'
-        })).then(function (practice) {
+        })).then(function (piece) {
             set = set.toObject();
-            set.practice = practice;
+            set.piece = piece;
             return set;
         });
     });
 }
 
 setSchema.statics.cleanRemove = function (set) {
-    return PracticeModel.removeQ({srcId: set._id }).then(function () {
+    return PieceModel.removeQ({srcId: set._id }).then(function () {
         return set.removeQ();
     });    
 }

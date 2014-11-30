@@ -1,4 +1,4 @@
-var practices = [];
+var pieces = [];
 
 db.oldperformances.find({
     instrument: 'mandolin'
@@ -21,7 +21,7 @@ db.oldperformances.find({
         if (!newTune) {
             return db.dodgyPerfs.insert(perf); 
         }
-        practices.push({
+        pieces.push({
             type: 'tune',
             srcId: newTune._id,
             stickiness: 0
@@ -29,22 +29,22 @@ db.oldperformances.find({
     }
 });
 
-practices.forEach(function (practice) {
+pieces.forEach(function (piece) {
     var unique = true;
 
     db.sets.find().forEach(function (set) {
-        if (db.practices.find({
+        if (db.pieces.find({
             srcId: set._id,
             type: 'set'
         }).length()) {
             set.tunes.forEach(function (tuneId) {
-                if (tuneId.equals(practice.srcId)) {
+                if (tuneId.equals(piece.srcId)) {
                     unique = false; 
                 }
             });
         }
     })
     if (unique) {
-        db.practices.insert(practice);
+        db.pieces.insert(piece);
     }
 })

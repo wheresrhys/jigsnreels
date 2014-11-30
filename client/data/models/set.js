@@ -22,9 +22,9 @@ module.exports = require('exoskeleton').Model.extend({
                 return tune._id;
             })
         }
-        if (resp.practice) {
-            this.trigger('newPractice', resp.practice);
-            delete resp.practice;
+        if (resp.piece) {
+            this.trigger('newPiece', resp.piece);
+            delete resp.piece;
         }
         return resp;
     },

@@ -2,7 +2,7 @@ var express = require('express');
 var db = require('./models/_dbConnection');
 var path = require('path');
 var http = require('http');
-var practices = require('./routes/practices');
+var pieces = require('./routes/pieces');
 var tunes = require('./routes/tunes');
 var sets = require('./routes/sets');
 var scraper = require('./lib/scraper');
@@ -26,11 +26,11 @@ var api = express.Router();
 
 api.use(require('body-parser').json());
 
-api.get('/practices', practices.fetchAll);
-api.get('/practices/:id', practices.findById);
-api.post('/practices', practices.add);
-api.put('/practices/:id', practices.update);
-api.delete('/practices/:id', practices.delete);
+api.get('/pieces', pieces.fetchAll);
+api.get('/pieces/:id', pieces.findById);
+api.post('/pieces', pieces.add);
+api.put('/pieces/:id', pieces.update);
+api.delete('/pieces/:id', pieces.delete);
 
 api.get('/tunes', tunes.fetchAll);
 api.get('/tunes/:id', tunes.findById);

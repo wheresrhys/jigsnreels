@@ -44,7 +44,7 @@ db.oldsets.find().forEach(function (set) {
     if (newSet) {
         db.sets.insert(newSet); 
         if (isMandoSet(oldTunes)) {
-            db.practices.insert({
+            db.pieces.insert({
                 type: 'set',
                 srcId: db.sets.find().sort( { _id : -1 } ).limit(1)[0]._id
             }); 

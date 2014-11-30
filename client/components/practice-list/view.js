@@ -1,6 +1,6 @@
 var swig = require('swig/index');
-var PracticeView = require('../practice/view');
-var practices = require('../../data/collections/practices');
+var PieceView = require('../piece/view');
+var pieces = require('../../data/collections/pieces');
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
@@ -8,7 +8,7 @@ module.exports = require('../../scaffolding/view').extend({
 	events: {},
 
 	initialize: function (opts) {
-		this.practices = practices;
+		this.pieces = pieces;
 		this.parentEl = opts.parentEl;
 		this.length = 20;
 		this.render = this.render.bind(this);
@@ -16,19 +16,19 @@ module.exports = require('../../scaffolding/view').extend({
 		this.enforceUniqueAbc = this.enforceUniqueAbc.bind(this);
 		this.appendModel = this.appendModel.bind(this);
 		var self = this;
-		opts.practicesPromise.then(function (){
-			self.listenTo(self.practices, 'practiced', self.append);
+		opts.piecesPromise.then(function (){
+			self.listenTo(self.pieces, 'practiced', self.append);
 			self.render();
 		});
 	},
 
 	render: function () {
-		this.renderToDom(swig.render(this.tpl, this.practices.Presenter().toJSON(true)), true);
+		this.renderToDom(swig.render(this.tpl, this.pieces.Presenter().toJSON(true)), true);
 		this.listEl = this.el.querySelector('.practice-list__list');
 		var self = this;
-		this.practices.models.slice(0, this.length).forEach(function (practice) {
+		this.pieces.models.slice(0, this.length).forEach(function (piece) {
 			setTimeout(function () {
-				self.appendModel(practice);
+				self.appendModel(piece);
 			});
 		});
 
@@ -36,21 +36,21 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	appendModel: function (model) {
-		var practiceView = new PracticeView({
-			practice: model, 
+		var pieceView = new PieceView({
+			piece: model, 
 			parentEl: this.listEl,
 			parentView: this
 		}).render();	
-		this.listenTo(practiceView, 'abc-open', this.enforceUniqueAbc);
+		this.listenTo(pieceView, 'abc-open', this.enforceUniqueAbc);
 	},
 
-	enforceUniqueAbc: function (practice) {
+	enforceUniqueAbc: function (piece) {
 		this.abcViewer && this.abcViewer.destroy();
-		this.abcViewer = practice.abcViewer;
+		this.abcViewer = piece.abcViewer;
 	},
 
 	append: function () {
 		this.listEl.classList.toggle('alt');
-		this.appendModel(this.practices.models[this.length - 1]);
+		this.appendModel(this.pieces.models[this.length - 1]);
 	}
 });

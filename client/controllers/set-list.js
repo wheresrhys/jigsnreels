@@ -1,6 +1,5 @@
 var setsPromise;
 
-
 module.exports = function () {
 	var sets = require('../data/collections/sets');
 	setsPromise = setsPromise || sets.fetch();

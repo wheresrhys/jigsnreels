@@ -11,8 +11,8 @@ var URLs = {
 	sets: function (id) {
 		return '/api/sets' + (id ? '/' + id : '');
 	},
-	practices: function (id) {
-		return '/api/practices' + (id ? '/' + id : '');
+	pieces: function (id) {
+		return '/api/pieces' + (id ? '/' + id : '');
 	}
 };
 

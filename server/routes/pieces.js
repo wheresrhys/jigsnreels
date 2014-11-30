@@ -1,32 +1,32 @@
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
-var PracticeModel = require('../models/practice');
+var PieceModel = require('../models/piece');
 var SetModel = require('../models/set');
 var TuneModel = require('../models/tune');
 
 
-var addResourceToPractice = function (practice) {
-	practice = practice.toObject();
-	if (practice.type === 'set') {
-		return SetModel.getWithTunes(practice.srcId).then(function (set) {
-			practice.src = set;
-			return practice;
+var addResourceToPiece = function (piece) {
+	piece = piece.toObject();
+	if (piece.type === 'set') {
+		return SetModel.getWithTunes(piece.srcId).then(function (set) {
+			piece.src = set;
+			return piece;
 		});
-	} else if (practice.type === 'tune') {
+	} else if (piece.type === 'tune') {
 		return TuneModel.findQ({
-			_id: practice.srcId
+			_id: piece.srcId
 		}).then(function (tune) {
-			practice.src = tune;
-			return practice;
+			piece.src = tune;
+			return piece;
 		});
 	}
 }
 
 
 exports.fetchAll = function (req, res) {
-	PracticeModel.findQ({}).then(function (practices) {
-		Promise.all(practices.map(addResourceToPractice)).then(function (practices) {
-			res.send(practices);    
+	PieceModel.findQ({}).then(function (pieces) {
+		Promise.all(pieces.map(addResourceToPiece)).then(function (pieces) {
+			res.send(pieces);    
 		})
 	}).catch(function (err) {
 		res.setStatus(500).send(err);
@@ -34,7 +34,7 @@ exports.fetchAll = function (req, res) {
 };
 
 exports.findById = function (req, res) {
-	PracticeModel.findOne({
+	PieceModel.findOne({
 		_id: new ObjectId(req.params.id)
 	}, function (err, result) {
 		res.send(result);
@@ -42,7 +42,7 @@ exports.findById = function (req, res) {
 };
 
 exports.add = function (req, res) {
-	PracticeModel.create(req.body, function (err, result) {
+	PieceModel.create(req.body, function (err, result) {
 		res.send(result);
 	});
 };
@@ -50,11 +50,11 @@ exports.add = function (req, res) {
 
 exports.update = function (req, res) {
 	delete req.body._id;
-	req.body.lastPracticed = new Date(req.body.lastPracticed);
-	PracticeModel.updateQ({
+	req.body.lastPieced = new Date(req.body.lastPieced);
+	PieceModel.updateQ({
 		_id: new ObjectId(req.params.id)
 	}, req.body, {}).then(function () {
-		PracticeModel.findOneQ({
+		PieceModel.findOneQ({
 			_id: new ObjectId(req.params.id)
 		}).then(function (set) {
 			res.send(set);
@@ -65,7 +65,7 @@ exports.update = function (req, res) {
 };
 
 exports.delete = function (req, res) {
-	PracticeModel.removeQ({
+	PieceModel.removeQ({
 		_id: new ObjectId(req.params.id)
 	}).then(function () {
 		res.send({});

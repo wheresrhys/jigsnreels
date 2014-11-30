@@ -1,35 +1,35 @@
-li.practice--sticky {
+li.piece--sticky {
     @include uiListStrongItem();
 }
-.practice--set {
-    .practice__subject__header {
+.piece--set {
+    .piece__subject__header {
         padding: 10px;
         border-bottom: 1px solid $lines;
         position: relative;
         box-sizing: border-box;
         padding-right: 30px;
     }
-    .practice__subject__name {
+    .piece__subject__name {
         color: $set-font-color;
     }
 }
 
-.practice__set__edit {
+.piece__set__edit {
     position: absolute;
     top: 2px;
     right: 5px;   
 }
 
-.practice--tune .practice__subject {
+.piece--tune .piece__subject {
     padding: 10px;
 }
 
-.practice--tune .practice__subject__name, 
-.practice__set__tune-name {
+.piece--tune .piece__subject__name, 
+.piece__set__tune-name {
     color: $tune-font-color
 }
 
-.practice__basics {
+.piece__basics {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -38,13 +38,13 @@ li.practice--sticky {
     align-items: stretch;
 }
 
-.practice__subject {
+.piece__subject {
     order: 0;
     flex: 1 1 auto;
     align-self: auto;
 }
 
-.practice__actions {
+.piece__actions {
     order: 0;
     flex: 0 0 auto;
     align-self: auto;
@@ -60,7 +60,7 @@ li.practice--sticky {
 
 
 
-.practice__stats {
+.piece__stats {
     line-height: 1.4;
     padding-left: 20px;
     background-size: 15px 15px;
@@ -68,19 +68,19 @@ li.practice--sticky {
     background-position: 2px 2px;
 }
 
-.practice__stats--good {
+.piece__stats--good {
     background-image: url('img/ic_thumb_up.svg');
 }
 
-.practice__stats--bad {
+.piece__stats--bad {
     background-image: url('img/ic_thumb_down.svg');   
 }
 
-.practice__stats--neutral {
+.piece__stats--neutral {
     background-image: url('img/ic_thumbs_up_down.svg');
 }
 
-.practice__action {
+.piece__practice {
     border: none;
     outline: none;
     order: 0;
@@ -102,7 +102,7 @@ li.practice--sticky {
 }
 
 
-.practice__good {
+.piece__practice--good {
     background-color: #2a0;
     
     i {
@@ -110,7 +110,7 @@ li.practice--sticky {
     }
 }
 
-.practice__bad {
+.piece__practice--bad {
     background-color: #b00;
     
     i {
@@ -118,7 +118,7 @@ li.practice--sticky {
     }
 }
 
-.practice__skip {
+.piece__practice--skip {
     background-color: #27d;
     
     i {
@@ -127,7 +127,7 @@ li.practice--sticky {
 }
 
 
-.practice__set {
+.piece__set {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -151,7 +151,7 @@ li.practice--sticky {
     }
 }
 
-.practice__view-abc {
+.piece__view-abc {
     border: none;
     outline: none;
     cursor: pointer;

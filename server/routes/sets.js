@@ -25,7 +25,7 @@ exports.findById = function (req, res) {
 
 exports.add = function (req, res) {
 	SetModel.createQ(req.body).then(function (set) {
-		SetModel.addPractice(set).then(function (set) {
+		SetModel.addPiece(set).then(function (set) {
 			res.send(set);	
 		});
 	}).catch(function (err) {

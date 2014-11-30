@@ -1,0 +1,34 @@
+<li class="piece {% if isSticky %}piece--sticky{% endif %} piece--{{type}}" data-piece-id={{ _id }}>
+    <div class="piece__basics">
+        <div class="piece__subject">
+            {% if type === 'set' %}
+                <div class="piece__subject__header">
+                    {% if src.name %}
+                    <h3 class="piece__subject__name">{{ src.name | deTheify | safe }}</h3>
+                    {% endif %}
+                    <a href="/set-editor/{{src._id}}" class="piece__set__edit">edit</a>
+                </div>
+                <ol class="piece__set">
+                    {% for tuneIndex, tune in src.tunes %}
+                    <li><h4 class="piece__set__tune-name">{{ tune.name | deTheify | safe }}</h4>{{ src.keys[tuneIndex] }} {{tune.rhythms[0] }}
+                    <button class="piece__view-abc" data-tune-id="{{ tune._id }}"></button></li>
+                    {% endfor %}
+                </ol>
+                
+            {% else %}
+                {% if src.name %}
+                    <h3 class="piece__subject__name">{{ src.name | deTheify | safe }}</h3>
+                {% endif %}
+                <p>{{ src.keys[0] }} {{src.rhythms[0] }} <button class="piece__view-abc" data-tune-id="{{ src._id }}"></button></p>
+            {% endif %}
+        </div>
+
+        <div class="piece__actions">
+            {% if lastPracticed %}<p class="piece__stats piece__stats--{{ lastPracticeQuality }}">{{ lastPracticed | daysAgo }}</p>{% endif %}
+            <button class="piece__practice piece__practice--good" data-practice-type="good"><i></i></button>
+            <button class="piece__practice piece__practice--bad" data-practice-type="bad"><i></i></button>
+            <button class="piece__practice piece__practice--skip" data-practice-type="skip"><i></i></button>
+        </div>
+    </div>
+    <div class="piece__abc"></div>
+</li>

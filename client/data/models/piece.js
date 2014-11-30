@@ -7,10 +7,10 @@ var BB = require('exoskeleton');
 module.exports = BB.Model.extend({
 	idAttribute: '_id',
 	url: function () {
-		return require('../../scaffolding/api').url('practices', this.id);
+		return require('../../scaffolding/api').url('pieces', this.id);
 	},
 
-	Presenter: require('./practice-presenter'),
+	Presenter: require('./piece-presenter'),
 
 	parse: function (resp) {
 		if (resp.src) {
@@ -24,7 +24,7 @@ module.exports = BB.Model.extend({
 		delete resp.src
 		return resp;
 	},
-	doPractice: function (type) {
+	practice: function (type) {
 		var score;
 		var oldScore = this.get('lastPracticeQuality');
 		if (type === 'good') {

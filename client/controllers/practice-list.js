@@ -1,10 +1,10 @@
-var practicesPromise;
+var piecesPromise;
 
 module.exports = function () {
-	var practices = require('../data/collections/practices');
-	practicesPromise = practicesPromise || practices.fetch({parse: true});
+	var pieces = require('../data/collections/pieces');
+	piecesPromise = piecesPromise || pieces.fetch({parse: true});
 	var view = new (require('../components/practice-list/view'))({
-        practicesPromise: practicesPromise, 
+        piecesPromise: piecesPromise, 
         parentEl: document.querySelector('main')
     });    
     view.setAsCurrentPage();

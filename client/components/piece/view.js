@@ -4,30 +4,30 @@ var AbcViewer = require('../abc-viewer/view');
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
 	events: {
-		'click .practice__good': 'doPractice',
-		'click .practice__bad': 'doPractice',
-		'click .practice__skip': 'doPractice',
+		'click .practice__good': 'practice',
+		'click .practice__bad': 'practice',
+		'click .practice__skip': 'practice',
 		'click .practice__view-abc': 'viewAbc',
 	},
 	initialize: function (opts) {
-		this.practice = opts.practice;
+		this.piece = opts.piece;
 		this.parentEl = opts.parentEl;
 
 		this.render = this.render.bind(this);
 		
-		this.listenTo(this.practice, 'sync', this.render);
+		this.listenTo(this.piece, 'sync', this.render);
 		this.listenTo(opts.parentView, 'destroy', this.destroy);
-		// this.listenTo(this.practice, 'destroy', this.destroy);
+		// this.listenTo(this.piece, 'destroy', this.destroy);
 		this.render();
 	},
 
 	render: function () {
-		this.renderToDom(swig.render(this.tpl, this.practice.Presenter().toJSON(true)))
+		this.renderToDom(swig.render(this.tpl, this.piece.Presenter().toJSON(true)))
 		this.abcEl = this.el.querySelector('.practice__abc');
 		return this;
 	},
-	doPractice: function (ev) {
-		this.practice.doPractice(ev.delegateTarget.dataset.practiceType)
+	practice: function (ev) {
+		this.piece.practice(ev.delegateTarget.dataset.practiceType)
 		this.destroy();
 	},
 	viewAbc: function (ev) {
