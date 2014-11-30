@@ -21,7 +21,7 @@ module.exports = require('../../scaffolding/view').extend({
 		this.parentEl = opts.parentEl;
 		this.parentView = opts.parentView;
 		this.tune = allTunes.filter(function (tune) {
-			return tune.get('_id') == opts.tuneId;
+			return tune.get('_id') === opts.tuneId;
 		})[0];
 		this.opts = opts;
 
