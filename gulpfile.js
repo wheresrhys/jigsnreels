@@ -4,13 +4,8 @@ gulp.task('clean', function () {
 	return require('del')('./public');
 });
 
-gulp.task('tpl', function  () {
-	return gulp.src('client/index.html')
-		.pipe(gulp.dest('./public'));
-});
-
 gulp.task('img', function  () {
-	return gulp.src('client/global-styles/**/*.svg')
+	return gulp.src('client/scaffolding/global-styles/**/*.svg')
 		.pipe(gulp.dest('./public'));
 });
 
@@ -59,7 +54,7 @@ gulp.task('test', ['jshint']);
 
 // gulp.task('clean-build', ['clean'], ['tpl', 'js', 'sass']);
 
-gulp.task('default', ['tpl', 'js', 'sass', 'img']);
+gulp.task('default', ['js', 'sass', 'img']);
 
 gulp.task('watch', function() {
 	gulp.watch('./client/**/*.scss', ['sass']);

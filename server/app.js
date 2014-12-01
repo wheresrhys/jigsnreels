@@ -14,14 +14,17 @@ var swig = require('swig');
 
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
-app.set('views', require('path').join(__dirname, '../public'));
+app.set('views', require('path').join(__dirname, '..'));
 swig.setDefaults({ cache: false });
 
 
 app.set('port', process.env.PORT);
 // app.use(express.logger('dev'));  /* ''default'', 'short', 'tiny', 'dev' */
 // console.log(path.join(__dirname.substr(0, __dirname.lastIndexOf('/'))));
-app.use('/', express.static(require('path').join(__dirname, '../public')));
+var assets = express.Router();
+assets.use('/', express.static(require('path').join(__dirname, '../public')));
+
+app.use('/assets', assets);
 
 var api = express.Router();
 
@@ -66,9 +69,11 @@ app.get('/', index)
     .get('/set*', index)
     .get('/practice', index);
 
+
 app.listen(process.env.PORT, function() {
     console.log('Listening on ' + process.env.PORT);
 });
+
 if (!process.env.NO_SCRAPE) {
     scraper.init();
 }
