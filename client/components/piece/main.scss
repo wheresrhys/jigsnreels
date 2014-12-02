@@ -30,35 +30,22 @@ li.piece--sticky {
 }
 
 .piece__basics {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-content: stretch;
-    align-items: stretch;
+    @include flexContainer((
+        stretch: true
+    ))
 }
 
 .piece__subject {
-    order: 0;
-    flex: 1 1 auto;
-    align-self: auto;
+    @include flexItem(1, 1);
 }
 
 .piece__actions {
-    order: 0;
-    flex: 0 0 auto;
-    align-self: auto;
-    width: 60px;
-    min-width: 40px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-content: stretch;
-    align-items: stretch;//flex-start;
+    @include flexItem(0, 0, 60px);
+    @include flexContainer((
+        vertical: true,
+        stretch: true
+    ));
 }
-
-
 
 .piece__stats {
     line-height: 1.4;
@@ -81,11 +68,9 @@ li.piece--sticky {
 }
 
 .piece__practice {
+    @include flexItem(0, 1, 35px);
     border: none;
     outline: none;
-    order: 0;
-    flex: 1 1 auto;
-    align-self: auto;    
     cursor: pointer;
     min-height: 35px;
     text-align: center;
@@ -128,26 +113,47 @@ li.piece--sticky {
 
 
 .piece__set {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-content: stretch;
-    align-items: stretch;//flex-start;
+    @include flexContainer((
+        stretch: true,
+        wrap: true
+    ));
 
     > li {
-        order: 0;
-        flex: 1 1 auto;
-        align-self: auto;
+        @include flexItem(3, 1, 120px);
         list-style: none;
         max-width: 300px;
         box-sizing: border-box;
         border-left: 1px solid $lines;
         padding: 10px;
 
-        &:first-child {
-            border-left: none;
+        background-image: url('/assets/img/ic_chevron_right.svg'); 
+        background-position: right 50%;
+        background-size: 18px;
+        background-repeat: no-repeat;
+        
+        &:nth-child(1) {
+            background-color: rgba(46, 66, 114, 0.1)
         }
+        &:nth-child(2) {
+            background-color: rgba(46, 66, 114, 0.15)
+        }
+        &:nth-child(3) {
+            background-color: rgba(46, 66, 114, 0.2)
+        }
+        &:nth-child(4) {
+            background-color: rgba(46, 66, 114, 0.25)
+        }
+        &:nth-child(5) {
+            background-color: rgba(46, 66, 114, 0.3)
+        }
+        &:nth-child(6) {
+            background-color: rgba(46, 66, 114, 0.35)
+        }
+        &:nth-child(7) {
+            background-color: rgba(46, 66, 114, 0.4)
+        }
+
+
     }
 }
 

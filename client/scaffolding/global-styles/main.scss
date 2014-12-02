@@ -5,6 +5,8 @@ $strong-bg: #e7e7e7;
 $set-font-color: #306;
 $tune-font-color: #530;
 
+@import "flexbox";
+
 html:not([data-environment="development"]){
 	padding-top: 30px;
 	&::before {
