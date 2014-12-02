@@ -1,5 +1,5 @@
 // var mongoose = require('mongoose');
-var mongoose = require('mongoose-q')(require('mongoose'));
+var mongoose = require('mongoose');
 // var mongooseQ = require('mongoose-q')(mongoose);
 var arrangementSchema = require('./arrangement');
 
@@ -20,14 +20,14 @@ var tuneSchema = mongoose.Schema({
 
 tuneSchema.statics.createNewFromSession = function (tune) {
     var self = this;
-    return this.findOneQ({sessionId: tune.sessionId }).then(function (foundTune) {
+    return this.findOne({sessionId: tune.sessionId }).exec().then(function (foundTune) {
         return foundTune ? Promise.resolve(foundTune) : self.createQ(tune);
     });
 };
 
 
 tuneSchema.statics._flush = function () {
-    return this.findQ({}).then(function (recs) {
+    return this.find({}).exec().then(function (recs) {
         recs.forEach(function(rec) {
             rec.remove();
         });

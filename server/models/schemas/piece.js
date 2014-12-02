@@ -1,4 +1,4 @@
-var mongoose = require('mongoose-q')(require('mongoose'));
+var mongoose = require('mongoose');
 
 module.exports = mongoose.Schema({
     type: String,

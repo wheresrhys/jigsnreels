@@ -5,57 +5,73 @@ var ObjectId = mongoose.Types.ObjectId;
 var SetModel = require('../models/set');
 var TuneModel = require('../models/tune');
 
+var noop = function () {};
+
 exports.fetchAll = function (req, res) {
-	SetModel.findQ({}).then(function (sets) {
-		Promise.all(sets.map(SetModel.addTunes)).then(function (sets) {
-			res.send(sets);    
-		}).catch(function (err) {
-			res.setStatus(500).send(err);
+	SetModel.find({}).exec()
+		.then(function (sets) {
+			Promise.all(sets.map(SetModel.addTunes))
+				.then(function (sets) {
+					res.send(sets);
+				})
+				.then(noop, function (err) {
+					res.setStatus(500).send(err);
+				});
 		});
-	});
 };
 
 exports.findById = function (req, res) {
 	SetModel.findOne({
 		_id: new ObjectId(req.params.id)
-	}, function (err, result) {
-		res.send(result);
-	});
+	}).exec()
+		.then(function (result) {
+			res.send(result);
+		})
+		.then(noop, function (err) {
+			res.setStatus(404).send(err);
+		});
 };
 
 exports.add = function (req, res) {
-	SetModel.createQ(req.body).then(function (set) {
-		SetModel.addPiece(set).then(function (set) {
-			res.send(set);	
+	SetModel.create(req.body)
+		.then(function (set) {
+			return SetModel.addPiece(set)
+				.then(function (set) {
+					res.send(set);
+				});
+		})
+		.then(noop, function (err) {
+			res.setStatus(500).send(err);
 		});
-	}).catch(function (err) {
-		res.setStatus(500).send(err);
-		setTimeout(function () {throw err})
-	});
 };
 
 exports.update = function (req, res) {
 	delete req.body._id;
-	SetModel.updateQ({
+	SetModel.update({
 		_id: new ObjectId(req.params.id)
-	}, req.body, {}).then(function () {
-		SetModel.findOneQ({
-			_id: new ObjectId(req.params.id)
-		}).then(SetModel.addTunes).then(function (set) {
-			res.send(set);
+	}, req.body, {}).exec()
+		.then(function () {
+			SetModel.findOne({
+				_id: new ObjectId(req.params.id)
+			}).exec()
+				.then(SetModel.addTunes)
+				.then(function (set) {
+					res.send(set);
+				});
+		})
+		.then(noop, function (err) {
+			res.setStatus(500).send(err);
 		});
-	}).catch(function (err) {
-		res.setStatus(500).send(err);
-	});
 };
 
 exports.delete = function (req, res) {
-	SetModel.findOneQ({
+	SetModel.findOne({
 		_id: new ObjectId(req.params.id)
-	})
+	}).exec()
 	.then(SetModel.cleanRemove)
 	.then(function (set) {
 		res.send({});
 	});
-
 };
+
+
