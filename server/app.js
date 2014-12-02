@@ -14,7 +14,7 @@ var swig = require('swig');
 
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
-app.set('views', require('path').join(__dirname, '..'));
+app.set('views', require('path').join(__dirname, '../templates'));
 swig.setDefaults({ cache: false });
 
 
