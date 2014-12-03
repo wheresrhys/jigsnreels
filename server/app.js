@@ -1,5 +1,7 @@
+require('es6-promise').polyfill();
+
+var db = require('./lib/dbConnection');
 var express = require('express');
-var db = require('./models/_dbConnection');
 var path = require('path');
 var http = require('http');
 var pieces = require('./routes/pieces');
@@ -17,8 +19,6 @@ app.set('view engine', 'html');
 app.set('views', require('path').join(__dirname, '../templates'));
 swig.setDefaults({ cache: false });
 
-
-app.set('port', process.env.PORT);
 // app.use(express.logger('dev'));  /* ''default'', 'short', 'tiny', 'dev' */
 // console.log(path.join(__dirname.substr(0, __dirname.lastIndexOf('/'))));
 var assets = express.Router();
@@ -50,30 +50,36 @@ api.delete('/sets/:id', sets.delete);
 
 
 api.get('/scraper', function (req, res) {
-    scraper.init().then(function (job) {
-        res.send(job)
-    });
+	scraper.init().then(function (job) {
+		res.send(job)
+	});
 });
 
 app.use('/api', api);
 
 function index (req, res, next) {
-    res.render('index', {
-        env: process.env.ENV
-    });
+	res.render('index', {
+		env: process.env.ENV
+	});
 }
 
 app.get('/', index)
-    .get('/index.html', index)
-    .get('/tune*', index)
-    .get('/set*', index)
-    .get('/practice', index);
-
-
-app.listen(process.env.PORT, function() {
-    console.log('Listening on ' + process.env.PORT);
-});
+	.get('/index.html', index)
+	.get('/tune*', index)
+	.get('/set*', index)
+	.get('/practice', index);
 
 if (!process.env.NO_SCRAPE) {
-    scraper.init();
+	scraper.init();
 }
+
+if (!module.parent) {
+	var port = Number(process.env.PORT || 3000);
+	app.listen(process.env.PORT, function() {
+		console.log('Listening on ' + process.env.PORT);
+	});
+} else {
+	module.exports = app;
+}
+
+
