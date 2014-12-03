@@ -15,7 +15,7 @@ pieceSchema.statics.addResourceToPiece = function (piece) {
 	if (process.env.TEST) {
 		piece = piece.toObject();
 		piece.resourceAdded = true;
-		return piece;
+		return Promise.resolve(piece);
 	}
 
 	piece = piece.toObject();

@@ -13,7 +13,8 @@ setSchema.statics.addTunes = function (set) {
 	if (process.env.TEST) {
 		set = set.toObject();
 		set.tunesAdded = true;
-		return set;
+
+		return Promise.resolve(set);
 	}
 	return Promise.all(set.tunes.map(function (tuneId) {
 		return TuneModel.findOne({
@@ -30,7 +31,7 @@ setSchema.statics.addPiece = function (set) {
 	if (process.env.TEST) {
 		set = set.toObject();
 		set.pieceAdded = true;
-		return set;
+		return Promise.resolve(set);
 	}
 	return PieceModel.findOne({srcId: this._id }).exec().then(function (foundPiece) {
 		return (foundPiece ? Promise.resolve(foundPiece) : PieceModel.create({
@@ -48,8 +49,9 @@ setSchema.statics.cleanRemove = function (set) {
 	if (process.env.TEST) {
 		set = set.toObject();
 		set.cleanlyRemoved = true;
-		return set;
+		return Promise.resolve(set);
 	}
+
 	return PieceModel.remove({srcId: set._id }).exec().then(function () {
 		return set.remove().exec();
 	});

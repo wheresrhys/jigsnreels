@@ -24,11 +24,12 @@ exports.findById = function (req, res) {
 	SetModel.findOne({
 		_id: new ObjectId(req.params.id)
 	}).exec()
-		.then(function (result) {
-			res.send(result);
+		.then(SetModel.addTunes)
+		.then(function (set) {
+			res.send(set);
 		})
 		.then(noop, function (err) {
-			res.setStatus(404).send(err);
+			res.setStatus(503).send(err);
 		});
 };
 
@@ -41,7 +42,7 @@ exports.add = function (req, res) {
 				});
 		})
 		.then(noop, function (err) {
-			res.setStatus(500).send(err);
+			res.setStatus(503).send(err);
 		});
 };
 
@@ -68,10 +69,14 @@ exports.delete = function (req, res) {
 	SetModel.findOne({
 		_id: new ObjectId(req.params.id)
 	}).exec()
-	.then(SetModel.cleanRemove)
-	.then(function (set) {
-		res.send({});
-	});
+		.then(SetModel.cleanRemove)
+		.then(function (set) {
+			if (process.env.TEST) {
+				res.send(set);
+			} else {
+				res.send({});
+			}
+		});
 };
 
 
