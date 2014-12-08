@@ -1,3 +1,0 @@
-describe('models/performance', function () {
-	
-});

@@ -1,108 +1,108 @@
 
 
   <section>
-    <div class="modal-header clearfix">
-      <button type="button" class="close" ng-click="$dismiss()">&times;</button>
-      <h3><span j-tune-heading data-tune="activeTune" data-stats="true"></span>
-        <small><a ng-if="activeTune.tune.sessionId"target="_blank" href="http://www.thesession.org/tunes/display/{{tune.tune.sessionId}}">View on session</a></small></h3>
-        <a class="btn toggle-props" ng-click="propertiesCollapsed = !propertiesCollapsed">
-            Edit properties
-        </a>
-        
-        <div class="collapse properties" collapse="propertiesCollapsed">
-            <div class="span4">
-                <fieldset>
-                    <label>Name</label><input ng-model="activeTune.tune.name" ng-change="update()" />
-                    <label>Rhythm</label><select
-                           ng-model="activeTune.tune.rhythm"
-                           ng-options="opt for opt in dropdowns.rhythm"
-                           ng-change="update()" >
-                    </select>
-                    <!-- <label>Root</label><select
-                           ng-model="activeTune.arrangement.root"
-                           ng-options="opt for opt in dropdowns.root"
-                           ng-change="updateArrangement({{activeTune.arrangement}})" >
-                    </select> -->
-                    <label>Mode</label><select
-                           ng-model="activeTune.tune.mode"
-                           ng-options="opt for opt in dropdowns.mode"
-                           ng-change="update(true)" >
-                    </select>
-                    <label>Meter</label><input ng-model="activeTune.tune.meter" ng-change="update(true)" />
-                </fieldset>
-                
-            </div>
-            <div class="span5">
-                <fieldset>
-                    
-                    
-                    <label>Notes</label>
-                    <textarea ng-change="update()" ng-model="activeTune.tune.notes"></textarea>
-                </fieldset>
-                
-            </div>
-        </div>
-    </div>
-    <div class="modal-body">
-      <div class="span6 score-wrapper">  
-        <div ng-hide="editingAbc">
-          <button class="btn" ng-click="nextAbc()" ng-show="tune.tune.arrangements.length > 1">Next ABC</button>
-          <button class="btn btn-warning" ng-click="saveAbcToPerformance()" ng-show="abcSavePending">Use</button>
-          <button class="btn btn-warning" ng-click="saveAbcToPerformance(true)" ng-show="abcSavePending">New performance</button>
-          <button class="btn btn-danger" ng-click="revertAbc()" ng-show="abcSavePending">Cancel</button>
-          <button class="btn btn-info" ng-click="editAbc()">Edit</button>
-          <button class="btn btn-success" ng-click="newAbc()">New</button>
-          <div class="score" j-draw-score tune="{{tune.scoreGenerator}}"></div>
-        </div>
-        <div ng-if="editingAbc" ng-show="editingAbc">
-          <button class="btn btn-warning" ng-click="cancelAbcEdit()">Cancel</button>
-          <button class="btn btn-success" ng-click="saveAbcDialog()">Save</button>
-          <textarea class="abcEditor" ng-model="editableScoreGenerator.arrangement.abc"></textarea>
-          <div class="score" j-draw-score tune="{{editableScoreGenerator}}"></div>
-        </div>
-        
-      </div>
-      <div class="span3">
-        <fieldset ng-if="showPerformance" class="has-success" >
-            <label>Rate performance</label>
-            <div j-performance-rater data-ratee="activeTune" data-callback="update"></div>
-        </fieldset>
-        <label>Rating</label>
-        <select
-           ng-model="activeTune.tune.rating"
-           ng-options="opt.value as opt.label for opt in dropdowns.rating"
-           ng-change="update()" >
-           <option ng-if="tune.rating === -1" value="">-- rate tune --</option>
-        </select>
-        <label>Popularity</label>
-        <select
-           ng-model="activeTune.tune.popularity"
-           ng-options="opt.value as opt.label for opt in dropdowns.popularity"
-           ng-change="update()" >
-           <option ng-if="tune.popularity === -1" value="">-- popularity --</option>
-        </select>
-        <fieldset ng-if="showPerformance" >
-            <label>Root</label><select
-                   ng-model="activeTune.arrangement.root"
-                   ng-options="opt for opt in dropdowns.root"
-                   ng-change="updateArrangement({{activeTune.arrangement}})" >
-            </select>
-            <label>Difficulty</label>
-            <select
-               ng-model="activeTune.performance.difficulty"
-               ng-options="opt.value as opt.label for opt in dropdowns.difficulty"
-               ng-change="update()" >
-               <option ng-if="activeTune.performance.difficulty === -1" value="">-- difficulty --</option>
-            </select>
-            <label>Special attention<input type="checkbox"
-               ng-model="activeTune.performance.special"
-               ng-change="update()" >
-         </fieldset>
-      </div>
-    </div>
-    <!--div class="modal-footer">
-      <a href="#" class="btn" ng-click="$dismiss()">Close</a>
-      
-    </div-->
+	<div class="modal-header clearfix">
+	  <button type="button" class="close" ng-click="$dismiss()">&times;</button>
+	  <h3><span j-tune-heading data-tune="activeTune" data-stats="true"></span>
+		<small><a ng-if="activeTune.tune.sessionId"target="_blank" href="http://www.thesession.org/tunes/display/{{tune.tune.sessionId}}">View on session</a></small></h3>
+		<a class="btn toggle-props" ng-click="propertiesCollapsed = !propertiesCollapsed">
+			Edit properties
+		</a>
+
+		<div class="collapse properties" collapse="propertiesCollapsed">
+			<div class="span4">
+				<fieldset>
+					<label>Name</label><input ng-model="activeTune.tune.name" ng-change="update()" />
+					<label>Rhythm</label><select
+						   ng-model="activeTune.tune.rhythm"
+						   ng-options="opt for opt in dropdowns.rhythm"
+						   ng-change="update()" >
+					</select>
+					<!-- <label>Root</label><select
+						   ng-model="activeTune.arrangement.root"
+						   ng-options="opt for opt in dropdowns.root"
+						   ng-change="updateArrangement({{activeTune.arrangement}})" >
+					</select> -->
+					<label>Mode</label><select
+						   ng-model="activeTune.tune.mode"
+						   ng-options="opt for opt in dropdowns.mode"
+						   ng-change="update(true)" >
+					</select>
+					<label>Meter</label><input ng-model="activeTune.tune.meter" ng-change="update(true)" />
+				</fieldset>
+
+			</div>
+			<div class="span5">
+				<fieldset>
+
+
+					<label>Notes</label>
+					<textarea ng-change="update()" ng-model="activeTune.tune.notes"></textarea>
+				</fieldset>
+
+			</div>
+		</div>
+	</div>
+	<div class="modal-body">
+	  <div class="span6 score-wrapper">
+		<div ng-hide="editingAbc">
+		  <button class="btn" ng-click="nextAbc()" ng-show="tune.tune.arrangements.length > 1">Next ABC</button>
+		  <button class="btn btn-warning" ng-click="saveAbcToPerformance()" ng-show="abcSavePending">Use</button>
+		  <button class="btn btn-warning" ng-click="saveAbcToPerformance(true)" ng-show="abcSavePending">New performance</button>
+		  <button class="btn btn-danger" ng-click="revertAbc()" ng-show="abcSavePending">Cancel</button>
+		  <button class="btn btn-info" ng-click="editAbc()">Edit</button>
+		  <button class="btn btn-success" ng-click="newAbc()">New</button>
+		  <div class="score" j-draw-score tune="{{tune.scoreGenerator}}"></div>
+		</div>
+		<div ng-if="editingAbc" ng-show="editingAbc">
+		  <button class="btn btn-warning" ng-click="cancelAbcEdit()">Cancel</button>
+		  <button class="btn btn-success" ng-click="saveAbcDialog()">Save</button>
+		  <textarea class="abcEditor" ng-model="editableScoreGenerator.arrangement.abc"></textarea>
+		  <div class="score" j-draw-score tune="{{editableScoreGenerator}}"></div>
+		</div>
+
+	  </div>
+	  <div class="span3">
+		<fieldset ng-if="showPerformance" class="has-success" >
+			<label>Rate performance</label>
+			<div j-performance-rater data-ratee="activeTune" data-callback="update"></div>
+		</fieldset>
+		<label>Rating</label>
+		<select
+		   ng-model="activeTune.tune.rating"
+		   ng-options="opt.value as opt.label for opt in dropdowns.rating"
+		   ng-change="update()" >
+		   <option ng-if="tune.rating === -1" value="">-- rate tune --</option>
+		</select>
+		<label>Popularity</label>
+		<select
+		   ng-model="activeTune.tune.popularity"
+		   ng-options="opt.value as opt.label for opt in dropdowns.popularity"
+		   ng-change="update()" >
+		   <option ng-if="tune.popularity === -1" value="">-- popularity --</option>
+		</select>
+		<fieldset ng-if="showPerformance" >
+			<label>Root</label><select
+				   ng-model="activeTune.arrangement.root"
+				   ng-options="opt for opt in dropdowns.root"
+				   ng-change="updateArrangement({{activeTune.arrangement}})" >
+			</select>
+			<label>Difficulty</label>
+			<select
+			   ng-model="activeTune.performance.difficulty"
+			   ng-options="opt.value as opt.label for opt in dropdowns.difficulty"
+			   ng-change="update()" >
+			   <option ng-if="activeTune.performance.difficulty === -1" value="">-- difficulty --</option>
+			</select>
+			<label>Special attention<input type="checkbox"
+			   ng-model="activeTune.performance.special"
+			   ng-change="update()" >
+		 </fieldset>
+	  </div>
+	</div>
+	<!--div class="modal-footer">
+	  <a href="#" class="btn" ng-click="$dismiss()">Close</a>
+
+	</div-->
   </section>
 

@@ -1,3 +1,0 @@
-describe('models/tune', function () {
-	
-});

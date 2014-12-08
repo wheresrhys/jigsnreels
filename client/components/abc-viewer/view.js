@@ -12,7 +12,7 @@ var abcConf = {
 }
 
 module.exports = require('../../scaffolding/view').extend({
-	
+
 	events: {
 		'click .abc-viewer__close': 'destroy'
 	},
@@ -44,8 +44,8 @@ module.exports = require('../../scaffolding/view').extend({
 			ABC.renderAbc(self.el.querySelector('.abc-viewer__score'), abc, {}, abcConf, {});
 		});
 		// if (self.snippetOnly) {
-		//     snippetsStore.cacheScore(self.arrangement, self.el[0].innerHTML);
-		// } 
+		//	 snippetsStore.cacheScore(self.arrangement, self.el[0].innerHTML);
+		// }
 		// return this;
 	},
 
@@ -55,20 +55,20 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	// renderScore: function () {
-	//     var self = this;
-	//     this.abc = 'X:1' +
-	//     //'\nT:' + scoreGenerator.name + 
-	//     '\nM:' + this.scoreGenerator.meter + 
-	//     '\nL:1/8' + 
-	//     //'\nR:' + scoreGenerator.rhythm + 
-	//     '\nK:' + this.arrangement.root + this.scoreGenerator.mode + 
-	//     '\n' + this.abc;
+	//	 var self = this;
+	//	 this.abc = 'X:1' +
+	//	 //'\nT:' + scoreGenerator.name +
+	//	 '\nM:' + this.scoreGenerator.meter +
+	//	 '\nL:1/8' +
+	//	 //'\nR:' + scoreGenerator.rhythm +
+	//	 '\nK:' + this.arrangement.root + this.scoreGenerator.mode +
+	//	 '\n' + this.abc;
 
-	//     setTimeout(function () {
-	//         ABCJS.renderAbc(self.el[0], self.abc, {}, self.conf, {});  
+	//	 setTimeout(function () {
+	//		 ABCJS.renderAbc(self.el[0], self.abc, {}, self.conf, {});
 
-			 
-	//     }, 100);        
+
+	//	 }, 100);
 	// }
 
 	getSnippet: function () {
@@ -77,15 +77,15 @@ module.exports = require('../../scaffolding/view').extend({
 		// this.el.addClass('score-snippet');
 
 		// snippetsStore.getCachedScore(this.arrangement, function (obj) {
-		//     self.el.html(obj.score);
-		//     self.el[0].style.width = self.el.find('svg')[0].getAttribute('width') + 'px';
+		//	 self.el.html(obj.score);
+		//	 self.el[0].style.width = self.el.find('svg')[0].getAttribute('width') + 'px';
 		// }, function () {
-		//     self.abc = self.abc.replace(/^\|*:?/, '');
-		//     self.abc = self.abc.split('|');
-		//     self.abc = self.abc.slice(0, (self.abc[0].length < 4 ? 4 : 3)).join('|');
-		//     self.conf.scale = 0.5;
-		//     self.conf.staffwidth = 450;
-		//     self.renderScore();
+		//	 self.abc = self.abc.replace(/^\|*:?/, '');
+		//	 self.abc = self.abc.split('|');
+		//	 self.abc = self.abc.slice(0, (self.abc[0].length < 4 ? 4 : 3)).join('|');
+		//	 self.conf.scale = 0.5;
+		//	 self.conf.staffwidth = 450;
+		//	 self.renderScore();
 		// });
 	}
 
@@ -100,71 +100,71 @@ module.exports = require('../../scaffolding/view').extend({
 	// snippetsStore;
 
 // var ScoreDrawer = function (abc, snippetOnly) {
-//     this.el = el;
-//     this.scoreGenerator = scoreGenerator;
-//     this.snippetOnly = snippetOnly;
-//     this.exec();
+//	 this.el = el;
+//	 this.scoreGenerator = scoreGenerator;
+//	 this.snippetOnly = snippetOnly;
+//	 this.exec();
 // };
 
 // ScoreDrawer.prototype = {
-//     exec: function () {
-		
-//         this.el.html('');
+//	 exec: function () {
+
+//		 this.el.html('');
 
 
-//         this.arrangement = this.scoreGenerator.arrangement;
+//		 this.arrangement = this.scoreGenerator.arrangement;
 
-//         if (!this.arrangement) {
-//             return;
-//         }
+//		 if (!this.arrangement) {
+//			 return;
+//		 }
 
-//         this.abc = this.arrangement.abc;
-//         this.;
+//		 this.abc = this.arrangement.abc;
+//		 this.;
 
-		
 
-//         if (this.snippetOnly) {
-//             this.getSnippet();
-//         } else {
-//             this.renderScore();
-//         } 
-//     },
 
-//     getSnippet: function () {
-//         var self = this;
+//		 if (this.snippetOnly) {
+//			 this.getSnippet();
+//		 } else {
+//			 this.renderScore();
+//		 }
+//	 },
 
-//         this.el.addClass('score-snippet');
+//	 getSnippet: function () {
+//		 var self = this;
 
-//         snippetsStore.getCachedScore(this.arrangement, function (obj) {
-//             self.el.html(obj.score);
-//             self.el[0].style.width = self.el.find('svg')[0].getAttribute('width') + 'px';
-//         }, function () {
-//             self.abc = self.abc.replace(/^\|*:?/, '');
-//             self.abc = self.abc.split('|');
-//             self.abc = self.abc.slice(0, (self.abc[0].length < 4 ? 4 : 3)).join('|');
-//             self.conf.scale = 0.5;
-//             self.conf.staffwidth = 450;
-//             self.renderScore();
-//         });
-//     },
+//		 this.el.addClass('score-snippet');
+
+//		 snippetsStore.getCachedScore(this.arrangement, function (obj) {
+//			 self.el.html(obj.score);
+//			 self.el[0].style.width = self.el.find('svg')[0].getAttribute('width') + 'px';
+//		 }, function () {
+//			 self.abc = self.abc.replace(/^\|*:?/, '');
+//			 self.abc = self.abc.split('|');
+//			 self.abc = self.abc.slice(0, (self.abc[0].length < 4 ? 4 : 3)).join('|');
+//			 self.conf.scale = 0.5;
+//			 self.conf.staffwidth = 450;
+//			 self.renderScore();
+//		 });
+//	 },
 
 
 
 // };
 
 // require('angular').module('jnr.tune').directive('jDrawScore', function (jScoreSnippets) {
-//     snippetsStore = jScoreSnippets;
+//	 snippetsStore = jScoreSnippets;
 
-//     return {
-//         link: function(scope, el, attrs) {
-			
-//             var snippetOnly = !!attrs.snippet;
+//	 return {
+//		 link: function(scope, el, attrs) {
 
-//             attrs.$observe('tune', function(value) {
-//                 if (value) {
-//                     new ScoreDrawer(JSON.parse(value), snippetOnly, el);
-//                 }
-//             });
-//         }
-//     };
+//			 var snippetOnly = !!attrs.snippet;
+
+//			 attrs.$observe('tune', function(value) {
+//				 if (value) {
+//					 new ScoreDrawer(JSON.parse(value), snippetOnly, el);
+//				 }
+//			 });
+//		 }
+//	 };
 // });

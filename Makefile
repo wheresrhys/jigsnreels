@@ -1,9 +1,15 @@
+refresh-test-data:
+	curl -sG 'https://thesession.org/members/61738/tunebook' -o 'tests/fixtures/thesession/tunebook.html'
+	curl -sG 'https://thesession.org/tunes/1/abc'  -o 'tests/fixtures/thesession/tune.abc'
 
+ci-test:
+	@./node_modules/.bin/gulp jshint
+	$(MAKE) refresh-test-data
 
-test: 
-	@./node_modules/.bin/gulp test
+test:
+	export NO_SCRAPE=true; export DB_HOST=testhost; export DB=testdb; ./node_modules/.bin/mocha --recursive --require expectations --require sinon tests/server/specs/
 
-run-local: 
+run-local:
 	export NO_SCRAPE=true DB=jnr_local ENV=development PORT=5000 DB_HOST=localhost; nodemon --watch server server/app.js
 
 deploy:

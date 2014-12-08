@@ -1,49 +1,52 @@
-var mongoose = require('mongoose-q')(require('mongoose'));
+var mongoose = require('mongoose');
 var transitionSchema = require('./transition');
 var TuneModel = require('../tune');
 var PieceModel = require('../piece');
 
 var setSchema = mongoose.Schema({
-    name: String,
-    tunes: [mongoose.Schema.Types.ObjectId],
-    keys: [String]
+	name: String,
+	tunes: [mongoose.Schema.Types.ObjectId],
+	keys: [String]
 });
 
 setSchema.statics.addTunes = function (set) {
-    return Promise.all(set.tunes.map(function (tuneId) {
-        return TuneModel.findOneQ({
-            _id: tuneId
-        })
-    })).then(function (tunes) {
-        set = set.toObject();
-        set.tunes = tunes;
-        return set;
-    });
+	return !set.tunes.length ? Promise.resolve(set.toObject()) : Promise.all(set.tunes.map(function (tuneId) {
+		return TuneModel.findOne({
+			_id: tuneId
+		}).exec();
+	})).then(function (tunes) {
+		set = set.toObject();
+		set.tunes = tunes;
+		return set;
+	});
 }
 
 setSchema.statics.addPiece = function (set) {
-    return PieceModel.findOneQ({srcId: this._id }).then(function (foundPiece) {
-        return (foundPiece ? Promise.resolve(foundPiece) : PieceModel.createQ({
-            srcId: set._id,
-            type: 'set'
-        })).then(function (piece) {
-            set = set.toObject();
-            set.piece = piece;
-            return set;
-        });
-    });
+	PieceModel = require('../piece'); // re-require because circular
+
+	return PieceModel.findOne({srcId: this._id }).exec()
+		.then(function (foundPiece) {
+			return (foundPiece ? Promise.resolve(foundPiece) : PieceModel.create({
+				srcId: set._id,
+				type: 'set'
+			})).then(function (piece) {
+				set = set.toObject();
+				set.piece = piece;
+				return set;
+			});
+		});
 }
 
 setSchema.statics.cleanRemove = function (set) {
-    return PieceModel.removeQ({srcId: set._id }).then(function () {
-        return set.removeQ();
-    });    
+	return PieceModel.remove({srcId: set._id }).exec().then(function () {
+		return set.remove();
+	});
 }
 
 setSchema.statics.getWithTunes = function (setId) {
-    return this.findOneQ({
-        _id: setId
-    }).then(this.addTunes)
+	return this.findOne({
+		_id: setId
+	}).exec().then(this.addTunes)
 }
 
 module.exports = setSchema;

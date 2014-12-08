@@ -7,13 +7,13 @@ var AbcViewer = require('../abc-viewer/view')
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
 	events: {
-        'change .set-editor__tune-selector': 'appendTune',
-        'change .set-editor__tune__key-selector': 'changeKey',
-        'change .set-editor__set-name': 'addName',
-        'submit .set-editor__form': 'save',
-        'click .set-editor__delete': 'delete',
-        'click .set-editor__tune__delete': 'deleteTune',
-        'click .set-editor__tune__view': 'viewTune'
+		'change .set-editor__tune-selector': 'appendTune',
+		'change .set-editor__tune__key-selector': 'changeKey',
+		'change .set-editor__set-name': 'addName',
+		'submit .set-editor__form': 'save',
+		'click .set-editor__delete': 'delete',
+		'click .set-editor__tune__delete': 'deleteTune',
+		'click .set-editor__tune__view': 'viewTune'
 	},
 
 	initialize: function (opts) {
@@ -49,7 +49,7 @@ module.exports = require('../../scaffolding/view').extend({
 		this.set.appendTune(tuneId);
 		this.abcViewer = new AbcViewer({
 			tuneId: tuneId,
-			parentEl: this.abcEl, 
+			parentEl: this.abcEl,
 			parentView: this,
 			isDismissable: true
 		});
@@ -60,7 +60,7 @@ module.exports = require('../../scaffolding/view').extend({
 		this.abcViewer && this.abcViewer.destroy();
 		this.abcViewer = new AbcViewer({
 			tuneId: ev.delegateTarget.parentNode.dataset.tuneId,
-			parentEl: this.abcEl, 
+			parentEl: this.abcEl,
 			parentView: this,
 			isDismissable: true
 		});
@@ -100,7 +100,7 @@ module.exports = require('../../scaffolding/view').extend({
 				if (this.set) {
 					this.listenToOnce(this.set, 'sync', function () {
 						require('../../scaffolding/router').navigate('/practice', { trigger: true })
-					});	
+					});
 					this.listenTo(this.set, 'change', this.render);
 				} else {
 					this.set = new SetModel()
@@ -116,7 +116,7 @@ module.exports = require('../../scaffolding/view').extend({
 				this.listenToOnce(this.set, 'sync', this.freshSet);
 				this.listenTo(this.set, 'change', this.render);
 			}
-			this.render();		
+			this.render();
 		}
 	}
 });

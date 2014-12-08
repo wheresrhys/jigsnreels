@@ -1,3 +1,0 @@
-describe('routes/test', function () {
-	
-});
