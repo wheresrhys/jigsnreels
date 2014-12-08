@@ -11,6 +11,8 @@ var app = require('../../../../server/app');
 var modelName = 'piece';
 var router = require(format('../../../../server/routes/%ss', modelName));
 var Model = require(format('../../../../server/models/%s', modelName));
+var TuneModel = require('../../../../server/models/tune');
+var SetModel = require('../../../../server/models/set');
 var schema = require(format('../../../../server/models/schemas/%s', modelName));
 
 describe(format('api - %ss', modelName), function () {
@@ -27,34 +29,63 @@ describe(format('api - %ss', modelName), function () {
 					.expect(200)
 					.end(function (err, res) {
 						expect(res.body.length).toEqual(2);
-						expect(res.body[0].resourceAdded).toBeTruthy();
 						done();
 					});
 			});
 	});
-	it('should get a record', function (done) {
-		Model.create([{}, {}])
+	it('should get a record with tune', function (done) {
+		TuneModel.create({
+			name: 'testname1'
+		})
+		.then(function (tune){
+			Model.create({
+				srcId: tune._id,
+				type: 'tune'
+			})
 			.then(function (piece1) {
 				request(app)
 					.get(format('/api/%ss/%s', modelName, piece1._id))
 					.expect(200)
 					.end(function (err, res) {
 						expect(res.body._id).toEqual(piece1._id.toString());
-						expect(res.body.resourceAdded).toBeTruthy();
+						expect(res.body.src.name).toBe('testname1');
 						done();
 					});
 			});
+		});
 	});
+	it('should get a record with set', function (done) {
+		SetModel.create({
+			name: 'testname2'
+		})
+		.then(function (set){
+			Model.create({
+				srcId: set._id,
+				type: 'set'
+			})
+			.then(function (piece1) {
+				request(app)
+					.get(format('/api/%ss/%s', modelName, piece1._id))
+					.expect(200)
+					.end(function (err, res) {
+						expect(res.body._id).toEqual(piece1._id.toString());
+						expect(res.body.src.name).toBe('testname2');
+						done();
+					});
+			});
+		});
+	});
+
 	it('should create record', function (done) {
 		request(app)
 			.post(format('/api/%ss', modelName))
 			.send({
-				type: 'res_type',
+				type: 'tune',
 				srcId: '547b75a0c78538b0346f8887'
 			})
 			.expect(200)
 			.end(function (err, res) {
-				expect(res.body.type).toEqual('res_type');
+				expect(res.body.type).toEqual('tune');
 				expect(res.body.srcId).toEqual('547b75a0c78538b0346f8887');
 				expect(typeof res.body.lastPracticed).toBe('undefined');
 				expect(typeof new Date(res.body.lastPracticed).getTime()).toBe('number');

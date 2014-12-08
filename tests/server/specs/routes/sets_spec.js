@@ -11,6 +11,8 @@ var app = require('../../../../server/app');
 var modelName = 'set';
 var router = require(format('../../../../server/routes/%ss', modelName));
 var Model = require(format('../../../../server/models/%s', modelName));
+var TuneModel = require('../../../../server/models/tune');
+var PieceModel = require('../../../../server/models/piece');
 var schema = require(format('../../../../server/models/schemas/%s', modelName));
 
 describe(format('api - %ss', modelName), function () {
@@ -27,45 +29,59 @@ describe(format('api - %ss', modelName), function () {
 					.expect(200)
 					.end(function (err, res) {
 						expect(res.body.length).toEqual(2);
-						expect(res.body[0].tunesAdded).toBeTruthy();
 						done();
 					});
 			});
 	});
-	it('should get a record', function (done) {
-		Model.create([{}, {}])
-			.then(function (set1) {
+	it('should get a record with its tunes', function (done) {
+		TuneModel.create({
+			name: 'testname1'
+		})
+			.then(function (tune) {
+				Model.create({
+					tunes: [tune._id]
+				})
+				.then(function (set1) {
+					request(app)
+						.get(format('/api/%ss/%s', modelName, set1._id))
+						.expect(200)
+						.end(function (err, res) {
+							expect(res.body._id).toEqual(set1._id.toString());
+							expect(res.body.tunes[0].name).toBe('testname1');
+							done();
+						});
+				});
+			});
+	});
+
+
+	it('should create record', function (done) {
+		TuneModel.create({
+			name: 'testname1'
+		})
+			.then(function (tune) {
 				request(app)
-					.get(format('/api/%ss/%s', modelName, set1._id))
+					.post(format('/api/%ss', modelName))
+					.send({
+						name: 'test name',
+						tunes: [tune._id.toString()],
+						keys: ['Dmaj']
+					})
 					.expect(200)
 					.end(function (err, res) {
-						expect(res.body._id).toEqual(set1._id.toString());
-						expect(res.body.tunesAdded).toBeTruthy();
-						done();
+						expect(typeof res.body._id).toEqual('string');
+						expect(res.body.name).toEqual('test name');
+						expect(res.body.tunes).toEqual([tune._id.toString()]);
+						expect(res.body.keys).toEqual(['Dmaj']);
+						Promise.all([Model.find().exec(), PieceModel.find().exec()])
+							.then(function (results) {
+								expect(results[0].length).toEqual(1);
+								expect(results[1].length).toEqual(1);
+								done();
+							});
 					});
-			});
-	});
-	it('should create record', function (done) {
-		request(app)
-			.post(format('/api/%ss', modelName))
-			.send({
-				name: 'test name',
-				tunes: ['547b75a0c78538b0346f8887'],
-				keys: ['Dmaj']
-			})
-			.expect(200)
-			.end(function (err, res) {
-				expect(typeof res.body._id).toEqual('string');
-				expect(res.body.name).toEqual('test name');
-				expect(res.body.tunes).toEqual(['547b75a0c78538b0346f8887']);
-				expect(res.body.keys).toEqual(['Dmaj']);
-				expect(res.body.pieceAdded).toBeTruthy();
-				Model.find().exec()
-					.then(function (results) {
-						expect(results.length).toEqual(1);
-						done();
-					});
-			});
+
+		});
 	});
 
 	it('should update record', function (done) {
@@ -88,12 +104,20 @@ describe(format('api - %ss', modelName), function () {
 	it('should delete record', function (done) {
 		Model.create([{}, {}])
 			.then(function (set1, set2) {
-				request(app)
-					.delete(format('/api/%ss/%s', modelName, set1._id))
-					.expect(200)
-					.end(function (err, res) {
-						expect(res.body.cleanlyRemoved).toBeTruthy();
-						done();
+				PieceModel.create({
+					srcId: set1._id.toString()
+				}).then(function (piece) {
+						request(app)
+							.delete(format('/api/%ss/%s', modelName, set1._id))
+							.expect(200)
+							.end(function (err, res) {
+								Promise.all([Model.find().exec(), PieceModel.find().exec()])
+									.then(function (things) {
+										expect(things[0].length).toBe(1);
+										expect(things[1].length).toBe(0);
+										done();
+									})
+							});
 					});
 			});
 	});

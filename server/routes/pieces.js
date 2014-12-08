@@ -21,6 +21,7 @@ exports.fetchAll = function (req, res) {
 };
 
 exports.findById = function (req, res) {
+
 	PieceModel.findOne({
 		_id: new ObjectId(req.params.id)
 	}).exec()

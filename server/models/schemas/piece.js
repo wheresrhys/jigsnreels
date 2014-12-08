@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var PieceModel = require('../piece');
 var SetModel = require('../set');
+var TuneModel = require('../tune');
 
 var pieceSchema = module.exports = mongoose.Schema({
 	type: String,
@@ -12,11 +13,6 @@ var pieceSchema = module.exports = mongoose.Schema({
 });
 
 pieceSchema.statics.addResourceToPiece = function (piece) {
-	if (process.env.TEST) {
-		piece = piece.toObject();
-		piece.resourceAdded = true;
-		return Promise.resolve(piece);
-	}
 
 	piece = piece.toObject();
 	if (piece.type === 'set') {
@@ -26,7 +22,8 @@ pieceSchema.statics.addResourceToPiece = function (piece) {
 				return piece;
 			});
 	} else if (piece.type === 'tune') {
-		return TuneModel.find({
+
+		return TuneModel.findOne({
 			_id: piece.srcId
 		}).exec()
 			.then(function (tune) {

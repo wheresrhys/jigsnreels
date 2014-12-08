@@ -71,11 +71,7 @@ exports.delete = function (req, res) {
 	}).exec()
 		.then(SetModel.cleanRemove)
 		.then(function (set) {
-			if (process.env.TEST) {
-				res.send(set);
-			} else {
-				res.send({});
-			}
+			res.send({});
 		});
 };
 

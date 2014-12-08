@@ -63,11 +63,7 @@ function index (req, res, next) {
 	});
 }
 
-app.get('/', index)
-	.get('/index.html', index)
-	.get('/tune*', index)
-	.get('/set*', index)
-	.get('/practice', index);
+app.get('*', index);
 
 if (!process.env.NO_SCRAPE) {
 	scraper.init();

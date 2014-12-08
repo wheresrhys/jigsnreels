@@ -10,13 +10,7 @@ var setSchema = mongoose.Schema({
 });
 
 setSchema.statics.addTunes = function (set) {
-	if (process.env.TEST) {
-		set = set.toObject();
-		set.tunesAdded = true;
-
-		return Promise.resolve(set);
-	}
-	return Promise.all(set.tunes.map(function (tuneId) {
+	return !set.tunes.length ? Promise.resolve(set.toObject()) : Promise.all(set.tunes.map(function (tuneId) {
 		return TuneModel.findOne({
 			_id: tuneId
 		}).exec();
@@ -28,32 +22,24 @@ setSchema.statics.addTunes = function (set) {
 }
 
 setSchema.statics.addPiece = function (set) {
-	if (process.env.TEST) {
-		set = set.toObject();
-		set.pieceAdded = true;
-		return Promise.resolve(set);
-	}
-	return PieceModel.findOne({srcId: this._id }).exec().then(function (foundPiece) {
-		return (foundPiece ? Promise.resolve(foundPiece) : PieceModel.create({
-			srcId: set._id,
-			type: 'set'
-		})).then(function (piece) {
-			set = set.toObject();
-			set.piece = piece;
-			return set;
+	PieceModel = require('../piece'); // re-require because circular
+
+	return PieceModel.findOne({srcId: this._id }).exec()
+		.then(function (foundPiece) {
+			return (foundPiece ? Promise.resolve(foundPiece) : PieceModel.create({
+				srcId: set._id,
+				type: 'set'
+			})).then(function (piece) {
+				set = set.toObject();
+				set.piece = piece;
+				return set;
+			});
 		});
-	});
 }
 
 setSchema.statics.cleanRemove = function (set) {
-	if (process.env.TEST) {
-		set = set.toObject();
-		set.cleanlyRemoved = true;
-		return Promise.resolve(set);
-	}
-
 	return PieceModel.remove({srcId: set._id }).exec().then(function () {
-		return set.remove().exec();
+		return set.remove();
 	});
 }
 
