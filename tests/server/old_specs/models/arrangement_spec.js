@@ -1,3 +1,0 @@
-describe('models/arrangement', function () {
-	
-});

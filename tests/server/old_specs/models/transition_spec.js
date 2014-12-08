@@ -1,3 +1,0 @@
-describe('models/transition', function () {
-	
-});
