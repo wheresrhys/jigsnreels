@@ -83,7 +83,6 @@ TuneGetter.prototype = {
 	},
 
 	processTuneList: function (res) {
-		require('fs').writeFile('resp.html', res.body)
 		var tunes = [];
 		res.body.replace(/<a href="\/tunes\/(\d+)\">([^<]+)<\/a>/g, function($0, $1, $2) {
 			debug('retrieved tune listing %s, %s from thesession', $1, $2);
@@ -120,7 +119,6 @@ TuneGetter.prototype = {
 				self.storeAbc(tune, res.body);
 			})
 			.catch(function (err) {
-				console.log(err);
 				debug(tune, err);
 			});
 	},
@@ -176,10 +174,16 @@ TuneGetter.prototype = {
 					return arr._id;
 				})
 
-				return tune.save().then(function (tune) {
-					debug('Details fetched and saved for tune %s, %s', tune.sessionId, tune.name);
-					return tune;
-				});
+				return new Promise(function (resolve, reject) {
+					tune.save(function (err, tune) {
+						if (err) {
+							reject(err);
+						} else {
+							debug('Details fetched and saved for tune %s, %s', tune.sessionId, tune.name);
+							resolve(tune);
+						}
+					});
+				})
 
 			});
 		}

@@ -170,7 +170,6 @@ describe('scraper', function () {
 					expect(tune.abcId instanceof ObjectId).toBeTruthy();
 					expect(typeof tune.abc).toEqual('string')
 					expect(tune.arrangements[0] instanceof ObjectId).toBeTruthy();
-
 					Arrangement.find().exec()
 						.then(function (arrs) {
 							expect(arrs.length).toBeGreaterThan(0);
@@ -183,6 +182,8 @@ describe('scraper', function () {
 							expect(arrs[0].tune).toEqual(tune._id);
 							done();
 						});
+				}).catch(function (err) {
+					console.log('sdfdsfds', err)
 				});
 		});
 
