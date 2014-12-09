@@ -1,331 +1,210 @@
 // require('../../../jasmine.jnr.js');
-var mongoose = require('mongoose'),
-	httpMocks = require('express-mocks-http'),
-	request = require('request'),
-	Tune = require('../../../server/models/tune'),
-	fs = require('fs');
+var mongoose = require('mongoose');
+var mockgoose = require('mockgoose');
+mockgoose(mongoose);
+var request = require('supertest');
+var sinon = require('sinon');
+var nock = require('nock');
+var Tune = require('../../../server/models/tune');
+var Arrangement = require('../../../server/models/arrangement');
+var Scraper = require('../../../server/lib/scraper');
+var fs = require('fs');
+var abc = fs.readFileSync('./tests/fixtures/thesession/tune.abc', 'utf-8');
+var page = fs.readFileSync('./tests/fixtures/thesession/tunebook.html', 'utf-8');
+var dummyId = '547b75a0c78538b0346f887f';
 
+describe('scraper', function () {
 
-xdescribe('routes/scraper', function () {
-	var scraper,
-		req,
-		res,
-		Getter;
+	var scraper;
 
 	beforeEach(function () {
-		scraper = require('../../../server/lib/scraper');
-		Getter = scraper._TuneGetter;
-		res = httpMocks.createResponse();
-		spyOn(res, 'send');
+		scraper = new Scraper();
 	});
 
-	describe('handling the request', function () {
-		it('should start the process to get all new tunes', function () {
-			req = httpMocks.createRequest({
-				method: 'GET',
-				url: '/rest/scraper'
-			});
-
-			spyOn(Getter.prototype, 'getNewTunes').andCallFake(function () {
-				res.send('got new tunes');
-			});
-
-			scraper.getNew(req, res);
-			expect(Getter.prototype.getNewTunes).toHaveBeenCalled();
-			expect(res.send).toHaveBeenCalledWith('got new tunes');
-		});
+	afterEach(function () {
+		mockgoose.reset();
 	});
 
-	describe('TuneGetter object', function () {
-		var getter;
+	it('should fetch multiple pages of the tunebook if paginated', function (done) {
 
-		beforeEach(function () {
-			getter = new Getter(res);
+		nock('https://thesession.org')
+			.filteringPath(/\/.*/, '/XXX')
+			.get('/XXX')
+			.times(2)
+			.reply(200, page);
+
+		sinon.stub(scraper, 'processTuneList');
+		scraper.getNewTunes();
+		setTimeout(function () {
+			expect(scraper.processTuneList.callCount).toBeGreaterThan(1);
+			expect(scraper.processTuneList.getCalls()[0].args[0].body).toEqual(page);
+			scraper.processTuneList.restore();
+			done();
+		}, 50)
+	});
+
+
+	it('should process each tune on a page', function () {
+		sinon.stub(scraper, 'storeTune');
+		scraper.processTuneList({
+			body: page
 		});
-		describe('getNewTunes', function () {
+		expect(scraper.storeTune.callCount).toBeGreaterThan(10);
+		expect(typeof scraper.storeTune.getCalls()[0].args[0].sessionId).toBe('number');
+		expect(typeof scraper.storeTune.getCalls()[0].args[0].name).toBe('string');
+		scraper.storeTune.restore();
+	});
 
-			it('should fetch the first page of the tunebook (and stop if no more pages)', function () {
-				var page = fs.readFileSync('./test/server/stubs/tunebook.html', 'utf-8');
-				spyOn(getter, 'fetchPage').andCallFake(function (url, callback) {
-					callback(page);
-				});
-				spyOn(getter, 'processTuneList');
-				getter.getNewTunes();
-				expect(getter.fetchPage.calls.length).toBe(1);
-				expect(getter.processTuneList.calls.length).toBe(1);
-				expect(getter.fetchPage).lastCalledWith('http://thesession.org/members/61738/tunebook');
-				expect(getter.processTuneList).toHaveBeenCalledWith(page);
-			});
-
-			it('should fetch subsequent pages of the tunebook if paginated', function () {
-				var page = fs.readFileSync('./test/server/stubs/tunebook(paginated).html', 'utf-8');
-				spyOn(getter, 'fetchPage').andCallFake(function (url, callback) {
-					callback(page);
-				});
-				spyOn(getter, 'processTuneList');
-				getter.getNewTunes();
-				expect(getter.fetchPage.calls.length).toBe(3);
-				expect(getter.fetchPage).recentlyCalledWith(2, 'http://thesession.org/members/61738/tunebook');
-				expect(getter.fetchPage).recentlyCalledWith(1, 'http://thesession.org/members/61738/tunebook?page=3');
-				expect(getter.fetchPage).recentlyCalledWith(0, 'http://thesession.org/members/61738/tunebook?page=2');
-				expect(getter.processTuneList.calls.length).toBe(3);
-			});
-
+	it('should create tune if new', function (done) {
+		sinon.stub(scraper, 'retrieveTuneInfo', function () {
+			return Promise.resolve({});
 		});
-
-		describe('fetchPage', function () {
-			it('should make a request to the given url and run the callback on the returned page', function () {
-				var pageCallback = jasmine.createSpy('fetchPageCallback');
-
-				spyOn(request, 'get').andCallFake(function (opts, callback) {
-					callback(undefined, 'response', 'body');
-				});
-				getter.fetchPage('url', pageCallback);
-				expect(request.get).lastCalledWith({
-					uri: 'url',
-					port: 80,
-					encoding: 'utf8'
-				});
-				expect(pageCallback).toHaveBeenCalledWith('body', 'response');
-
-			});
-
-			xit('should cope well with a failed request', function () {
-
-			});
-
-			it('should update the pending processes count', function () {
-				var pageCallback = jasmine.createSpy('fetchPageCallback');
-				spyOn(request, 'get').andCallFake(function (opts, callback) {
-					expect(getter.pendingProcesses).toBe(1);
-					callback(undefined, 'response', 'body');
-					expect(getter.pendingProcesses).toBe(0);
-				});
-
-				getter.fetchPage('url', pageCallback);
-
-			});
-		});
-
-		describe('processTuneList', function () {
-			var page = fs.readFileSync('./test/server/stubs/tunebook.html', 'utf-8');
-			it('should check all tunes listed on the page against database', function () {
-				spyOn(getter, 'storeTune');
-				getter.processTuneList(page);
-				expect(getter.storeTune.calls.length).toBe(2);
-			});
-			it('should eliminate special characters from tune names', function () {
-				spyOn(getter, 'storeTune');
-				getter.processTuneList(page);
-				expect(getter.storeTune).toHaveBeenCalledWith({
-					sessionId: 2,
-					name: '\'Tune-2\''
-				});
-			});
-		});
-
-		describe('storeTune', function () {
-			it('should try and create a new tune in the database', function () {
-				spyOn(Tune, 'createNewFromSession');
-				getter.storeTune('test-tune');
-				expect(Tune.createNewFromSession).lastCalledWith('test-tune');
-			});
-
-			it('should get tune info from the session when tune is new', function () {
-				spyOn(Tune, 'createNewFromSession').andCallFake(function (tune, callback) {
-					callback('New tune');
-				});
-				spyOn(getter, 'retrieveTuneInfo');
-				getter.storeTune('test-tune');
-				expect(getter.retrieveTuneInfo).lastCalledWith('New tune');
-			});
-
-			it('should not communicate with the session when tune already existed', function () {
-				spyOn(Tune, 'createNewFromSession').andCallFake(function (tune, callback) {
-					callback();
-				});
-				spyOn(getter, 'retrieveTuneInfo');
-				getter.storeTune('test-tune');
-				expect(getter.retrieveTuneInfo).not.toHaveBeenCalled();
-			});
-			it('should update the pending processes count', function () {
-				var tuneCallback = jasmine.createSpy('tuneCallback');
-				spyOn(Tune, 'createNewFromSession').andCallFake(function (tune, callback) {
-					expect(getter.pendingProcesses).toBe(1);
-					callback();
-					expect(getter.pendingProcesses).toBe(0);
-				});
-
-				getter.fetchPage('url', tuneCallback);
-
-			});
-
-			describe('sending a http response', function () {
-				beforeEach(function () {
-					spyOn(Tune, 'createNewFromSession').andCallFake(function (tune, callback) {
-						callback();
-					});
-					spyOn(getter, 'send');
-					spyOn(getter, 'retrieveTuneInfo');
-				});
-				it('should send a response if no pending processes', function () {
-					getter.pendingProcesses = 0;
-					getter.storeTune();
-					expect(getter.send).toHaveBeenCalled();
-				});
-
-				it('should not send a response if there are still processes pending', function () {
-					getter.pendingProcesses = 1;
-					getter.storeTune();
-					expect(getter.send).not.toHaveBeenCalled();
-				});
-			});
-
-
-
-		});
-
-		describe('retrieveTuneInfo', function () {
-
-			it('should fetch the tune\'s abc sheet', function () {
-				spyOn(getter, 'fetchPage');
-				getter.retrieveTuneInfo({
-					sessionId: 1
-				});
-				expect(getter.fetchPage.calls.length).toBe(1);
-				expect(getter.fetchPage).lastCalledWith('http://www.thesession.org/tunes/1/abc');
-			});
-
-			it('should update the pending processes count', function () {
-				var tuneCallback = jasmine.createSpy('tuneCallback');
-				spyOn(getter, 'fetchPage').andCallFake(function (url, callback) {
-					expect(getter.pendingProcesses).toBe(1);
-					callback('X: 1\r\nabc');
-					expect(getter.pendingProcesses).toBe(0);
-				});
-				spyOn(getter, 'saveTuneInfo');
-				getter.retrieveTuneInfo({
-					sessionId: 1
-				});
-			});
-			describe('extracting data from the abc file', function () {
-				var abc,
-					tuneSaver,
-					init = function () {
-						spyOn(getter, 'fetchPage').andCallFake(function (url, callback) {
-							callback(abc);
-						});
-						spyOn(getter, 'saveTuneInfo');
-
-						getter.retrieveTuneInfo({
-							sessionId: 1
-						});
-					};
-
-				describe('when data is as expected', function () {
-					beforeEach(function () {
-						abc = fs.readFileSync('./test/server/stubs/tune.abc', 'utf-8');
-						init();
-					});
-
-					it('should be able to extract multiple abcs', function () {
-						expect(getter.saveTuneInfo.mostRecentCall.args[0].arrangements.length).toBe(2);
-					});
-
-					it('should be able to extract meter', function () {
-						expect(getter.saveTuneInfo.mostRecentCall.args[0].meter).toBe('4/4');
-					});
-
-					it('should be able to extract rhythm', function () {
-						expect(getter.saveTuneInfo.mostRecentCall.args[0].rhythm).toBe('reel');
-					});
-
-					it('should be able to extract mode', function () {
-						expect(getter.saveTuneInfo.mostRecentCall.args[0].mode).toBe('maj');
-					});
-
-					it('should be able to extract root', function () {
-						expect(getter.saveTuneInfo.mostRecentCall.args[0].arrangements[0].root).toBe('G');
-						expect(getter.saveTuneInfo.mostRecentCall.args[0].arrangements[1].root).toBe('Bb');
-					});
-
-					it('should be able to extract abc', function () {
-						expect(getter.saveTuneInfo.mostRecentCall.args[0].arrangements[0].abc.replace(/(\n|\r)/g, '')).toBe('|: abc:||: abc:|');
-					});
-
-				});
-				describe('when data is not as expected', function () {
-					it('should cope well if the document appears not to contain any abc notation', function () {
-						abc = 'have a banana';
-						expect(init).not.toThrow();
-					});
-					it('should cope well if any data is missing from an abc', function () {
-						abc = 'X: 1\r\nabc';
-						expect(init).not.toThrow();
-					});
-				});
-			});
-
-		});
-
-		describe('saveTuneInfo', function () {
-			var tune;
-
-			beforeEach(function () {
-				tune = {
-					save: jasmine.createSpy('tune save').andCallFake(function (callback) {
-						callback();
+		scraper.storeTune({
+			sessionId: 123,
+			name: 'new'
+		})
+			.then(function () {
+				Tune.find().exec()
+					.then(function (tunes) {
+						expect(tunes.length).toBe(1);
+						expect(tunes[0].sessionId).toBe(123);
+						expect(scraper.retrieveTuneInfo.calledOnce).toBeTruthy();
+						scraper.retrieveTuneInfo.restore();
+						done();
 					})
-				};
-				spyOn(getter, 'send');
-			});
+			})
+	});
+
+	it('should retrieve existing tune if exists', function (done) {
+		sinon.stub(scraper, 'retrieveTuneInfo', function () {
+			return Promise.resolve({});
+		});
+		Tune.create({
+			sessionId: 123,
+			name: 'old'
+		})
+			.then(function () {
+				scraper.storeTune({
+					sessionId: 123,
+					name: 'new'
+				})
+					.then(function () {
+						Tune.find().exec()
+							.then(function (tunes) {
+								expect(tunes.length).toBe(1);
+								expect(tunes[0].name).toBe('old');
+								expect(scraper.retrieveTuneInfo.calledOnce).toBeTruthy();
+								scraper.retrieveTuneInfo.restore();
+								done();
+							})
+					})
+			})
+	});
+
+	it('should not get extra tune info if already complete', function (done) {
+		sinon.stub(scraper, 'retrieveTuneInfo', function () {
+			return Promise.resolve({});
+		});
+		Tune.create({
+			sessionId: 123,
+			name: 'old',
+			arrangements: [dummyId]
+		})
+			.then(function () {
+				scraper.storeTune({
+					sessionId: 123,
+					name: 'new'
+				})
+					.then(function () {
+						Tune.find().exec()
+							.then(function (tunes) {
+								expect(tunes.length).toBe(1);
+								expect(scraper.retrieveTuneInfo.called).toBeFalsy();
+								scraper.retrieveTuneInfo.restore();
+								done();
+							})
+					})
+			})
+	});
+
+	it('should fetch abc file from the session', function (done) {
+		var mock = nock('https://thesession.org')
+			.filteringPath(/^\/tunes\/\d+\/abc$/, '/tunes/XXX/abc')
+			.get('/tunes/XXX/abc')
+			.reply(200, abc);
+
+		var tune = {
+			sessionId: 123
+		};
+
+		sinon.stub(scraper, 'storeAbc');
+		scraper.retrieveTuneInfo(tune);
+		setTimeout(function () {
+			expect(mock.isDone()).toBeTruthy();
+			expect(scraper.storeAbc.calledOnce).toBeTruthy();
+			expect(scraper.storeAbc.calledWith(tune, abc)).toBeTruthy();
+			scraper.storeAbc.restore();
+			done();
+		}, 50)
+	});
 
 
-			it('should save the tune', function () {
-				getter.saveTuneInfo(tune);
-				expect(tune.save).toHaveBeenCalled();
-			});
+	describe('extracting data from the abc file', function () {
+		var tune;
+		var ObjectId = mongoose.Types.ObjectId;
 
-			it('should update the pending processes count', function () {
-				tune.save = jasmine.createSpy('tune save', function (callback) {
-					expect(getter.pendingProcesses).toBe(1);
-					callback();
-					expect(getter.pendingProcesses).toBe(0);
-				});
-
-				getter.saveTuneInfo(tune);
-
-			});
-
-			it ('should add the tune to the new tunes list', function () {
-				getter.saveTuneInfo(tune);
-				expect(getter.newTunes[0]).toBe(tune);
-			});
-
-			describe('sending a http response', function () {
-				it('should send a response if no pending processes', function () {
-					getter.pendingProcesses = 0;
-					getter.saveTuneInfo(tune);
-					expect(getter.send).toHaveBeenCalled();
-				});
-
-				it('should not send a response if there are still processes pending', function () {
-					getter.pendingProcesses = 1;
-					getter.saveTuneInfo(tune);
-					expect(getter.send).not.toHaveBeenCalled();
-				});
-			});
+		beforeEach(function (done) {
+			Tune.create({}).then(function (t) {
+				tune = t;
+				done();
+			})
 		});
 
-		describe('send', function () {
-			it('should send a response', function () {
-				getter.newTunes = ['tester'];
-				getter.send();
-				expect(getter.response.send).toHaveBeenCalledWith(['tester']);
-				expect(getter.response.send.calls.length).toBe(1);
+		it('should work \'in the wild\'', function (done) {
+			scraper.storeAbc(tune, abc)
+				.then(function () {
+					expect(tune.keys.length).toBeGreaterThan(0);
+					expect(tune.keys[0]).toMatch(/^[ABCDEFG](#|b)?[a-z]{3}$/);
+					expect(tune.meters.length).toBeGreaterThan(0);
+					expect(tune.rhythms.length).toBeGreaterThan(0);
+					expect(tune.abcId instanceof ObjectId).toBeTruthy();
+					expect(typeof tune.abc).toEqual('string')
+					expect(tune.arrangements[0] instanceof ObjectId).toBeTruthy();
+
+					Arrangement.find().exec()
+						.then(function (arrs) {
+							expect(arrs.length).toBeGreaterThan(0);
+
+							expect(arrs[0].meter).toMatch(/^\d{1,2}\/\d{1,2}$/);
+							expect(typeof arrs[0].rhythm).toBe('string');
+							expect(arrs[0].mode).toMatch(/^[a-z]{3}$/);
+							expect(arrs[0].root).toMatch(/^[ABCDEFG](#|b)?$/);
+							expect(typeof arrs[0].abc).toBe('string');
+							expect(arrs[0].tune).toEqual(tune._id);
+							done();
+						});
+				});
+		});
+
+		it('should cope well if the document does not contain abc', function (done) {
+			scraper.storeAbc(tune, 'have a banana')
+				.then(function () {
+					expect(tune.keys).toEqual([]);
+					Arrangement.find().exec()
+						.then(function (arrs) {
+							expect(arrs.length).toBe(0);
+							done();
+						});
+				});
+		});
 
 
-			});
+
+		it('should be able to identify a tune\'s normal key', function () {
+			scraper.storeAbc(tune, 'X: 1\r\nK:Emin\r\nX: 2\r\nK:Gmaj\r\nX: 3\r\nK:Gmaj\r\n')
+				.then(function () {
+					expect(tune.keys).toEqual(['Gmaj', 'Emin']);
+				})
 		});
 
 	});

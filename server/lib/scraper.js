@@ -1,10 +1,11 @@
 require('es6-promise').polyfill();
 
 var request = require('request-then');
-var mongoose = require('mongoose-q');
+var mongoose = require('mongoose');
 var Arrangement = require('../models/arrangement');
 var Tune = require('../models/tune');
 var debug = require('debug')('scraper');
+var format = require('util').format;
 
 var groupByPopularity = function (arr) {
 	var o = {};
@@ -98,15 +99,15 @@ TuneGetter.prototype = {
 	storeTune: function (tune) {
 		var self = this;
 
-		return Tune.createNewFromSession(tune).then(function(newTune) {
-
-			if (newTune.arrangements.length) {
-				debug('full details already exist for tune %s, %s', newTune.sessionId, newTune.name);
-				return newTune;
-			} else {
-				return self.retrieveTuneInfo(newTune);
-			}
-		});
+		return Tune.createNewFromSession(tune)
+			.then(function(newTune) {
+				if (newTune.arrangements.length) {
+					debug('full details already exist for tune %s, %s', newTune.sessionId, newTune.name);
+					return newTune;
+				} else {
+					return self.retrieveTuneInfo(newTune);
+				}
+			});
 
 	},
 
@@ -114,19 +115,25 @@ TuneGetter.prototype = {
 		debug('retrieving full details for tune %s, %s', tune.sessionId, tune.name);
 		var self = this;
 
-		return this.request('https://thesession.org/tunes/' + tune.sessionId + '/abc').then(function(res) {
-			var arrs = res.body;
+		return this.request('https://thesession.org/tunes/' + tune.sessionId + '/abc')
+			.then(function (res) {
+				self.storeAbc(tune, res.body);
+			})
+			.catch(function (err) {
+				console.log(err);
+				debug(tune, err);
+			});
+	},
+	storeAbc: function(tune, arrangements) {
 
-			arrs = arrs.split(/X: \d+\r\n/);
-			arrs.shift(); // get rid of the intial empty string
-			if (!arrs.length) {
+			arrangements = arrangements.split(/X: \d+\r\n/);
+			arrangements.shift(); // get rid of the intial empty string
+			if (!arrangements.length) {
 				debug('No abc available for tune %s, %s', tune.sessionId, tune.name);
-				return tune;
+				return Promise.resolve(tune);
 			}
 
-
-
-			arrs = arrs.map(function (arr) {
+			arrangements = arrangements.map(function (arr) {
 				return {
 					meter: (arr.match(/M:(?:\s*)(.*)/) || [])[1],
 					rhythm: (arr.match(/R:(?:\s*)(.*)/) || [])[1],
@@ -137,30 +144,24 @@ TuneGetter.prototype = {
 				}
 			});
 
-			tune.meters = groupByPopularity(arrs.map(function (t) {
+			tune.meters = groupByPopularity(arrangements.map(function (t) {
 				return t.meter;
 			}));
-			tune.keys = groupByPopularity(arrs.map(function (t) {
+			tune.keys = groupByPopularity(arrangements.map(function (t) {
 				return t.root + t.mode;
 			}));
-			tune.rhythms = groupByPopularity(arrs.map(function (t) {
+			tune.rhythms = groupByPopularity(arrangements.map(function (t) {
 				return t.rhythm;
 			}));
 
-			tune.abc = arrs.filter(function (arr) {
-				return (arr.meter === tune.meters[0] &&
-					arr.rhythm === tune.rhythms[0] &&
-					(arr.root + arr.mode) === tune.keys[0]);
-			})[0] || arrs[0];
-
-			return Promise.all(arrs.map(function (arr) {
-				return Arrangement.createQ(arr);
-			})).then(function (arrs) {
-				var defaultArr = arrs.filter(function (arr) {
+			return Promise.all(arrangements.map(function (arr) {
+				return Arrangement.create(arr);
+			})).then(function (arrangements) {
+				var defaultArr = arrangements.filter(function (arr) {
 					return (arr.meter === tune.meters[0] &&
 						arr.rhythm === tune.rhythms[0] &&
 						(arr.root + arr.mode) === tune.keys[0]);
-				})[0] || arrs[0];
+				})[0] || arrangements[0];
 
 				tune.abcId = defaultArr._id;
 				tune.abc = require('util').format(
@@ -171,25 +172,24 @@ TuneGetter.prototype = {
 					defaultArr.abc
 				);
 
-				tune.arrangements = arrs.map(function (arr) {
+				tune.arrangements = arrangements.map(function (arr) {
 					return arr._id;
 				})
 
-				return tune.saveQ().then(function (tune) {
+				return tune.save().then(function (tune) {
 					debug('Details fetched and saved for tune %s, %s', tune.sessionId, tune.name);
 					return tune;
 				});
 
 			});
-		}).then(function (err) {
-			debug(tune, err);
-		});
-	}
+		}
 };
 
 var getter;
 
-exports.init = function() {
+module.exports = TuneGetter
+
+module.exports.init = function() {
 	if (getter) {
 		return getter.getNewTunes();
 	}
