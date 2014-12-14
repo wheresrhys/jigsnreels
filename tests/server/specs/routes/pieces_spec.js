@@ -34,17 +34,28 @@ describe(format('api - %ss', modelName), function () {
 			});
 	});
 
-	it('should fetch all records', function (done) {
-		Model.create([{}, {}])
-			.then(function () {
-				request(app)
-					.get(format('/api/%ss', modelName))
-					.expect(200)
-					.end(function (err, res) {
-						expect(res.body.length).toEqual(2);
-						done();
+	it('should fetch all records for a tunebook', function (done) {
+		TuneModel.create({})
+			.then(function (tune) {
+				Model.create([{
+					tunebook: 'user:mandolin'
+				}, {
+					tunebook: 'user:whistle',
+					srcId: tune._id,
+					type: 'tune'
+				}])
+					.then(function () {
+						request(app)
+							.get(format('/api/%ss/?tunebook=whistle', modelName))
+							.expect(200)
+							.end(function (err, res) {
+								expect(res.body.length).toEqual(1);
+								expect(res.body[0].tunebook).toEqual('user:whistle');
+								done();
+							});
 					});
 			});
+
 	});
 
 	it('should get a record with tune', function (done) {

@@ -8,7 +8,10 @@ var noop = function (){};
 
 
 exports.fetchAll = function (req, res) {
-	PieceModel.find({}).exec()
+	var criteria = req.query.tunebook ? {
+		tunebook: {$regex: new RegExp('\\:' + req.query.tunebook + '$')}
+	} : {};
+	PieceModel.find(criteria).exec()
 		.then(function (pieces) {
 			return Promise.all(pieces.map(PieceModel.addResourceToPiece))
 				.then(function (pieces) {
