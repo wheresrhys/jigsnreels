@@ -33,6 +33,20 @@ describe(format('api - %ss', modelName), function () {
 					});
 			});
 	});
+
+	it('should fetch all records', function (done) {
+		Model.create([{}, {}])
+			.then(function () {
+				request(app)
+					.get(format('/api/%ss', modelName))
+					.expect(200)
+					.end(function (err, res) {
+						expect(res.body.length).toEqual(2);
+						done();
+					});
+			});
+	});
+
 	it('should get a record with tune', function (done) {
 		TuneModel.create({
 			name: 'testname1'

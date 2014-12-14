@@ -1,5 +1,9 @@
 require('es6-promise').polyfill();
 
+Object.keys(console).forEach(function (method) {
+   console[method] = console[method].bind(console);
+});
+
 var db = require('./lib/dbConnection');
 var express = require('express');
 var path = require('path');
