@@ -35,22 +35,28 @@ describe(format('api - %ss', modelName), function () {
 	});
 
 	it('should fetch all records for a tunebook', function (done) {
-		TuneModel.create({})
-			.then(function (tune) {
+		Promise.all([TuneModel.create({}), SetModel.create({})])
+			.then(function (res) {
 				Model.create([{
 					tunebook: 'user:mandolin'
 				}, {
 					tunebook: 'user:whistle',
-					srcId: tune._id,
+					srcId: res[0]._id,
 					type: 'tune'
+				},
+				{
+					tunebook: 'user:whistle',
+					srcId: res[1]._id,
+					type: 'set'
 				}])
 					.then(function () {
 						request(app)
 							.get(format('/api/%ss/?tunebook=whistle', modelName))
 							.expect(200)
 							.end(function (err, res) {
-								expect(res.body.length).toEqual(1);
+								expect(res.body.length).toEqual(2);
 								expect(res.body[0].tunebook).toEqual('user:whistle');
+								expect(res.body[1].tunebook).toEqual('user:whistle');
 								done();
 							});
 					});

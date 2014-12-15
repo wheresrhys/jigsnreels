@@ -55,7 +55,7 @@ db.collection('oldsets').find({}).toArray()
 						return db.collection('pieces').insert({
 							type: 'set',
 							srcId: set._id,
-							tunebook: 'wheresrhys:' + isMandoSet(oldTunes) ? 'mandolin' : 'whistle'
+							tunebook: 'wheresrhys:' + (isMandoSet(oldTunes) ? 'mandolin' : 'whistle')
 						})
 					});
 			}, function (err) {
@@ -63,5 +63,8 @@ db.collection('oldsets').find({}).toArray()
 			})
 
 		}));
+	})
+	.then(function () {
+		process.exit(0);
 	});
 

@@ -39,4 +39,7 @@ module.exports = db.collection('oldtunes').find({}).toArray()
 			}
 
 		})).catch(console.log);
+	})
+	.then(function () {
+		process.exit(0);
 	});

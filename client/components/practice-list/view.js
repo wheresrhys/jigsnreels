@@ -1,14 +1,13 @@
 var swig = require('swig/index');
 var PieceView = require('../piece/view');
-var pieces = require('../../data/collections/pieces');
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
-	
+
 	events: {},
 
 	initialize: function (opts) {
-		this.pieces = pieces;
+		this.pieces = opts.pieces;
 		this.parentEl = opts.parentEl;
 		this.length = 20;
 		this.render = this.render.bind(this);
@@ -16,7 +15,8 @@ module.exports = require('../../scaffolding/view').extend({
 		this.enforceUniqueAbc = this.enforceUniqueAbc.bind(this);
 		this.appendModel = this.appendModel.bind(this);
 		var self = this;
-		opts.piecesPromise.then(function (){
+		opts.piecesPromise.then(function (pieces) {
+
 			self.listenTo(self.pieces, 'practiced', self.append);
 			self.render();
 		});
@@ -37,10 +37,10 @@ module.exports = require('../../scaffolding/view').extend({
 
 	appendModel: function (model) {
 		var pieceView = new PieceView({
-			piece: model, 
+			piece: model,
 			parentEl: this.listEl,
 			parentView: this
-		}).render();	
+		}).render();
 		this.listenTo(pieceView, 'abc-open', this.enforceUniqueAbc);
 	},
 

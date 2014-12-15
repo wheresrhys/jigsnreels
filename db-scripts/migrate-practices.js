@@ -70,4 +70,7 @@ Promise.all([
 				return Promise.all(perfs.map(convertPerformance));
 			})
 			.catch(console.log);
+	})
+	.then(function () {
+		process.exit(0);
 	});

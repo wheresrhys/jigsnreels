@@ -9,12 +9,15 @@ setTimeout(function () {
 var sets = require('./sets');
 var Pieces = require('backbone-es6').Collection.extend({
 	name: 'pieces',
-	url: require('../../scaffolding/api').url('pieces'),
+	url: function () {
+		return require('../../scaffolding/api').url('pieces', null, this.tunebook)
+	},
 	model: require('../models/piece'),
 	Presenter: require('./pieces-presenter'),
 
-	initialize: function () {
+	initialize: function (opts) {
 		var self = this;
+		this.tunebook = opts.tunebook;
 		this.listenTo(sets, 'newPiece', function () {
 			// this
 			console.log(arguments);
@@ -34,16 +37,16 @@ var Pieces = require('backbone-es6').Collection.extend({
 				self.models.splice(index, 1, piece);
 				return true;
 			}
-		}) || this.models.push(piece);	
+		}) || this.models.push(piece);
 	},
 	comparator: function (piece) {
 		var timeAgo = (now - new Date(piece.get('lastPieced'))) / (24 * 60 * 60 * 1000);
 		if (isNaN(timeAgo)) {
 			return 0;
 		}
-		var score = (-timeAgo / 2) + 
+		var score = (-timeAgo / 2) +
 			1 * piece.get('lastPieceQuality') +
-			-1 * piece.get('stickiness');	
+			-1 * piece.get('stickiness');
 		piece.score = score;
 		return score;
 	},
@@ -56,4 +59,14 @@ var Pieces = require('backbone-es6').Collection.extend({
 	}
 });
 
-module.exports = new Pieces();
+var tunebooks = {};
+
+module.exports = {
+	get: function (tunebook) {
+		tunebook = tunebook || '';
+		return tunebooks[tunebook] || (tunebooks[tunebook] = new Pieces({
+			tunebook: tunebook
+		}));
+
+	}
+}
