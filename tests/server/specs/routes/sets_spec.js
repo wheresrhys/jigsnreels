@@ -103,7 +103,6 @@ describe(format('api - %ss', modelName), function () {
 						expect(res.body.keys).toEqual(['Dmaj']);
 						Promise.all([Model.find().exec(), PieceModel.find().exec()])
 							.then(function (results) {
-								console.log(results[1])
 								expect(results[0].length).toEqual(1);
 								expect(results[1].length).toEqual(1);
 								expect(results[1][0].tunebook).toEqual('wheresrhys:test-tunes');

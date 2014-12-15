@@ -8,10 +8,7 @@ var db = require('./lib/dbConnection');
 var express = require('express');
 var path = require('path');
 var http = require('http');
-var pieces = require('./routes/pieces');
-var tunes = require('./routes/tunes');
-var sets = require('./routes/sets');
-var scraper = require('./lib/scraper');
+
 
 var app = express();
 
@@ -34,11 +31,15 @@ var api = express.Router();
 
 api.use(require('body-parser').json());
 
+var pieces = require('./routes/pieces');
+
 api.get('/pieces', pieces.fetchAll);
 api.get('/pieces/:id', pieces.findById);
 api.post('/pieces', pieces.add);
 api.put('/pieces/:id', pieces.update);
 api.delete('/pieces/:id', pieces.delete);
+
+var tunes = require('./routes/tunes');
 
 api.get('/tunes', tunes.fetchAll);
 api.get('/tunes/:id', tunes.findById);
@@ -46,12 +47,20 @@ api.post('/tunes', tunes.add);
 api.put('/tunes/:id', tunes.update);
 // api.del('/tunes/:id', tunes.deleteTune);
 
+var sets = require('./routes/sets');
+
 api.get('/sets', sets.fetchAll);
 api.get('/sets/:id', sets.findById);
 api.post('/sets', sets.add);
 api.put('/sets/:id', sets.update);
 api.delete('/sets/:id', sets.delete);
 
+var users = require('./routes/users');
+
+api.get('/users/:name', users.findByName);
+api.put('/users/:name', users.update);
+
+var scraper = require('./lib/scraper');
 
 api.get('/scraper', function (req, res) {
 	scraper.init().then(function (job) {

@@ -9,9 +9,7 @@ var noop = function (){};
 
 exports.fetchAll = function (req, res) {
 	var criteria = req.query.tunebook ? {
-		tunebook: {
-			$regex: new RegExp('\\:' + req.query.tunebook + '$')
-		}
+		tunebook: 'wheresrhys:' + req.query.tunebook
 	} : {};
 	PieceModel.find(criteria).exec()
 		.then(function (pieces) {

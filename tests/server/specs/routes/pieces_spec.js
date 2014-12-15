@@ -38,14 +38,14 @@ describe(format('api - %ss', modelName), function () {
 		Promise.all([TuneModel.create({}), SetModel.create({})])
 			.then(function (res) {
 				Model.create([{
-					tunebook: 'user:mandolin'
+					tunebook: 'wheresrhys:mandolin'
 				}, {
-					tunebook: 'user:whistle',
+					tunebook: 'wheresrhys:whistle',
 					srcId: res[0]._id,
 					type: 'tune'
 				},
 				{
-					tunebook: 'user:whistle',
+					tunebook: 'wheresrhys:whistle',
 					srcId: res[1]._id,
 					type: 'set'
 				}])
@@ -55,8 +55,8 @@ describe(format('api - %ss', modelName), function () {
 							.expect(200)
 							.end(function (err, res) {
 								expect(res.body.length).toEqual(2);
-								expect(res.body[0].tunebook).toEqual('user:whistle');
-								expect(res.body[1].tunebook).toEqual('user:whistle');
+								expect(res.body[0].tunebook).toEqual('wheresrhys:whistle');
+								expect(res.body[1].tunebook).toEqual('wheresrhys:whistle');
 								done();
 							});
 					});
