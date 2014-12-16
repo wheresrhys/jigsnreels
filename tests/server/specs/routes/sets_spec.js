@@ -76,12 +76,40 @@ describe(format('api - %ss', modelName), function () {
 						Promise.all([Model.find().exec(), PieceModel.find().exec()])
 							.then(function (results) {
 								expect(results[0].length).toEqual(1);
-								expect(results[1].length).toEqual(1);
+								expect(results[1].length).toEqual(0);
 								done();
 							});
 					});
+			});
+	});
 
-		});
+	it('should create record with a piece if requested', function (done) {
+		TuneModel.create({
+			name: 'testname1'
+		})
+			.then(function (tune) {
+				request(app)
+					.post(format('/api/%ss?tunebook=test-tunes', modelName))
+					.send({
+						name: 'test name',
+						tunes: [tune._id.toString()],
+						keys: ['Dmaj']
+					})
+					.expect(200)
+					.end(function (err, res) {
+						expect(typeof res.body._id).toEqual('string');
+						expect(res.body.name).toEqual('test name');
+						expect(res.body.tunes).toEqual([tune._id.toString()]);
+						expect(res.body.keys).toEqual(['Dmaj']);
+						Promise.all([Model.find().exec(), PieceModel.find().exec()])
+							.then(function (results) {
+								expect(results[0].length).toEqual(1);
+								expect(results[1].length).toEqual(1);
+								expect(results[1][0].tunebook).toEqual('wheresrhys:test-tunes');
+								done();
+							});
+					});
+			});
 	});
 
 	it('should update record', function (done) {

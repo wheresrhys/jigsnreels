@@ -1,11 +1,15 @@
 var setsPromise;
 
 module.exports = function () {
+	var pieces = require('../data/collections/pieces');
 	var sets = require('../data/collections/sets');
-	setsPromise = setsPromise || sets.fetch();
-	var view = new (require('../components/set-list/view'))({
-		sets: sets,
-		parentEl: document.querySelector('main')
-	});
-	view.setAsCurrentPage();
+	Promise.all([pieces.fetch(), sets.fetch()])
+			.then(function () {
+
+				var view = new (require('../components/set-list'))({
+					sets: sets,
+					parentEl: document.querySelector('main')
+				});
+				view.setAsCurrentPage();
+			}).catch(function (err) {console.log(err)});
 };

@@ -36,10 +36,13 @@ exports.findById = function (req, res) {
 exports.add = function (req, res) {
 	SetModel.create(req.body)
 		.then(function (set) {
-			return SetModel.addPiece(set)
-				.then(function (set) {
-					res.send(set);
-				});
+			if (req.query.tunebook) {
+				return SetModel.addPiece(set, req.query.tunebook)
+					.then(function (set) {
+						res.send(set);
+					});
+			}
+			return res.send(set);
 		})
 		.then(noop, function (err) {
 			res.setStatus(503).send(err);

@@ -1,5 +1,4 @@
-var swig = require('swig/index');
-var AbcViewer = require('../abc-viewer/view');
+var AbcViewer = require('../abc-viewer');
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
@@ -14,7 +13,7 @@ module.exports = require('../../scaffolding/view').extend({
 		this.parentEl = opts.parentEl;
 
 		this.render = this.render.bind(this);
-		
+
 		this.listenTo(this.piece, 'sync', this.render);
 		this.listenTo(opts.parentView, 'destroy', this.destroy);
 		// this.listenTo(this.piece, 'destroy', this.destroy);
@@ -22,7 +21,8 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	render: function () {
-		this.renderToDom(swig.render(this.tpl, this.piece.Presenter().toJSON(true)))
+		var self = this;
+		this.renderToDom(self.swig.render(self.tpl, this.piece.viewModel().withSrc().end(true)));
 		this.abcEl = this.el.querySelector('.piece__abc');
 		return this;
 	},
@@ -33,7 +33,7 @@ module.exports = require('../../scaffolding/view').extend({
 	viewAbc: function (ev) {
 		this.abcViewer = new AbcViewer({
 			tuneId: ev.delegateTarget.dataset.tuneId,
-			parentEl: this.abcEl, 
+			parentEl: this.abcEl,
 			parentView: this,
 			isDismissable: true
 		});

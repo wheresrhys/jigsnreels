@@ -33,6 +33,37 @@ describe(format('api - %ss', modelName), function () {
 					});
 			});
 	});
+
+	it('should fetch all records for a tunebook', function (done) {
+		Promise.all([TuneModel.create({}), SetModel.create({})])
+			.then(function (res) {
+				Model.create([{
+					tunebook: 'wheresrhys:mandolin'
+				}, {
+					tunebook: 'wheresrhys:whistle',
+					srcId: res[0]._id,
+					type: 'tune'
+				},
+				{
+					tunebook: 'wheresrhys:whistle',
+					srcId: res[1]._id,
+					type: 'set'
+				}])
+					.then(function () {
+						request(app)
+							.get(format('/api/%ss/?tunebook=whistle', modelName))
+							.expect(200)
+							.end(function (err, res) {
+								expect(res.body.length).toEqual(2);
+								expect(res.body[0].tunebook).toEqual('wheresrhys:whistle');
+								expect(res.body[1].tunebook).toEqual('wheresrhys:whistle');
+								done();
+							});
+					});
+			});
+
+	});
+
 	it('should get a record with tune', function (done) {
 		TuneModel.create({
 			name: 'testname1'

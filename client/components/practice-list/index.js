@@ -1,32 +1,28 @@
-var swig = require('swig/index');
-var PieceView = require('../piece/view');
-var pieces = require('../../data/collections/pieces');
+var PieceView = require('../piece');
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
-	
+
 	events: {},
 
 	initialize: function (opts) {
-		this.pieces = pieces;
+		this.pieces = opts.pieces;
 		this.parentEl = opts.parentEl;
+		this.tunebook = opts.tunebook;
 		this.length = 20;
 		this.render = this.render.bind(this);
 		this.destroy = this.simpleDestroy.bind(this);
 		this.enforceUniqueAbc = this.enforceUniqueAbc.bind(this);
 		this.appendModel = this.appendModel.bind(this);
-		var self = this;
-		opts.piecesPromise.then(function (){
-			self.listenTo(self.pieces, 'practiced', self.append);
-			self.render();
-		});
+		this.listenTo(this.pieces, 'practiced', this.append);
+		this.render();
 	},
 
 	render: function () {
-		this.renderToDom(swig.render(this.tpl, this.pieces.Presenter().toJSON(true)), true);
+		this.renderToDom(this.swig.render(this.tpl), true);
 		this.listEl = this.el.querySelector('.practice-list__list');
 		var self = this;
-		this.pieces.models.slice(0, this.length).forEach(function (piece) {
+		this.pieces.getTunebook(this.tunebook).slice(0, this.length).forEach(function (piece) {
 			setTimeout(function () {
 				self.appendModel(piece);
 			});
@@ -37,10 +33,10 @@ module.exports = require('../../scaffolding/view').extend({
 
 	appendModel: function (model) {
 		var pieceView = new PieceView({
-			piece: model, 
+			piece: model,
 			parentEl: this.listEl,
 			parentView: this
-		}).render();	
+		}).render();
 		this.listenTo(pieceView, 'abc-open', this.enforceUniqueAbc);
 	},
 

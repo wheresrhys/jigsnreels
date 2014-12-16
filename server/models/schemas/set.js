@@ -21,14 +21,18 @@ setSchema.statics.addTunes = function (set) {
 	});
 }
 
-setSchema.statics.addPiece = function (set) {
+setSchema.statics.addPiece = function (set, tunebook) {
 	PieceModel = require('../piece'); // re-require because circular
 
-	return PieceModel.findOne({srcId: this._id }).exec()
+	return PieceModel.findOne({
+		srcId: this._id,
+		tunebook: 'wheresrhys:' + tunebook
+	}).exec()
 		.then(function (foundPiece) {
 			return (foundPiece ? Promise.resolve(foundPiece) : PieceModel.create({
 				srcId: set._id,
-				type: 'set'
+				type: 'set',
+				tunebook: 'wheresrhys:' + tunebook
 			})).then(function (piece) {
 				set = set.toObject();
 				set.piece = piece;
@@ -38,7 +42,9 @@ setSchema.statics.addPiece = function (set) {
 }
 
 setSchema.statics.cleanRemove = function (set) {
-	return PieceModel.remove({srcId: set._id }).exec().then(function () {
+	return PieceModel.remove({
+		srcId: set._id
+	}).exec().then(function () {
 		return set.remove();
 	});
 }

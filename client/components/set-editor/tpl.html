@@ -21,8 +21,9 @@
 					{% else %}
 						{{ tune.keys[0] }}
 					{% endif %}
-					<button class="set-editor__tune__delete"> - </button>
-					<button class="set-editor__tune__view"> - </button>
+					<button class="set-editor__tune__delete"> delete </button>
+					{% if tuneIndex %}<button class="set-editor__tune__move-up"> move up </button>{% endif %}
+					<button class="set-editor__tune__view"> view </button>
 				</li>
 				{% endfor %}
 			</ol>

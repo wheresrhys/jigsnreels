@@ -1,8 +1,7 @@
-var swig = require('swig/index');
 var SetModel = require('../../data/models/set');
 var allSets = require('../../data/collections/sets');
 var allTunes = require('../../data/collections/tunes');
-var AbcViewer = require('../abc-viewer/view')
+var AbcViewer = require('../abc-viewer')
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
@@ -13,34 +12,42 @@ module.exports = require('../../scaffolding/view').extend({
 		'submit .set-editor__form': 'save',
 		'click .set-editor__delete': 'delete',
 		'click .set-editor__tune__delete': 'deleteTune',
+		'click .set-editor__tune__move-up': 'moveTuneUp',
 		'click .set-editor__tune__view': 'viewTune'
 	},
 
 	initialize: function (opts) {
 		this.isEditing = !!opts.id;
-		this.tunesPromise = opts.tunesPromise;
+		this.tunes = opts.tunes;
 		this.parentEl = opts.parentEl;
 		this.render = this.render.bind(this);
 		this.freshSet = this.freshSet.bind(this);
-		this.tunesPromise.then(this.render);
+
 		this.destroy = this.simpleDestroy.bind(this);
 		this.freshSet(opts.id);
+		this.render();
 	},
 
 	render: function () {
-		this.renderToDom(swig.render(this.tpl, {
+
+		this.renderToDom(this.swig.render(this.tpl, {
 			locals: {
-				set: this.set.Presenter().toJSON(),
+				set: this.set.viewModel()
+							.end(),
 				isEditing: this.isEditing,
-				tunes: allTunes.Presenter({
-					by: 'rhythm',
-					sort: function (a, b) {
-						return a.get('keys')[0].charAt(0) > b.get('keys')[0].charAt(0) ? 1 : -1;
-					}
-				}).toJSON()
+				tunes: allTunes.viewModel()
+								.childDo('end')
+								.sortByName()
+								.groupBy('rhythm')
+								.sortBy(function (a, b) {
+									return a.keys[0].charAt(0) > b.keys[0].charAt(0) ? 1 : -1;
+								})
+								.end()
 			}
 		}), true);
+
 		this.abcEl = this.el.querySelector('.set-editor__abc-viewer');
+		return this;
 	},
 
 	appendTune: function (ev) {
@@ -69,6 +76,11 @@ module.exports = require('../../scaffolding/view').extend({
 	deleteTune: function (ev) {
 		ev.preventDefault();
 		this.set.removeTune(ev.delegateTarget.parentNode.dataset.tuneId);
+	},
+
+	moveTuneUp: function (ev) {
+		ev.preventDefault();
+		this.set.moveTuneUp(ev.delegateTarget.parentNode.dataset.tuneId);
 	},
 
 	changeKey: function (ev) {
@@ -109,6 +121,7 @@ module.exports = require('../../scaffolding/view').extend({
 						self.listenToOnce(self.set, 'sync', function () {
 							require('../../scaffolding/router').navigate('/practice', { trigger: true });
 						});
+						self.listenTo(self.set, 'change', self.render);
 					});
 				}
 			} else {

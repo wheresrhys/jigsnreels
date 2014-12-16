@@ -3,11 +3,10 @@ var allTunes = require('../collections/tunes');
 
 module.exports = require('backbone-es6').Model.extend({
 	idAttribute: '_id',
+	viewModel: require('../view-models/set'),
 	url: function () {
 		return require('../../scaffolding/api').url('sets', this.id);
 	},
-
-	Presenter: require('./set-presenter'),
 
 	defaults: {
 		tunes: [],
@@ -54,6 +53,17 @@ module.exports = require('backbone-es6').Model.extend({
 		var pos = tunes.indexOf(tuneId);
 		this.get('tunes').splice(pos, 1);
 		this.get('keys').splice(pos, 1);
+		this.trigger('change');
+	},
+	moveTuneUp: function (tuneId) {
+		var tunes = this.get('tunes');
+		var pos = tunes.indexOf(tuneId);
+		if (!pos) return;
+		var key = this.get('keys')[pos];
+		this.get('tunes').splice(pos, 1);
+		this.get('tunes').splice(pos - 1, 0, tuneId);
+		this.get('keys').splice(pos, 1);
+		this.get('keys').splice(pos - 1, 0, key);
 		this.trigger('change');
 	},
 	changeTuneKey: function (newKey, tuneId) {

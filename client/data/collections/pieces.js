@@ -1,20 +1,24 @@
 
 // keep an accurate enough reference to the current time;
 var now = new Date();
+var user = window.user;
 
 setTimeout(function () {
 	now = new Date();
 }, 1000);
 
-var sets = require('./sets');
-var Pieces = require('backbone-es6').Collection.extend({
-	name: 'pieces',
-	url: require('../../scaffolding/api').url('pieces'),
-	model: require('../models/piece'),
-	Presenter: require('./pieces-presenter'),
 
-	initialize: function () {
+var Pieces = module.exports = require('backbone-es6').Collection.extend({
+	name: 'pieces',
+	url: function () {
+		return require('../../scaffolding/api').url('pieces', null, this.tunebook)
+	},
+	model: require('../models/piece'),
+
+	initialize: function (opts) {
 		var self = this;
+		var sets = require('./sets');
+		this.isInTunebook = this.isInTunebook.bind(this);
 		this.listenTo(sets, 'newPiece', function () {
 			// this
 			console.log(arguments);
@@ -34,16 +38,23 @@ var Pieces = require('backbone-es6').Collection.extend({
 				self.models.splice(index, 1, piece);
 				return true;
 			}
-		}) || this.models.push(piece);	
+		}) || this.models.push(piece);
+	},
+	addPiece: function (id, type, tunebook) {
+		return this.add({
+			srcId: id,
+			type: type,
+			tunebook: 'wheresrhys:' + tunebook
+		}).save();
 	},
 	comparator: function (piece) {
 		var timeAgo = (now - new Date(piece.get('lastPieced'))) / (24 * 60 * 60 * 1000);
 		if (isNaN(timeAgo)) {
 			return 0;
 		}
-		var score = (-timeAgo / 2) + 
+		var score = (-timeAgo / 2) +
 			1 * piece.get('lastPieceQuality') +
-			-1 * piece.get('stickiness');	
+			-1 * piece.get('stickiness');
 		piece.score = score;
 		return score;
 	},
@@ -53,6 +64,52 @@ var Pieces = require('backbone-es6').Collection.extend({
 				piece.destroy();
 			}
 		});
+	},
+	getTunebook: function (tunebook) {
+		return this.models.filter(function (piece) {
+			return piece.get('tunebook') === 'wheresrhys:' + tunebook;
+		})
+	},
+	getIdsByTunebook: function () {
+		var tunebooksHash = {};
+		var setsCollection = require('./sets');
+		var self = this;
+		user.tunebooks.forEach(function (tunebook) {
+			var idsHash = {};
+			self.models.filter(function (piece) {
+				return piece.get('tunebook') === 'wheresrhys:' + tunebook;
+			}).forEach(function (piece) {
+				idsHash[piece.get('srcId')] = true;
+				if (piece.get('type') === 'set') {
+					setsCollection.models.filter(function (set) {
+						return set.id === piece.get('srcId');
+					})[0].get('tunes').forEach(function(tune) {
+						idsHash[tune] = true;
+					});
+				}
+			})
+			tunebooksHash[tunebook] = Object.keys(idsHash);
+		});
+		return tunebooksHash;
+	},
+
+	getTunebooksForResource: function (model, tunebooksHash) {
+		return user.tunebooks.map(function (tunebook) {
+			return {
+				name: tunebook,
+				isListed: tunebooksHash[tunebook].indexOf(model.id) > -1
+			}
+		});
+	},
+	isInTunebook: function (model, tunebook, type) {
+		return this.models.some(function (piece) {
+			return piece.get('srcId') === model.id && piece.get('tunebook') === 'wheresrhys:' + tunebook;
+		})
+	},
+	hasSetInTunebook: function (model, sets) {
+		return sets.some(function (set) {
+			return set.indexOf(model.id) > -1;
+		})
 	}
 });
 

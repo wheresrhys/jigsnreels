@@ -9,7 +9,8 @@ var pieceSchema = module.exports = mongoose.Schema({
 	lastPracticed: Date,
 	stickiness: {type: Number, default: 0},
 	completeness: {type: Number, default: 0},
-	lastPracticeQuality: {type: Number, default: 0}
+	lastPracticeQuality: {type: Number, default: 0},
+	tunebook: String
 });
 
 pieceSchema.statics.addResourceToPiece = function (piece) {

@@ -59,5 +59,5 @@ gulp.task('default', ['js', 'sass', 'img']);
 gulp.task('watch', function() {
 	gulp.watch('./client/**/*.scss', ['sass']);
 	gulp.watch('./client/**/*.js', ['jshint', 'js']);
-	gulp.watch('./client/**/*.html', ['tpl', 'js']);
+	gulp.watch('./client/**/*.html', ['js']);
 });

@@ -10,4 +10,6 @@ db.getSiblingDB('jnr_prod').performances.find().forEach(function (performance) {
 	db.oldperformances.insert(performance);
 });
 
-db.tunes.copyTo('unspoiltTunes');
+db.getSiblingDB('jnr_prod').unspoiltTunes.find().forEach(function (tune) {
+	db.tunes.insert(tune);
+});
