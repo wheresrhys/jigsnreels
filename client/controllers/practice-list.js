@@ -1,6 +1,6 @@
 
 module.exports = function (tunebook) {
-	var pieces = require('../data/collections/pieces').get(tunebook);
+	var pieces = require('../data/collections/pieces').getTunebook(tunebook);
 	var piecesPromise = pieces.fetch({parse: true});
 	var view = new (require('../components/practice-list'))({
 		pieces: pieces,

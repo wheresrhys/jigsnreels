@@ -1,0 +1,12 @@
+<li style="border: 1px solid red">
+	<h2>{{ name }}</h2>
+	<ol>
+		{% for tuneIndex, tune in tunes %}
+		<li><a href="http://thesession.org/tunes/{{ tune.sessionId }}">{{ tune.name }}, {{ keys[tuneIndex] }} {{tune.rhythms[0] }}</a></li>
+		{% endfor %}
+		{% for tunebook in tunebooks %}
+		<span>{{tunebook.isListed}}, {{tunebook.name}}</span></li>
+		{% endfor %}
+
+	</ol>
+</li>
