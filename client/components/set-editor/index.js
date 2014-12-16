@@ -121,6 +121,7 @@ module.exports = require('../../scaffolding/view').extend({
 						self.listenToOnce(self.set, 'sync', function () {
 							require('../../scaffolding/router').navigate('/practice', { trigger: true });
 						});
+						self.listenTo(self.set, 'change', self.render);
 					});
 				}
 			} else {
