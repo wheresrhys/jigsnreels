@@ -1,6 +1,3 @@
-var tunes = require('../collections/tunes');
-var pieces = require('../collections/pieces');
-
 var TuneViewModel = module.exports = function (model) {
 	if (!model) {
 		return new TuneViewModel(this);

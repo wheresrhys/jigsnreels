@@ -1,8 +1,6 @@
 var tunes = require('../collections/tunes');
-var pieces = require('../collections/pieces');
 
 var SetViewModel = module.exports = function (model) {
-	var tunes = require('../collections/tunes');
 	if (!model) {
 		return new SetViewModel(this);
 	}
@@ -17,8 +15,7 @@ var SetViewModel = module.exports = function (model) {
 
 SetViewModel.prototype = {
 	withTunebooks: function () {
-		var pieces = require('../collections/pieces');
-		this.out.tunebooks = pieces.getTunebooksForResource(this.model);
+		this.out.tunebooks = require('../collections/pieces').getTunebooksForResource(this.model);
 		return this;
 	},
 

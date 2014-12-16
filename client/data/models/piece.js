@@ -1,6 +1,8 @@
 'use strict';
-
+var tunes = require('../collections/tunes');
+var sets = require('../collections/sets');
 var BB = require('backbone-es6');
+
 module.exports = BB.Model.extend({
 	idAttribute: '_id',
 	url: function () {
@@ -10,8 +12,6 @@ module.exports = BB.Model.extend({
 	viewModel: require('../view-models/piece'),
 
 	parse: function (resp) {
-		var tunes = require('../collections/tunes');
-		var sets = require('../collections/sets');
 		if (resp.src) {
 			if (resp.type === 'set') {
 				sets = require('../collections/sets');

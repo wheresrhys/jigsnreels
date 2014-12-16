@@ -8,6 +8,7 @@ module.exports = require('../../scaffolding/view').extend({
 	initialize: function (opts) {
 		this.pieces = opts.pieces;
 		this.parentEl = opts.parentEl;
+		this.tunebook = opts.tunebook;
 		this.length = 20;
 		this.render = this.render.bind(this);
 		this.destroy = this.simpleDestroy.bind(this);
@@ -21,7 +22,7 @@ module.exports = require('../../scaffolding/view').extend({
 		this.renderToDom(this.swig.render(this.tpl), true);
 		this.listEl = this.el.querySelector('.practice-list__list');
 		var self = this;
-		this.pieces.models.slice(0, this.length).forEach(function (piece) {
+		this.pieces.getTunebook(this.tunebook).slice(0, this.length).forEach(function (piece) {
 			setTimeout(function () {
 				self.appendModel(piece);
 			});

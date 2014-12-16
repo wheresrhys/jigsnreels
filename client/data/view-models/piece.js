@@ -17,8 +17,8 @@ var PieceViewModel = module.exports = function (model) {
 
 PieceViewModel.prototype = {
 	withSrc: function () {
-		var collection = (this.model.get('type') === 'set') ? require('../collections/sets') : require('../collections/tunes');
-		this.out.src = collection.models.filter(this.isCorrectResource)[0].viewModel().end();;
+		var collection = (this.model.get('type') === 'set') ? sets : tunes;
+		this.out.src = collection.models.filter(this.isCorrectResource)[0].viewModel().end();
 		return this;
 	},
 

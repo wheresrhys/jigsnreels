@@ -2,8 +2,6 @@
 // keep an accurate enough reference to the current time;
 var now = new Date();
 var user = window.user;
-var tunebooks = {};
-var tunebookPromises = {};
 
 setTimeout(function () {
 	now = new Date();
@@ -18,8 +16,8 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 
 	initialize: function (opts) {
 		var self = this;
-		this.tunebook = opts.tunebook;
 		var sets = require('./sets');
+		this.isInTunebook = this.isInTunebook.bind(this);
 		this.listenTo(sets, 'newPiece', function () {
 			// this
 			console.log(arguments);
@@ -41,11 +39,11 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 			}
 		}) || this.models.push(piece);
 	},
-	addPiece: function (id, type) {
+	addPiece: function (id, type, tunebook) {
 		return this.add({
 			srcId: id,
 			type: type,
-			tunebook: 'wheresrhys:' + this.tunebook
+			tunebook: 'wheresrhys:' + tunebook
 		}).save();
 	},
 	comparator: function (piece) {
@@ -65,32 +63,25 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 				piece.destroy();
 			}
 		});
-	}
-}, {
-	getTunebook: function (tunebook, asPromise) {
-		var tunebookName = tunebook || '';
-		tunebook = tunebooks[tunebookName] || (tunebooks[tunebookName] = new Pieces({
-			tunebook: tunebookName
-		}));
-		if (asPromise) {
-			tunebook = tunebookPromises[tunebookName] || (tunebookPromises[tunebookName] = tunebooks[tunebookName].fetch());
-		}
-		return tunebook;
 	},
-	getAll: function (asPromise) {
-		return user.tunebooks.map(function (tunebook) {
-			return Pieces.getTunebook(tunebook, asPromise);
+	getTunebook: function (tunebook) {
+		return this.models.filter(function (piece) {
+			return piece.get('tunebook') === 'wheresrhys:' + tunebook;
 		})
 	},
 	getTunebooksForResource: function (model) {
-		var self = this;
 		return user.tunebooks.map(function (tunebook) {
 			return {
 				name: tunebook,
-				isListed: self.getTunebook(tunebook).some(function (piece) {
-					return piece.get('srcId') === model.id;
-				})
+				isListed: this.isInTunebook(model, tunebook)
 			}
+		}.bind(this));
+	},
+	isInTunebook: function (model, tunebook) {
+		return this.models.some(function (piece) {
+			return piece.get('srcId') === model.id && piece.get('tunebook') === 'wheresrhys:' + tunebook;
 		})
 	}
 });
+
+module.exports = new Pieces();

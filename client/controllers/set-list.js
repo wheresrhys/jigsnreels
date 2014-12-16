@@ -1,10 +1,11 @@
 var setsPromise;
 
 module.exports = function () {
+	var pieces = require('../data/collections/pieces');
 	var sets = require('../data/collections/sets');
-	var tunebooks = require('../data/collections/pieces').getAll(true);
-	Promise.all(tunebooks.concat(sets.fetch()))
+	Promise.all([pieces.fetch(), sets.fetch()])
 			.then(function () {
+
 				var view = new (require('../components/set-list'))({
 					sets: sets,
 					parentEl: document.querySelector('main')
