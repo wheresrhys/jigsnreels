@@ -29,5 +29,6 @@ module.exports = require('backbone-es6').NativeView.extend({
 	setAsCurrentPage: function () {
 		currentPageView && currentPageView.destroy();
 		currentPageView = this;
-	}
+	},
+	swig: require('swig/index')
 });

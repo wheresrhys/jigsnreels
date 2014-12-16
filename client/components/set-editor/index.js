@@ -1,8 +1,7 @@
-var swig = require('swig/index');
 var SetModel = require('../../data/models/set');
 var allSets = require('../../data/collections/sets');
 var allTunes = require('../../data/collections/tunes');
-var AbcViewer = require('../abc-viewer/view')
+var AbcViewer = require('../abc-viewer')
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
@@ -28,7 +27,7 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	render: function () {
-		this.renderToDom(swig.render(this.tpl, {
+		this.renderToDom(this.swig.render(this.tpl, {
 			locals: {
 				set: this.set.Presenter().toJSON(),
 				isEditing: this.isEditing,

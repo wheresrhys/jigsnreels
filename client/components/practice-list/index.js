@@ -1,5 +1,4 @@
-var swig = require('swig/index');
-var PieceView = require('../piece/view');
+var PieceView = require('../piece');
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
@@ -23,7 +22,7 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	render: function () {
-		this.renderToDom(swig.render(this.tpl, this.pieces.Presenter().toJSON(true)), true);
+		this.renderToDom(this.swig.render(this.tpl, this.pieces.Presenter().toJSON(true)), true);
 		this.listEl = this.el.querySelector('.practice-list__list');
 		var self = this;
 		this.pieces.models.slice(0, this.length).forEach(function (piece) {
