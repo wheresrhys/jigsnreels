@@ -17,37 +17,36 @@ module.exports = require('../../scaffolding/view').extend({
 
 	initialize: function (opts) {
 		this.isEditing = !!opts.id;
-		this.tunesPromise = opts.tunesPromise;
+		this.tunes = opts.tunes;
 		this.parentEl = opts.parentEl;
 		this.render = this.render.bind(this);
 		this.freshSet = this.freshSet.bind(this);
-		this.tunesPromise.then(this.render);
+
 		this.destroy = this.simpleDestroy.bind(this);
 		this.freshSet(opts.id);
+		this.render();
 	},
 
 	render: function () {
 
-		var self = this;
-		this.set.viewModel()
-			.end()
-			.then(function (setViewModel) {
-				self.renderToDom(self.swig.render(self.tpl, {
-					locals: {
-						set: setViewModel,
-						isEditing: self.isEditing
-						// tunes: allTunes.Presenter({
-						// 	by: 'rhythm',
-						// 	sort: function (a, b) {
-						// 		return a.get('keys')[0].charAt(0) > b.get('keys')[0].charAt(0) ? 1 : -1;
-						// 	}
-						// }).toJSON()
-					}
-				}), true);
-			});
-		return this;
+		this.renderToDom(this.swig.render(this.tpl, {
+			locals: {
+				set: this.set.viewModel()
+							.end(),
+				isEditing: this.isEditing,
+				tunes: allTunes.viewModel()
+								.childDo('end')
+								.sortByName()
+								.groupBy('rhythm')
+								.sortBy(function (a, b) {
+									return a.keys[0].charAt(0) > b.keys[0].charAt(0) ? 1 : -1;
+								})
+								.end()
+			}
+		}), true);
 
 		this.abcEl = this.el.querySelector('.set-editor__abc-viewer');
+		return this;
 	},
 
 	appendTune: function (ev) {

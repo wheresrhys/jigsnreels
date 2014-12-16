@@ -1,12 +1,19 @@
-<li style="border: 1px solid red">
+<li class="set" data-set-id="_id" style="border: 1px solid red">
 	<h2>{{ name }}</h2>
 	<ol>
 		{% for tuneIndex, tune in tunes %}
-		<li><a href="http://thesession.org/tunes/{{ tune.sessionId }}">{{ tune.name }}, {{ keys[tuneIndex] }} {{tune.rhythms[0] }}</a></li>
+		<li>{{ tune.name }}, {{ keys[tuneIndex] }} {{tune.rhythms[0] }}</li>
 		{% endfor %}
-		{% for tunebook in tunebooks %}
-		<span>{{tunebook.isListed}}, {{tunebook.name}}</span></li>
-		{% endfor %}
-
 	</ol>
+	<ul>
+		{% for tunebook in tunebooks %}
+		<li>
+			{% if tunebook.isListed %}
+				<span>{{tunebook.name}}</span>
+			{% else %}
+				<button class="set__tunebook-adder">{{tunebook.name}}</button>
+			{% endif %}
+		</li>
+		{% endfor %}
+	</ul>
 </li>

@@ -13,12 +13,8 @@ module.exports = require('../../scaffolding/view').extend({
 		this.destroy = this.simpleDestroy.bind(this);
 		this.enforceUniqueAbc = this.enforceUniqueAbc.bind(this);
 		this.appendModel = this.appendModel.bind(this);
-		var self = this;
-		opts.piecesPromise.then(function (pieces) {
-
-			self.listenTo(self.pieces, 'practiced', self.append);
-			self.render();
-		});
+		this.listenTo(this.pieces, 'practiced', this.append);
+		this.render();
 	},
 
 	render: function () {

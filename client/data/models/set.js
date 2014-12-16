@@ -16,6 +16,7 @@ module.exports = require('backbone-es6').Model.extend({
 	},
 
 	parse: function (resp) {
+		var allTunes = require('../collections/tunes');
 		if (typeof resp.tunes[0] === 'object') {
 			allTunes.add(resp.tunes, {parse: true});
 			resp.tunes = resp.tunes.map(function (tune) {
@@ -29,6 +30,7 @@ module.exports = require('backbone-es6').Model.extend({
 		return resp;
 	},
 	tuneNames: function () {
+		var allTunes = require('../collections/tunes');
 		return this.get('tunes').map(function (tuneId) {
 			return allTunes.filter(function (tune) {
 				return tune.get('_id') === tuneId;
@@ -36,6 +38,7 @@ module.exports = require('backbone-es6').Model.extend({
 		});
 	},
 	appendTune: function (tuneId) {
+		var allTunes = require('../../data/collections/tunes');
 		var tune = allTunes.filter(function (tune) {
 			return tune.get('_id') === tuneId;
 		})[0];

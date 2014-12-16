@@ -3,9 +3,10 @@ var sets = require('../collections/sets');
 
 var PieceViewModel = module.exports = function (model) {
 	if (!model) {
-		return new SetViewModel(this);
+		return new PieceViewModel(this);
 	}
 	this.model = model;
+	this.isCorrectResource = this.isCorrectResource.bind(this);
 	this.out = this.model.toJSON();
 	this.out.lastPracticed = this.out.lastPracticed && new Date(this.out.lastPracticed);
 	this.out.lastPracticeQuality = this.out.lastPracticeQuality === -1 ? 'bad' :
@@ -16,32 +17,22 @@ var PieceViewModel = module.exports = function (model) {
 
 PieceViewModel.prototype = {
 	withSrc: function () {
-		var collection = (this.model.get('type') === 'set') ? sets : tunes;
-		var self = this;
-		this.srcModel = collection.models.filter(function (model) {
-			return model.id === self.model.srcId;
-		})[0];
-
-		this.promise = this.promise
-			.then(function () {
-				return self.srcModel.viewModel().end();
-			})
-			.then(function(srcViewModel) {
-				self.out.src = srcViewModel;
-			})
-
+		var collection = (this.model.get('type') === 'set') ? require('../collections/sets') : require('../collections/tunes');
+		this.out.src = collection.models.filter(this.isCorrectResource)[0].viewModel().end();;
 		return this;
 	},
 
+	isCorrectResource: function (model) {
+		return model.id === this.model.get('srcId');
+	},
+
 	end: function (standalone) {
-		return this.promise.then(function () {
-			if (standalone) {
-				return {
-					locals: this.out
-				};
-			} else {
-				return this.out;
-			}
-		}.bind(this))
+		if (standalone) {
+			return {
+				locals: this.out
+			};
+		} else {
+			return this.out;
+		}
 	}
 };

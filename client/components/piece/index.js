@@ -22,11 +22,7 @@ module.exports = require('../../scaffolding/view').extend({
 
 	render: function () {
 		var self = this;
-		this.piece.viewModel()
-			.end(true)
-			.then(function (viewModel) {
-				self.renderToDom(self.swig.render(self.tpl, viewModel));
-			});
+		this.renderToDom(self.swig.render(self.tpl, this.piece.viewModel().withSrc().end(true)));
 		this.abcEl = this.el.querySelector('.piece__abc');
 		return this;
 	},

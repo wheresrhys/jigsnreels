@@ -70,20 +70,20 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 		}
 		return tunebook;
 	},
+	getAll: function (asPromise) {
+		return user.tunebooks.map(function (tunebook) {
+			return Pieces.getTunebook(tunebook, asPromise);
+		})
+	},
 	getTunebooksForResource: function (model) {
 		var self = this;
-		return Promise.all(user.tunebooks.map(function (tunebook) {
-			return self.getTunebook(tunebook, true)
-				.then(function (pieces) {
-					return {
-						name: tunebook,
-						isListed: pieces.some(function (piece) {
-							return piece.srcId === model.id;
-						})
-					}
-				});
-		})).catch(function (err) {
-			console.log(err)
+		return user.tunebooks.map(function (tunebook) {
+			return {
+				name: tunebook,
+				isListed: self.getTunebook(tunebook).some(function (piece) {
+					return piece.get('srcId') === model.id;
+				})
+			}
 		})
 	}
 });

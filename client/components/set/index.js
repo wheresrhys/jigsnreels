@@ -14,13 +14,12 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	render: function () {
-		var self = this;
-		this.set.viewModel()
-			.withTunebooks()
-			.end(true)
-			.then(function (setViewModel) {
-				self.renderToDom(self.swig.render(self.tpl, setViewModel));
-			});
+		this.renderToDom(this.swig.render(
+			this.tpl,
+			this.set.viewModel()
+				.withTunebooks()
+				.end(true)
+		));
 		return this;
 	},
 	destroy: function () {
