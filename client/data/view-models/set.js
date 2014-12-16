@@ -9,17 +9,23 @@ var SetViewModel = module.exports = function (model) {
 	this.out.tunes = this.model.get('tunes').map(function (tuneId) {
 		return tunes.models.filter(function (tune) {
 			return tune.get('_id') === tuneId;
-		})[0].viewModel().end()
+		})[0].viewModel();
 	})
 }
 
 SetViewModel.prototype = {
 	withTunebooks: function () {
-		this.out.tunebooks = require('../collections/pieces').getTunebooksForResource(this.model);
+		this.out.tunebooks = require('../collections/pieces').getTunebooksForResource(this.model, 'set');
+		this.out.tunes.forEach(function (tune) {
+			tune.withTunebooks();
+		});
 		return this;
 	},
 
 	end: function (standalone) {
+		this.out.tunes = this.out.tunes.map(function (tune) {
+			return tune.end()
+		});
 		if (standalone) {
 			return {
 				locals: this.out

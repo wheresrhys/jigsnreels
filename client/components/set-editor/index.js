@@ -12,6 +12,7 @@ module.exports = require('../../scaffolding/view').extend({
 		'submit .set-editor__form': 'save',
 		'click .set-editor__delete': 'delete',
 		'click .set-editor__tune__delete': 'deleteTune',
+		'click .set-editor__tune__move-up': 'moveTuneUp',
 		'click .set-editor__tune__view': 'viewTune'
 	},
 
@@ -75,6 +76,11 @@ module.exports = require('../../scaffolding/view').extend({
 	deleteTune: function (ev) {
 		ev.preventDefault();
 		this.set.removeTune(ev.delegateTarget.parentNode.dataset.tuneId);
+	},
+
+	moveTuneUp: function (ev) {
+		ev.preventDefault();
+		this.set.moveTuneUp(ev.delegateTarget.parentNode.dataset.tuneId);
 	},
 
 	changeKey: function (ev) {

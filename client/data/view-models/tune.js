@@ -7,7 +7,10 @@ var TuneViewModel = module.exports = function (model) {
 }
 
 TuneViewModel.prototype = {
-
+	withTunebooks: function () {
+		this.out.tunebooks = require('../collections/pieces').getTunebooksForResource(this.model, 'tune');
+		return this;
+	},
 	end: function (standalone) {
 		if (standalone) {
 			return {

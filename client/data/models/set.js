@@ -55,6 +55,17 @@ module.exports = require('backbone-es6').Model.extend({
 		this.get('keys').splice(pos, 1);
 		this.trigger('change');
 	},
+	moveTuneUp: function (tuneId) {
+		var tunes = this.get('tunes');
+		var pos = tunes.indexOf(tuneId);
+		if (!pos) return;
+		var key = this.get('keys')[pos];
+		this.get('tunes').splice(pos, 1);
+		this.get('tunes').splice(pos - 1, 0, tuneId);
+		this.get('keys').splice(pos, 1);
+		this.get('keys').splice(pos - 1, 0, key);
+		this.trigger('change');
+	},
 	changeTuneKey: function (newKey, tuneId) {
 		this.attributes.keys[this.get('tunes').indexOf(tuneId)] = newKey;
 		this.trigger('change');

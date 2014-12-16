@@ -7,6 +7,7 @@ setTimeout(function () {
 	now = new Date();
 }, 1000);
 
+
 var Pieces = module.exports = require('backbone-es6').Collection.extend({
 	name: 'pieces',
 	url: function () {
@@ -69,17 +70,38 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 			return piece.get('tunebook') === 'wheresrhys:' + tunebook;
 		})
 	},
-	getTunebooksForResource: function (model) {
+	getTunebooksForResource: function (model, type) {
+		var setsHash = {};
+
+		function getSets (tunebook) {
+			var setsCollection = require('./sets');
+			var sets = setsHash[tunebook] || (setsHash[tunebook] = this.models.filter(function (piece) {
+				return piece.get('type') === 'set' && piece.get('tunebook') === 'wheresrhys:' + tunebook;
+			}).map(function (piece) {
+				return setsCollection.models.filter(function (set) {
+					return set.id === piece.get('srcId');
+				})[0].get('tunes');
+			}))
+			return sets;
+		}
 		return user.tunebooks.map(function (tunebook) {
+			if (type === 'tune') {
+				var sets = getSets.call(this, tunebook);
+			}
 			return {
 				name: tunebook,
-				isListed: this.isInTunebook(model, tunebook)
+				isListed: this.isInTunebook(model, tunebook) || (type === 'tune' && this.hasSetInTunebook(model, sets))
 			}
 		}.bind(this));
 	},
-	isInTunebook: function (model, tunebook) {
+	isInTunebook: function (model, tunebook, type) {
 		return this.models.some(function (piece) {
 			return piece.get('srcId') === model.id && piece.get('tunebook') === 'wheresrhys:' + tunebook;
+		})
+	},
+	hasSetInTunebook: function (model, sets) {
+		return sets.some(function (set) {
+			return set.indexOf(model.id) > -1;
 		})
 	}
 });
