@@ -1,3 +1,5 @@
+var pieces = require('../../data/collections/pieces');
+
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
 	events: {},
@@ -11,6 +13,19 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	render: function () {
-		this.renderToDom(this.swig.render(this.tpl, this.sets.Presenter().toJSON(true)), true);
+
+		var sets = this.sets.Presenter().toJSON(true);
+		var self = this;
+		Promise.all(sets.locals.sets.map(function(set) {
+			return pieces.addTunebooks(set, 'set');
+		}))
+			.then(function (sets) {
+				self.renderToDom(self.swig.render(self.tpl, {
+					locals: {
+						sets: sets
+					}
+				}), true);
+			})
+
 	}
 });

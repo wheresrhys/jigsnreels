@@ -1,13 +1,16 @@
 
 // keep an accurate enough reference to the current time;
 var now = new Date();
+var user = window.user;
+var tunebooks = {};
+var tunebookPromises = {};
 
 setTimeout(function () {
 	now = new Date();
 }, 1000);
 
 var sets = require('./sets');
-var Pieces = require('backbone-es6').Collection.extend({
+var Pieces = module.exports = require('backbone-es6').Collection.extend({
 	name: 'pieces',
 	url: function () {
 		return require('../../scaffolding/api').url('pieces', null, this.tunebook)
@@ -57,16 +60,41 @@ var Pieces = require('backbone-es6').Collection.extend({
 			}
 		});
 	}
-});
-
-var tunebooks = {};
-
-module.exports = {
-	get: function (tunebook) {
-		tunebook = tunebook || '';
-		return tunebooks[tunebook] || (tunebooks[tunebook] = new Pieces({
-			tunebook: tunebook
+}, {
+	get: function (tunebook, asPromise) {
+		var tunebookName = tunebook || '';
+		tunebook = tunebooks[tunebookName] || (tunebooks[tunebookName] = new Pieces({
+			tunebook: tunebookName
 		}));
-
+		if (asPromise) {
+			tunebook = tunebookPromises[tunebookName] || (tunebookPromises[tunebookName] = tunebooks[tunebookName].fetch());
+		}
+		return tunebook;
+	},
+	contains: function (tunebook, type, id) {
+		return this.get(tunebook, true).then(function (pieces) {
+			return
+		});
+	},
+	addTunebooks: function (resource, type) {
+		var self = this;
+		return Promise.all(user.tunebooks.map(function (tunebook) {
+			return self.get(tunebook, true);
+		}))
+			.then(function (tunebooks) {
+				var isIn = [];
+				tunebooks.forEach(function (pieces, index) {
+					if (pieces.some(function (piece) {
+						return piece.srcId === resource._id && piece.type === type;
+					})) {
+						isIn.push(user.tunebooks[index])
+					}
+				});
+				resource.tunebooks = isIn;
+				return resource;
+			})
+			.catch(function(err){
+				console.log(err)
+			})
 	}
-}
+});
