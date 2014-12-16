@@ -27,18 +27,26 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	render: function () {
-		this.renderToDom(this.swig.render(this.tpl, {
-			locals: {
-				set: this.set.Presenter().toJSON(),
-				isEditing: this.isEditing,
-				tunes: allTunes.Presenter({
-					by: 'rhythm',
-					sort: function (a, b) {
-						return a.get('keys')[0].charAt(0) > b.get('keys')[0].charAt(0) ? 1 : -1;
+
+		var self = this;
+		this.set.viewModel()
+			.end()
+			.then(function (setViewModel) {
+				self.renderToDom(self.swig.render(self.tpl, {
+					locals: {
+						set: setViewModel,
+						isEditing: self.isEditing
+						// tunes: allTunes.Presenter({
+						// 	by: 'rhythm',
+						// 	sort: function (a, b) {
+						// 		return a.get('keys')[0].charAt(0) > b.get('keys')[0].charAt(0) ? 1 : -1;
+						// 	}
+						// }).toJSON()
 					}
-				}).toJSON()
-			}
-		}), true);
+				}), true);
+			});
+		return this;
+
 		this.abcEl = this.el.querySelector('.set-editor__abc-viewer');
 	},
 

@@ -1,7 +1,6 @@
-var ViewModel = require('../../data/view-models/set');
-
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
+	viewModel: require('../../data/view-models/set'),
 	events: {},
 	initialize: function (opts) {
 		this.set = opts.set;
@@ -16,12 +15,10 @@ module.exports = require('../../scaffolding/view').extend({
 
 	render: function () {
 		var self = this;
-		new ViewModel(this.set)
-			.withTunes()
+		this.set.viewModel()
 			.withTunebooks()
 			.end(true)
 			.then(function (setViewModel) {
-				console.log(setViewModel);
 				self.renderToDom(self.swig.render(self.tpl, setViewModel));
 			});
 		return this;

@@ -3,11 +3,11 @@ var allTunes = require('../collections/tunes');
 
 module.exports = require('backbone-es6').Model.extend({
 	idAttribute: '_id',
+	viewModel: require('../view-models/set'),
 	url: function () {
 		return require('../../scaffolding/api').url('sets', this.id);
 	},
 
-	Presenter: require('./set-presenter'),
 
 	defaults: {
 		tunes: [],

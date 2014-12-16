@@ -5,5 +5,5 @@ module.exports = require('backbone-es6').Model.extend({
 	url: function () {
 		return require('../../scaffolding/api').url('tunes', this.id);
 	},
-	Presenter: require('./tune-presenter')
+	viewModel: require('../view-models/tune')
 }, {});

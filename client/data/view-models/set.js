@@ -2,20 +2,24 @@ var tunes = require('../collections/tunes');
 var pieces = require('../collections/pieces');
 
 var SetViewModel = module.exports = function (model) {
+	if (!model) {
+		return new SetViewModel(this);
+	}
 	this.model = model;
+	var self = this;
 	this.out = this.model.toJSON();
-	this.promise = Promise.resolve();
+	this.promise = Promise.all(this.model.get('tunes').map(function (tuneId) {
+		return tunes.models.filter(function (tune) {
+			return tune.get('_id') === tuneId;
+		})[0].viewModel().end()
+
+	}))
+	.then(function(tunes) {
+			self.out.tunes = tunes;
+		});
 }
 
 SetViewModel.prototype = {
-	withTunes: function () {
-		this.out.tunes = this.model.get('tunes').map(function (tuneId) {
-			return tunes.filter(function (tune) {
-				return tune.get('_id') === tuneId;
-			})[0].Presenter().toJSON();
-		});
-		return this;
-	},
 	withTunebooks: function () {
 		var self = this;
 		this.promise = this.promise.then(function () {

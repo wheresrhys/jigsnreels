@@ -9,18 +9,17 @@ setTimeout(function () {
 	now = new Date();
 }, 1000);
 
-var sets = require('./sets');
 var Pieces = module.exports = require('backbone-es6').Collection.extend({
 	name: 'pieces',
 	url: function () {
 		return require('../../scaffolding/api').url('pieces', null, this.tunebook)
 	},
 	model: require('../models/piece'),
-	Presenter: require('./pieces-presenter'),
 
 	initialize: function (opts) {
 		var self = this;
 		this.tunebook = opts.tunebook;
+		var sets = require('./sets');
 		this.listenTo(sets, 'newPiece', function () {
 			// this
 			console.log(arguments);
@@ -83,6 +82,8 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 						})
 					}
 				});
-		}))
+		})).catch(function (err) {
+			console.log(err)
+		})
 	}
 });

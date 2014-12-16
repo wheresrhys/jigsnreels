@@ -22,7 +22,7 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	render: function () {
-		this.renderToDom(this.swig.render(this.tpl, this.pieces.Presenter().toJSON(true)), true);
+		this.renderToDom(this.swig.render(this.tpl), true);
 		this.listEl = this.el.querySelector('.practice-list__list');
 		var self = this;
 		this.pieces.models.slice(0, this.length).forEach(function (piece) {
