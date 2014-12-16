@@ -71,9 +71,14 @@ api.get('/scraper', function (req, res) {
 app.use('/api', api);
 
 function index (req, res, next) {
-	res.render('index', {
-		env: process.env.ENV
-	});
+	require('./models/user').findOne().exec()
+		.then(function (user) {
+			res.render('index', {
+				env: process.env.ENV,
+				user: JSON.stringify(user.toObject())
+			});
+		})
+
 }
 
 app.get('*', index);
