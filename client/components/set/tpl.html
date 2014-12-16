@@ -11,7 +11,7 @@
 			{% if tunebook.isListed %}
 				<span>{{tunebook.name}}</span>
 			{% else %}
-				<button class="set__tunebook-adder">{{tunebook.name}}</button>
+				<button class="set__tunebook-adder" data-tunebook-name="{{tunebook.name}}">{{tunebook.name}}</button>
 			{% endif %}
 		</li>
 		{% endfor %}

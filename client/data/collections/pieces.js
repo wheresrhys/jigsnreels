@@ -41,6 +41,13 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 			}
 		}) || this.models.push(piece);
 	},
+	addPiece: function (id, type) {
+		return this.add({
+			srcId: id,
+			type: type,
+			tunebook: 'wheresrhys:' + this.tunebook
+		}).save();
+	},
 	comparator: function (piece) {
 		var timeAgo = (now - new Date(piece.get('lastPieced'))) / (24 * 60 * 60 * 1000);
 		if (isNaN(timeAgo)) {

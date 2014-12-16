@@ -1,7 +1,9 @@
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
 	viewModel: require('../../data/view-models/set'),
-	events: {},
+	events: {
+		'click .set__tunebook-adder': 'addToTunebook'
+	},
 	initialize: function (opts) {
 		this.set = opts.set;
 		this.parentEl = opts.parentEl;
@@ -25,6 +27,12 @@ module.exports = require('../../scaffolding/view').extend({
 	destroy: function () {
 		this.closeAbc();
 		this.simpleDestroy();
+	},
+	addToTunebook: function (ev) {
+		require('../../data/collections/pieces')
+			.getTunebook(ev.delegateTarget.dataset.tunebookName)
+			.addPiece(this.set.id, 'set')
+			.then(this.render);
 	}
 
 });

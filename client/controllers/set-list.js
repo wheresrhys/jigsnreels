@@ -10,5 +10,5 @@ module.exports = function () {
 					parentEl: document.querySelector('main')
 				});
 				view.setAsCurrentPage();
-			});
+			}).catch(function (err) {console.log(err)});
 };
