@@ -1,5 +1,5 @@
 'use strict';
-
+require('./scaffolding/polyfills')
 require('./scaffolding/tpl');
 
 // We'll use this <body> reference to put some views in it below.

@@ -1,7 +1,6 @@
-
 module.exports = function (tunebook) {
 	var pieces = require('../data/collections/pieces');
-	pieces.fetch({parse: true})
+	pieces.populate()
 		.then(function () {
 			var view = new (require('../components/practice-list'))({
 				pieces: pieces,
@@ -10,5 +9,5 @@ module.exports = function (tunebook) {
 			});
 			view.setAsCurrentPage();
 			localStorage.setItem('lastTunebook', tunebook);
-		});
+		}).catch(function (err) {console.log(err)});
 };

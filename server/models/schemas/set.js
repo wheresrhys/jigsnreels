@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var transitionSchema = require('./transition');
 var TuneModel = require('../tune');
 var PieceModel = require('../piece');
 
@@ -42,11 +41,15 @@ setSchema.statics.addPiece = function (set, tunebook) {
 }
 
 setSchema.statics.cleanRemove = function (set) {
+	PieceModel = require('../piece');
 	return PieceModel.remove({
 		srcId: set._id
-	}).exec().then(function () {
-		return set.remove();
-	});
+	})
+	.exec()
+		.then(function (){}, function (err){console.log(err)})
+		.then(function () {
+			return set.remove();
+		});
 }
 
 setSchema.statics.getWithTunes = function (setId) {

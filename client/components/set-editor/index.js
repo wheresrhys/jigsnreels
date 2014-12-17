@@ -103,6 +103,7 @@ module.exports = require('../../scaffolding/view').extend({
 
 	freshSet: function (id) {
 		var self = this;
+		// typeof id === 'string' ensures it's the first call of this function when editing
 		if (!this.isEditing || typeof id === 'string') {
 			this.set && this.stopListening(this.set, 'change');
 			if (typeof id === 'string') {
@@ -116,13 +117,16 @@ module.exports = require('../../scaffolding/view').extend({
 					this.listenTo(this.set, 'change', this.render);
 				} else {
 					this.set = new SetModel()
-					Promise.all([this.set.set({_id: id}).fetch(), this.tunesPromise]).then(function () {
-						self.render();
-						self.listenToOnce(self.set, 'sync', function () {
-							require('../../scaffolding/router').navigate('/practice', { trigger: true });
+					this.set.set({_id: id}).fetch()
+						.then(function () {
+							self.render();
+							self.listenToOnce(self.set, 'sync', function () {
+								require('../../scaffolding/router').navigate('/practice', { trigger: true });
+							});
+							self.listenTo(self.set, 'change', self.render);
+						}, function (err) {
+							require('../../scaffolding/router').navigate('/sets', { trigger: true })
 						});
-						self.listenTo(self.set, 'change', self.render);
-					});
 				}
 			} else {
 				this.set = new SetModel();
