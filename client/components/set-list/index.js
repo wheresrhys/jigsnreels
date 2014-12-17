@@ -17,11 +17,13 @@ module.exports = require('../../scaffolding/view').extend({
 		this.listEl = this.el.querySelector('.set-list__list');
 		var self = this;
 		this.sets.models.forEach(function (model) {
-			var setView = new SetView({
-				set: model,
-				parentEl: self.listEl,
-				parentView: self
-			}).render();
+			setTimeout(function () {
+				var setView = new SetView({
+					set: model,
+					parentEl: self.listEl,
+					parentView: self
+				}).render();
+			});
 		});
 
 		return this;
