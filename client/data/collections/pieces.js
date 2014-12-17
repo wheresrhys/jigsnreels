@@ -113,7 +113,9 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 		return sets.some(function (set) {
 			return set.indexOf(model.id) > -1;
 		})
+	},
+	populate: function () {
+		return this.promise || (this.promise = this.fetch({parse: true}));
 	}
 });
-
-module.exports = new Pieces();
+module.exports = new Pieces()

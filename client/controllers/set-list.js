@@ -1,9 +1,7 @@
-var setsPromise;
-
 module.exports = function () {
 	var pieces = require('../data/collections/pieces');
 	var sets = require('../data/collections/sets');
-	Promise.all([pieces.fetch(), sets.fetch()])
+	Promise.all([pieces.populate(), sets.populate()])
 			.then(function () {
 
 				var view = new (require('../components/set-list'))({
