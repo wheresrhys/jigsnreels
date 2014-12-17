@@ -9,5 +9,5 @@ module.exports = function (id) {
 			id: id
 		});
 		view.setAsCurrentPage();
-	});
+	}).catch(function (err) {console.log(err)});
 };

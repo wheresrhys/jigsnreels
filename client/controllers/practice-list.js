@@ -10,5 +10,5 @@ module.exports = function (tunebook) {
 			});
 			view.setAsCurrentPage();
 			localStorage.setItem('lastTunebook', tunebook);
-		});
+		}).catch(function (err) {console.log(err)});
 };

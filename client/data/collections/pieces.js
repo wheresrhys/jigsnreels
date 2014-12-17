@@ -66,6 +66,9 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 		});
 	},
 	getTunebook: function (tunebook) {
+		if (!tunebook) {
+			return this.models.slice();
+		}
 		return this.models.filter(function (piece) {
 			return piece.get('tunebook') === 'wheresrhys:' + tunebook;
 		})
