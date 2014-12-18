@@ -1,0 +1,15 @@
+<li class="tune" data-tune-id="_id" style="border: 1px solid red">
+	<h2>{{ name }}, {{score}}, {{keys}}, {{rhythms}}</h2>
+	<ul>
+		{% for tunebook in tunebooks %}
+		<li>
+			{% if tunebook.isListed %}
+				<span>{{tunebook.name}}</span>
+			{% else %}
+				<button class="tune__tunebook-adder" data-tunebook-name="{{tunebook.name}}">{{tunebook.name}}</button>
+			{% endif %}
+		</li>
+		{% endfor %}
+	</ul>
+	<a href="/tune-editor/{{_id}}" class="tune__edit">edit</a>
+</li>

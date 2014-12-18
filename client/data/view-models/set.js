@@ -16,10 +16,10 @@ var SetViewModel = module.exports = function (model) {
 SetViewModel.prototype = {
 	withTunebooks: function () {
 		var pieces = require('../collections/pieces');
-		var ids = pieces.getIdsByTunebook();
-		this.out.tunebooks = pieces.getTunebooksForResource(this.model, ids);
+		var idsHash = pieces.getIdsByTunebook();
+		this.out.tunebooks = pieces.getTunebooksForResource(this.model, idsHash);
 		this.out.tunes.forEach(function (tune) {
-			tune.withTunebooks(ids);
+			tune.withTunebooks(idsHash);
 		});
 		return this;
 	},
