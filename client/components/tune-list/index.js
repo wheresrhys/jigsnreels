@@ -77,7 +77,7 @@ module.exports = require('../../scaffolding/view').extend({
 
 		} else {
 		// this.tunes = (term.indexOf(this.term) === 0) ? this.tunes : this.allTunes.models;
-			this.tunes = searchScore.sort(this.allTunes.models, criteria);
+			this.tunes = searchScore.sort(this.allTunes.models, criteria).slice(0, 20);
 		}
 		this.populate();
 	}
