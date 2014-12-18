@@ -67,9 +67,7 @@ module.exports = {
 		}));
 
 
-		return models.filter(function (model) {
-			return stringMatchScores.get(model) >= 0.5;
-		}).sort(function(model1, model2) {
+		return models.sort(function(model1, model2) {
 			var score1 = stringMatchScores.get(model1);
 			var score2 = stringMatchScores.get(model2);
 			return score1 === score2 ? 0 : score1 > score2 ? -1: 1
