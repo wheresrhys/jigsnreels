@@ -2,11 +2,11 @@ var SetModel = require('../../data/models/set');
 var allSets = require('../../data/collections/sets');
 var allTunes = require('../../data/collections/tunes');
 var AbcViewer = require('../abc-viewer')
+var TuneList = require('../tune-list')
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
 	events: {
-		'change .set-editor__tune-selector': 'appendTune',
 		'change .set-editor__tune__key-selector': 'changeKey',
 		'change .set-editor__set-name': 'addName',
 		'submit .set-editor__form': 'save',
@@ -34,26 +34,26 @@ module.exports = require('../../scaffolding/view').extend({
 			locals: {
 				set: this.set.viewModel()
 							.end(),
-				isEditing: this.isEditing,
-				tunes: allTunes.viewModel()
-								.childDo('end')
-								.sortByName()
-								.groupBy('rhythm')
-								.sortBy(function (a, b) {
-									return a.keys[0].charAt(0) > b.keys[0].charAt(0) ? 1 : -1;
-								})
-								.end()
+				isEditing: this.isEditing
 			}
 		}), true);
 
+		this.tunesEl = this.el.querySelector('.set-editor__tune-selector');
+		this.tuneList = new TuneList({
+			parentEl: this.tunesEl,
+			parent: this,
+			tunes: this.tunes,
+			limit: 5
+		});
+
+		// this.listenToOnce(this.tunesList, 'tune-clicked')
 		this.abcEl = this.el.querySelector('.set-editor__abc-viewer');
 		return this;
 	},
 
-	appendTune: function (ev) {
-		var select = ev.delegateTarget;
-		var tuneId = select.children[select.selectedIndex].value;
-		this.set.appendTune(tuneId);
+	appendTune: function (tune) {
+		var tuneId = ev.delegateTarget.dataset.tuneId;
+		this.set.appendTune(tune.id);
 		this.abcViewer = new AbcViewer({
 			tuneId: tuneId,
 			parentEl: this.abcEl,
