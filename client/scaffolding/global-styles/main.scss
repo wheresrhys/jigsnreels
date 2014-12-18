@@ -7,7 +7,7 @@ $tune-font-color: #530;
 
 @import "flexbox";
 
-html:not([data-environment="development"]){
+/*html:not([data-environment="development"]){
 	padding-top: 30px;
 	&::before {
 		display: block;
@@ -23,7 +23,7 @@ html:not([data-environment="development"]){
 		width: 100%;
 		z-index: 1;
 	}
-}
+}*/
 
 * {
 	margin: 0;

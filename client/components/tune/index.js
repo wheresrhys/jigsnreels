@@ -31,7 +31,7 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 	addToTunebook: function (ev) {
 		require('../../data/collections/pieces')
-			.addPiece(this.tune.id, 'tune', ev.delegateTarget.datatune.tunebookName)
+			.addPiece(this.tune.id, 'tune', ev.delegateTarget.dataset.tunebookName)
 			.then(this.render);
 	}
 

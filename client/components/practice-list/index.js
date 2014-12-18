@@ -15,6 +15,7 @@ module.exports = require('../../scaffolding/view').extend({
 		this.enforceUniqueAbc = this.enforceUniqueAbc.bind(this);
 		this.appendModel = this.appendModel.bind(this);
 		this.listenTo(this.pieces, 'practiced', this.append);
+		this.listenTo(this.pieces, 'destroy', this.append);
 		this.render();
 	},
 
@@ -45,6 +46,6 @@ module.exports = require('../../scaffolding/view').extend({
 
 	append: function () {
 		this.listEl.classList.toggle('alt');
-		this.appendModel(this.pieces.models[this.length - 1]);
+		this.appendModel(this.pieces.getTunebook(this.tunebook)[this.length - 1]);
 	}
 });
