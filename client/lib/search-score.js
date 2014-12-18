@@ -31,7 +31,7 @@ var analyze = function (string) {
 };
 
 var scoreForKey = function (model, keyCriteria) {
-	if (!keyCriteria) return 0;
+	if (!keyCriteria) return 1;
 	if (keyCriteria.negated) {
 		return 0;
 	} else {
@@ -48,7 +48,7 @@ var scoreForKey = function (model, keyCriteria) {
 }
 
 var scoreForRhythm = function (model, rhythmCriteria) {
-	if (!rhythmCriteria) return 0;
+	if (!rhythmCriteria) return 1;
 	if (rhythmCriteria.negated) {
 		return 0;
 	} else {
@@ -58,33 +58,29 @@ var scoreForRhythm = function (model, rhythmCriteria) {
 	}
 }
 
-var score = function (model, criteria) {
-
-	var result = criteria.term ? liquidMetal.score(model.get('name'), criteria.term) : 0
-
-	result += scoreForKey(model, criteria.key) + scoreForRhythm(model, criteria.rhythm);
-
-	return result;
-}
 
 module.exports = {
 	sort: function (models, criteria) {
 
+		if (criteria.key || criteria.rhythm) {
+			var models = models.filter(function (model) {
+				return scoreForKey(model, criteria.key) * scoreForRhythm(model, criteria.rhythm) ===1;
+			});
+		}
 
-		var scores = new WeakMap(models.map(function (model) {
+		var stringMatchScores = new WeakMap(models.map(function (model) {
 			return [
 				model,
-				score(model, criteria)
+				criteria.term ? liquidMetal.score(model.get('name'), criteria.term) : 1
 			];
 		}));
 
 
 		return models.filter(function (model) {
-			model.set('score', scores.get(model));
-			return scores.get(model) >= 0.5;
+			return stringMatchScores.get(model) >= 0.5;
 		}).sort(function(model1, model2) {
-			var score1 = scores.get(model1);
-			var score2 = scores.get(model2);
+			var score1 = stringMatchScores.get(model1);
+			var score2 = stringMatchScores.get(model2);
 			return score1 === score2 ? 0 : score1 > score2 ? -1: 1
 		}).map(function (model) {
 			return model;

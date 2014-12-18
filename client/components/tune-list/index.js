@@ -38,6 +38,7 @@ module.exports = require('../../scaffolding/view').extend({
 	initialize: function (opts) {
 		this.allTunes = opts.tunes;
 		this.parentEl = opts.parentEl;
+		this.parent = opts.parent;
 		this.render = this.render.bind(this);
 		this.destroy = this.simpleDestroy.bind(this);
 		this.search = debounce(this.search.bind(this), 200);
