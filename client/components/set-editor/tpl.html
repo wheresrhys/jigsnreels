@@ -2,6 +2,10 @@
 	<form class="set-editor__form">
 		{% for type in tunes.types %}
 			<select class="set-editor__tune-selector">
+				<option value=""> --- pick a {{ type }} --- </option>
+				{% for tune in tunes.tunes[type] %}
+				<option value="{{ tune._id }}">{{ tune.name }} / {{ tune.keys }} / {{ tune.quality }} </option>
+				{% endfor %}
 			</select>
 		{% endfor %}
 		{% if set.tunes.length %}
