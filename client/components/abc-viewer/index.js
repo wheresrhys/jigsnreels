@@ -16,10 +16,11 @@ module.exports = require('../../scaffolding/view').extend({
 	events: {
 		'click .abc-viewer__close': 'destroy'
 	},
+	name: 'abc-viewer',
 	initialize: function (opts) {
 		this.tpl = require('./tpl-full.html');
 		this.parentEl = opts.parentEl;
-		this.parentView = opts.parentView;
+		this.parent = opts.parent;
 		this.tune = allTunes.filter(function (tune) {
 			return tune.get('_id') === opts.tuneId;
 		})[0];
@@ -27,7 +28,7 @@ module.exports = require('../../scaffolding/view').extend({
 
 		this.render = this.render.bind(this);
 		this.destroy = this.destroy.bind(this);
-		this.listenTo(this.parentView, 'destroy', this.destroy);
+		this.listenTo(this.parent, 'destroy', this.destroy);
 		// this.listenTo(practice, 'destroy', this.destroy);
 		this.render();
 	},
@@ -50,7 +51,7 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	destroy: function () {
-		this.parentView.stopListening(this);
+		this.parent.stopListening(this);
 		this.simpleDestroy();
 	},
 

@@ -1,0 +1,34 @@
+<div class="editable-set">
+	<form class="editable-set__form">
+		{% if set.tunes.length %}
+			<ol>
+				{% for tuneIndex, tune in set.tunes %}
+				<li data-tune-id="{{ tune._id }}">{{ tune.name }}
+					{% if tune.keys.length > 1 %}
+						<select class="editable-set__tune__key-selector">
+							{% for key in tune.keys %}
+							<option value="{{ key }}" {% if key === set.keys[tuneIndex] %} selected {% endif %}>{{ key }}</option>
+							{% endfor %}
+						</select>
+					{% else %}
+						{{ tune.keys[0] }}
+					{% endif %}
+					<button class="editable-set__tune__delete"> delete </button>
+					{% if tuneIndex %}<button class="editable-set__tune__move-up"> move up </button>{% endif %}
+					<button class="editable-set__tune__view"> view </button>
+				</li>
+				{% endfor %}
+			</ol>
+			<input class="editable-set__set-name" value="{{set.name}}">
+
+
+			{% if isEditing %}
+			<input type="submit" value="save changes">
+			<input class="editable-set__delete" type="button" value="delete set">
+			{% else %}
+			<input type="submit" value="save new set">
+			{% endif %}
+		{% endif %}
+	</form>
+	<div class="editable-set__abc-viewer"></div>
+</div>

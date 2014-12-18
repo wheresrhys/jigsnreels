@@ -1,5 +1,6 @@
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
+	name: 'tune',
 	viewModel: require('../../data/view-models/tune'),
 	events: {
 		'click .tune__tunebook-adder': 'addToTunebook'
@@ -7,11 +8,11 @@ module.exports = require('../../scaffolding/view').extend({
 	initialize: function (opts) {
 		this.tune = opts.tune;
 		this.parentEl = opts.parentEl;
-
+		this.parent = opts.parent;
 		this.render = this.render.bind(this);
 		this.destroy = this.simpleDestroy.bind(this);
 		this.listenTo(this.tune, 'sync', this.render);
-		this.listenTo(opts.parentView, 'destroy', this.destroy);
+		this.listenTo(this.parent, 'destroy', this.destroy);
 		this.render();
 	},
 

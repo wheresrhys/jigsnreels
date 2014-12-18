@@ -6,7 +6,7 @@
 					{% if src.name %}
 					<h3 class="piece__subject__name">{{ src.name | deTheify | safe }}</h3>
 					{% endif %}
-					<a href="/set-editor/{{src._id}}" class="piece__set__edit">edit</a>
+					<a href="/sets/edit/{{src._id}}" class="piece__set__edit">edit</a>
 				</div>
 				<ol class="piece__set">
 					{% for tuneIndex, tune in src.tunes %}

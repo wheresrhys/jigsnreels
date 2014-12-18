@@ -2,6 +2,7 @@ var SetView = require('../set');
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
+	name: 'set-list',
 	events: {},
 	initialize: function (opts) {
 		this.sets = opts.sets;
@@ -18,11 +19,9 @@ module.exports = require('../../scaffolding/view').extend({
 		var self = this;
 		this.sets.models.forEach(function (model) {
 			setTimeout(function () {
-				var setView = new SetView({
-					set: model,
-					parentEl: self.listEl,
-					parentView: self
-				}).render();
+				var setView = new SetView(self.childOpts(self.listEl, {
+					set: model
+				})).render();
 			});
 		});
 

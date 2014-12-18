@@ -1,17 +1,17 @@
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
-	viewModel: require('../../data/view-models/set'),
+	name: 'set',
 	events: {
 		'click .set__tunebook-adder': 'addToTunebook'
 	},
 	initialize: function (opts) {
 		this.set = opts.set;
 		this.parentEl = opts.parentEl;
-
+		this.parent = opts.parent;
 		this.render = this.render.bind(this);
 		this.destroy = this.simpleDestroy.bind(this);
 		this.listenTo(this.set, 'sync', this.render);
-		this.listenTo(opts.parentView, 'destroy', this.destroy);
+		this.listenTo(this.parent, 'destroy', this.destroy);
 		this.render();
 	},
 
