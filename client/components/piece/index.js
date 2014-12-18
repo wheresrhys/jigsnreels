@@ -4,9 +4,8 @@ module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
 	name: 'piece',
 	events: {
-		'click .piece__practice--good': 'practice',
-		'click .piece__practice--bad': 'practice',
-		'click .piece__practice--skip': 'practice',
+		'click .piece__practice': 'practice',
+		'click .piece__remove': 'remove',
 		'click .piece__view-abc': 'viewAbc',
 	},
 	initialize: function (opts) {
@@ -17,7 +16,7 @@ module.exports = require('../../scaffolding/view').extend({
 
 		this.listenTo(this.piece, 'sync', this.render);
 		this.listenTo(this.parent, 'destroy', this.destroy);
-		// this.listenTo(this.piece, 'destroy', this.destroy);
+		this.listenTo(this.piece, 'destroy', this.destroy);
 		this.render();
 	},
 
@@ -44,6 +43,9 @@ module.exports = require('../../scaffolding/view').extend({
 	destroy: function () {
 		this.closeAbc();
 		this.simpleDestroy();
+	},
+	remove: function () {
+		this.piece.destroy();
 	}
 
 });

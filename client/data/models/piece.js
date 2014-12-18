@@ -30,6 +30,8 @@ module.exports = BB.Model.extend({
 			score = 1
 		} else if (type === 'skip') {
 			score = Math.min(this.get('lastPracticeQuality'), 0);
+		} else if (type === 'neutral') {
+			score = -0.2;
 		} else {
 			score = -1;
 		}

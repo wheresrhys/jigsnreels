@@ -27,7 +27,9 @@
 			{% if lastPracticed %}<p class="piece__stats piece__stats--{{ lastPracticeQuality }}">{{ lastPracticed | daysAgo }}</p>{% endif %}
 			<button class="piece__practice piece__practice--good" data-practice-type="good"><i></i></button>
 			<button class="piece__practice piece__practice--bad" data-practice-type="bad"><i></i></button>
+			<button class="piece__practice piece__practice--neutral" data-practice-type="neutral"><i> -- </i></button>
 			<button class="piece__practice piece__practice--skip" data-practice-type="skip"><i></i></button>
+			<button class="piece__remove"><i> x </i></button>
 		</div>
 	</div>
 	<div class="piece__abc"></div>
