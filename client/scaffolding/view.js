@@ -1,5 +1,7 @@
 var currentPageView;
 
+var classEventRX = /^[a-z]+ +\./;
+
 module.exports = require('backbone-es6').NativeView.extend({
 	buildDom: function (html) {
 		var frag = document.createElement('div');
@@ -30,5 +32,20 @@ module.exports = require('backbone-es6').NativeView.extend({
 		currentPageView && currentPageView.destroy();
 		currentPageView = this;
 	},
+	childOpts: function (bemClass, opts) {
+		opts.parent = this;
+		opts.parentEl = this.el.querySelector('.' + this.name + '__' + bemClass);
+		return opts;
+	},
+	// bemify: function (evs) {
+	// 	var obj = {};
+	// 	var name = this.name;
+	// 	Object.keys(evs).forEach(function (ev) {
+	// 		obj[ev.replace(classEventRX, function(match) {
+	// 			return match + name + '__';
+	// 		})] = evs[ev]
+	// 	})
+	// 	return obj;
+	// }
 	swig: require('swig/index')
 });
