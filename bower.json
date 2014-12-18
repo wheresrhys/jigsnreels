@@ -2,7 +2,7 @@
   "name": "jigs n reels",
   "dependencies": {
     "abcjs": "https://github.com/paulrosen/abcjs.git",
-    "liquidMetal": "https://github.com/rmm5t/liquidmetal.git",
+    "liquidmetal": "https://github.com/rmm5t/liquidmetal.git",
     "swig": "~1.4.2",
     "backbone-es6": "~1.0.0"
   },
