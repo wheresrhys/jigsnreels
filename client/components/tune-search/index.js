@@ -75,6 +75,7 @@ var scoreForRhythm = function (model, rhythmCriteria) {
 
 var TuneSearch = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
+	name: 'tune-search',
 	events: {
 		'keyup input[type="search"]': 'search'
 	},
@@ -86,6 +87,7 @@ var TuneSearch = require('../../scaffolding/view').extend({
 		this.render = this.render.bind(this);
 		this.destroy = this.simpleDestroy.bind(this);
 		this.search = debounce(this.search, 200, this);
+		this.listenTo(this.parent, 'destroy', this.destroy);
 		this.render();
 	},
 
@@ -115,7 +117,7 @@ var TuneSearch = require('../../scaffolding/view').extend({
 		});
 
 		return tunes.filter(function (model) {
-			return hash[model1.id] > 0;
+			return hash[model.id] > 0;
 		}).sort(function(model1, model2) {
 			var score1 = hash[model1.id];
 			var score2 = hash[model2.id];

@@ -10,9 +10,11 @@ module.exports = require('../../scaffolding/view').extend({
 	initialize: function (opts) {
 		this.opts = opts;
 		this.parentEl = opts.parentEl;
+		this.parent = opts.parent;
 		this.render = this.render.bind(this);
 		this.appendTune = this.appendTune.bind(this);
 		this.destroy = this.simpleDestroy.bind(this);
+		this.parent && this.listenTo(this.parent, 'destroy', this.destroy);
 		this.render();
 	},
 

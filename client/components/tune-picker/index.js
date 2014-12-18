@@ -4,11 +4,11 @@ var tuneTpl = require('./tune.html');
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
+	name: 'tune-picker',
 	events: {
 		'click .tune-picker__tune': 'selectTune'
 	},
 	initialize: function (opts) {
-		this.allTunes = opts.tunes;
 		this.parentEl = opts.parentEl;
 		this.parent = opts.parent;
 		this.limit = opts.limit || 20;
@@ -20,12 +20,9 @@ module.exports = require('../../scaffolding/view').extend({
 	staticRender: function () {
 		this.renderToDom(this.swig.render(this.tpl), true);
 		this.listEl = this.el.querySelector('.tune-picker__results');
-		this.search = new SearchView({
-			parent: this,
-			parentEl: this.el.querySelector('.tune-picker__search'),
-			tunes: this.allTunes,
+		this.search = new SearchView(this.childOpts('search', {
 			limit: 5
-		});
+		}));
 		this.listenTo(this.search, 'results', this.render)
 	},
 

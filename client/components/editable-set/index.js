@@ -4,6 +4,7 @@ var AbcViewer = require('../abc-viewer')
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
+	name: 'editable-set',
 	events: {
 		'change .editable-set__tune__key-selector': 'changeKey',
 		'change .editable-set__set-name': 'addName',
@@ -24,6 +25,7 @@ module.exports = require('../../scaffolding/view').extend({
 		this.destroy = this.simpleDestroy.bind(this);
 		this.freshSet(opts.id);
 		this.render();
+		this.listenTo(this.parent, 'destroy', this.destroy);
 	},
 
 	render: function () {
@@ -37,29 +39,24 @@ module.exports = require('../../scaffolding/view').extend({
 		}), true);
 
 		// this.listenToOnce(this.tunesList, 'tune-clicked')
-		this.abcEl = this.el.querySelector('.editable-set__abc-viewer');
 		return this;
 	},
 
 	appendTune: function (tuneId) {
 		this.set.appendTune(tuneId);
-		this.abcViewer = new AbcViewer({
+		this.abcViewer = new AbcViewer(this.childOpts('abc-viewer', {
 			tuneId: tuneId,
-			parentEl: this.abcEl,
-			parentView: this,
 			isDismissable: true
-		});
+		}));
 	},
 
 	viewTune: function (ev) {
 		ev.preventDefault();
 		this.abcViewer && this.abcViewer.destroy();
-		this.abcViewer = new AbcViewer({
+		this.abcViewer = new AbcViewer(this.childOpts('abc-viewer', {
 			tuneId: ev.delegateTarget.parentNode.dataset.tuneId,
-			parentEl: this.abcEl,
-			parentView: this,
 			isDismissable: true
-		});
+		}));
 	},
 
 	deleteTune: function (ev) {

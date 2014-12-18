@@ -2,7 +2,7 @@ var PieceView = require('../piece');
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
-
+	name: 'practice-list',
 	events: {},
 
 	initialize: function (opts) {
@@ -32,11 +32,9 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	appendModel: function (model) {
-		var pieceView = new PieceView({
-			piece: model,
-			parentEl: this.listEl,
-			parentView: this
-		}).render();
+		var pieceView = new PieceView(this.childOpts(this.listEl, {
+			piece: model
+		})).render();
 		this.listenTo(pieceView, 'abc-open', this.enforceUniqueAbc);
 	},
 

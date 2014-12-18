@@ -34,7 +34,7 @@ module.exports = require('backbone-es6').NativeView.extend({
 	},
 	childOpts: function (bemClass, opts) {
 		opts.parent = this;
-		opts.parentEl = this.el.querySelector('.' + this.name + '__' + bemClass);
+		opts.parentEl = typeof bemClass === 'object' ? bemClass : this.el.querySelector('.' + this.name + '__' + bemClass);
 		return opts;
 	},
 	// bemify: function (evs) {
