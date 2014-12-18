@@ -8,7 +8,9 @@ var TuneViewModel = module.exports = function (model) {
 
 TuneViewModel.prototype = {
 	withTunebooks: function (idsHash) {
-		this.out.tunebooks = require('../collections/pieces').getTunebooksForResource(this.model, idsHash);
+		var pieces = require('../collections/pieces')
+		idsHash = idsHash || pieces.getIdsByTunebook();
+		this.out.tunebooks = pieces.getTunebooksForResource(this.model, idsHash);
 		return this;
 	},
 	end: function (standalone) {

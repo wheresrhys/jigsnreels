@@ -12,12 +12,13 @@ var Router = require('backbone-es6').Router.extend({
 		'': function () {
 			this.navigate('practice', {trigger: true});
 		},
-		// 'tunes/' : 'tunes',
+		'tunes' : 'tunes',
 		'practice(/:tunebook)': 'practice',
 		'sets': 'sets',
 		'set-editor(/:id)': 'set-editor'
 	},
 	'practice': require('../controllers/practice-list'),
+	'tunes': require('../controllers/tune-list'),
 	'sets': require('../controllers/set-list'),
 	'set-editor': require('../controllers/set-editor')
 });
