@@ -2,26 +2,96 @@
 
 var liquidMetal = require('liquidmetal');
 
+var analyze = function (string) {
+	var obj = {};
+	obj.term = string
+		.replace(/\b[kK]\:(\!)?([ABCDEFG][#b]?)?(maj|mix|dor|min|aeo|\+|-)?\b/, function ($0, negated, root, mode) {
+			obj.key = {
+				negated: !!negated,
+				root: root,
+				modes: mode === '+' ? ['maj', 'mix'] :
+												mode === '-' ? ['dor', 'min', 'aeo'] :
+												mode ? [mode] : undefined
+			}
+			return ' ';
+		})
+		.replace(/\b[rR]\:(\!)?(reel|jig|slip jig|hornpipe|polka)\b/, function ($0, negated, rhythm) {
+			obj.rhythm = {
+				negated: !!negated,
+				rhythm: rhythm
+			}
+			return ' ';
+		})
+		.replace(/\b[kKrR]\:([^\s]+)?/g, function () {
+			return ' ';
+		})
+		.trim()
+		.replace(/\s+/, ' ')
+	return obj;
+};
+
+var scoreForKey = function (model, keyCriteria) {
+	if (!keyCriteria) return 0;
+	if (keyCriteria.negated) {
+		return 0;
+	} else {
+		return model.get('keys').some(function (key) {
+			if (keyCriteria.modes) {
+				return keyCriteria.modes.some(function (mode) {
+					return (keyCriteria.root + mode) === key;
+				});
+			} else {
+				return key.indexOf(keyCriteria.root) === 0;
+			}
+		}) ? 1 : 0;
+	}
+}
+
+var scoreForRhythm = function (model, rhythmCriteria) {
+	if (!rhythmCriteria) return 0;
+	if (rhythmCriteria.negated) {
+		return 0;
+	} else {
+		return model.get('rhythms').some(function (rhythm) {
+			return rhythmCriteria.rhythm.toLowerCase() === rhythm.toLowerCase();
+		}) ? 1 : 0;
+	}
+}
+
+var score = function (model, criteria) {
+
+	var result = criteria.term ? liquidMetal.score(model.get('name'), criteria.term) : 0
+
+	result += scoreForKey(model, criteria.key) + scoreForRhythm(model, criteria.rhythm);
+
+	return result;
+}
+
 module.exports = {
-	sort: function (models, searchTerm, limit) {
+	sort: function (models, criteria) {
+
+
 		var scores = new WeakMap(models.map(function (model) {
 			return [
 				model,
-				liquidMetal.score(model.get('name'), searchTerm)
+				score(model, criteria)
 			];
 		}));
 
 
 		return models.filter(function (model) {
-			return scores.get(model) > 0.5;
+			model.set('score', scores.get(model));
+			return scores.get(model) >= 0.5;
 		}).sort(function(model1, model2) {
 			var score1 = scores.get(model1);
 			var score2 = scores.get(model2);
-			return score1 === score2 ? 0 :
-						score1 > score2 ? -1: 1
+			return score1 === score2 ? 0 : score1 > score2 ? -1: 1
+		}).map(function (model) {
+			return model;
 		});
 
-	}
+	},
+	analyzeTerm: analyze
 };
 
 
