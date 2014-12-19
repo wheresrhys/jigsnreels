@@ -7,6 +7,7 @@ setTimeout(function () {
 	now = new Date();
 }, 1000);
 
+var tunebooksHash;
 
 var Pieces = module.exports = require('backbone-es6').Collection.extend({
 	name: 'pieces',
@@ -27,6 +28,14 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 		this.listenTo(sets, 'destroy', this.removeForSrc.bind(this));
 		this.on('practiced', function (piece) {
 			self.reInsert(piece);
+		});
+		this.on('add', function () {
+			//TODO edit the tunebookshash rather than clearing it
+			tunebooksHash = null;
+		});
+		this.on('remove', function () {
+			//TODO edit the tunebookshash rather than clearing it
+			tunebooksHash = null;
 		});
 	},
 	reInsert: function (piece) {
@@ -74,7 +83,10 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 		})
 	},
 	getIdsByTunebook: function () {
-		var tunebooksHash = {};
+		if (tunebooksHash) {
+			return tunebooksHash;
+		}
+		tunebooksHash = {};
 		var setsCollection = require('./sets');
 		var self = this;
 		user.tunebooks.forEach(function (tunebook) {
@@ -96,7 +108,8 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 		return tunebooksHash;
 	},
 
-	getTunebooksForResource: function (model, tunebooksHash) {
+	getTunebooksForResource: function (model) {
+		var tuneBooksHash = this.getIdsByTunebook();
 		return user.tunebooks.map(function (tunebook) {
 			return {
 				name: tunebook,

@@ -13,7 +13,14 @@ module.exports = require('backbone-es6').Model.extend({
 		keys: [],
 		name: ''
 	},
-
+	tunebooks: function () {
+		var pieces = require('../collections/pieces');
+		return pieces.getTunebooksForResource(this).filter(function (tb) {
+			return tb.isListed === true;
+		}).map(function (tb) {
+			return tb.name;
+		});
+	},
 	parse: function (resp) {
 		if (typeof resp.tunes[0] === 'object') {
 			allTunes.add(resp.tunes, {parse: true});
