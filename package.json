@@ -12,6 +12,7 @@
   "main": "server/app.js",
   "dependencies": {
     "body-parser": "^1.9.2",
+    "compression": "^1.2.2",
     "debug": "^2.1.0",
     "es6-promise": "^2.0.0",
     "express": "^4.0",

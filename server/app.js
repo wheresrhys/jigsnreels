@@ -25,6 +25,9 @@ swig.setDefaults({ cache: false });
 var assets = express.Router();
 assets.use('/', express.static(require('path').join(__dirname, '../public')));
 
+app.use(require('compression')({
+  threshold: 512
+}));
 app.use('/assets', assets);
 
 var api = express.Router();
