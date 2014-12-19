@@ -1,4 +1,8 @@
 var gulp = require('gulp');
+var gulpif = require('gulp-if');
+var streamify = require('gulp-streamify');
+var csso = require('gulp-csso');
+var uglify = require('gulp-uglify');
 
 gulp.task('clean', function () {
 	return require('del')('./public');
@@ -24,7 +28,7 @@ gulp.task('js', function () {
 		.src('./client/main.js', { read: false })
 		.pipe(require('gulp-browserify')({
 			basedir: __dirname + '/client',
-			debug: true,
+			debug: process.env.NODE_ENV === 'development',
 			transform: ['debowerify', require('swigify')({compress: null})],
 			exclude: ['underscore', 'jquery'],
 			shim: {
@@ -38,14 +42,16 @@ gulp.task('js', function () {
 				}
 			}
 		}))
-		// .pipe(require('gulp-uglify')())
+		.pipe(gulpif(process.env.NODE_ENV !== 'development', streamify(uglify())))
 		.pipe(gulp.dest('./public'));
 });
 
 gulp.task('sass', function () {
 	return gulp.src('client/main.scss')
-		.pipe(require('gulp-sass')())//{outputStyle: 'compressed'}))
-		.pipe(require('gulp-csso')())
+		.pipe(require('gulp-sass')({
+			outputStyle: (process.env.NODE_ENV !== 'development') && 'compressed'
+		}))
+		.pipe(gulpif(process.env.NODE_ENV !== 'development', csso()))
 		.pipe(gulp.dest('./public'));
 } );
 
