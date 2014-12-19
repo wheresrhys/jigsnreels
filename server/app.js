@@ -74,7 +74,7 @@ function index (req, res, next) {
 	require('./models/user').findOne().exec()
 		.then(function (user) {
 			res.render('index', {
-				env: process.env.ENV,
+				env: process.env.NODE_ENV,
 				user: JSON.stringify(user.toObject())
 			});
 		})

@@ -10,13 +10,13 @@ test:
 	export NO_SCRAPE=true; export DB_HOST=testhost; export DB=testdb; ./node_modules/.bin/mocha --recursive --require expectations --require sinon tests/server/specs/
 
 run-local:
-	export NO_SCRAPE=true DB=jnr_local ENV=development PORT=5000 DB_HOST=localhost; nodemon --watch server server/app.js
+	export NO_SCRAPE=true DB=jnr_local NODE_ENV=development PORT=5000 DB_HOST=localhost; nodemon --watch server server/app.js
 
 build:
-	gulp; gulp watch
+	export NODE_ENV=development; gulp; gulp watch
 
 deploy:
-	@./node_modules/.bin/gulp default img
+	@./node_modules/.bin/gulp default
 	# Pre-deploy clean
 	npm prune --production
 
