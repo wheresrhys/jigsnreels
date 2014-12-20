@@ -26,6 +26,7 @@ module.exports = require('backbone-es6').NativeView.extend({
 
 	simpleDestroy: function () {
 		this.stopListening();
+		this.trigger('destroy');
 		this.el.parentNode && this.el.parentNode.removeChild(this.el);
 	},
 	setAsCurrentPage: function () {
