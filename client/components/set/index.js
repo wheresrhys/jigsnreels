@@ -2,7 +2,8 @@ module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
 	name: 'set',
 	events: {
-		'click .set__tunebook-adder': 'addToTunebook'
+		'click .set__edit-tunebooks': 'displayTunebookTogglers',
+		'change .set__tunebook-toggle input[type="checkbox"]': 'toggleTunebook'
 	},
 	initialize: function (opts) {
 		this.set = opts.set;
@@ -28,9 +29,12 @@ module.exports = require('../../scaffolding/view').extend({
 		this.closeAbc();
 		this.simpleDestroy();
 	},
-	addToTunebook: function (ev) {
+	displayTunebookTogglers: function () {
+		this.el.querySelector('.set__tunebook-togglers').classList.toggle('active');
+	},
+	toggleTunebook: function (ev) {
 		require('../../data/collections/pieces')
-			.addPiece(this.set.id, 'set', ev.delegateTarget.dataset.tunebookName)
+			.togglePiece(this.set.id, 'set', ev.delegateTarget.value, ev.delegateTarget.checked)
 			.then(this.render);
 	}
 

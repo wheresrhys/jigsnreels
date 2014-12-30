@@ -77,7 +77,7 @@
 	@include primaryAction(mode_edit, $blue);
 }
 
-.set__add-to-tunebook {
+.set__edit-tunebooks {
 	@include primaryAction(my_library_add, $green);
 }
 
