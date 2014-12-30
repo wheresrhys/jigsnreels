@@ -1,5 +1,6 @@
 var TuneView = require('../tune');
-var SearchView = require('../tune-search');
+var SearchView = require('../search');
+var allTunes = require('../../data/collections/tunes');
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
@@ -8,7 +9,7 @@ module.exports = require('../../scaffolding/view').extend({
 	initialize: function (opts) {
 		this.parentEl = opts.parentEl;
 		this.parent = opts.parent;
-		this.limit = opts.limit || 20;
+		this.limit = 20;
 		this.render = this.render.bind(this);
 		this.destroy = this.simpleDestroy.bind(this);
 		this.parent && this.listenTo(this.parent, 'destroy', this.destroy);
@@ -21,13 +22,25 @@ module.exports = require('../../scaffolding/view').extend({
 		this.search = new SearchView(this.childOpts('search', {
 			limit: this.limit
 		}));
-		this.listenTo(this.search, 'results', this.render)
+		this.listenTo(this.search, 'results', this.render);
+		this.listenTo(this.search, 'invalid', this.render);
+		this.render();
 	},
 
 	render: function (results) {
-		this.listEl.innerHTML = '';
 		var self = this;
-		results.forEach(function (model) {
+		// don't rerender when we're applying no filter to an already unfiltered list
+		if (!results && !this.filtered && this.listEl.innerHTML) {
+			return;
+		}
+		this.filtered = !!results;
+		this.listEl.innerHTML = '';
+		var tunes = results || allTunes.models.sort(function (m1, m2) {
+			var m1r = m1.get('rating');
+			var m2r = m2.get('rating');
+			return (m1r === m2r) ? 0 : (m1r > m2r) ? 1 : -1;
+		}).slice(0, this.limit);
+		tunes.forEach(function (model) {
 			// setTimeout(function () {
 			var tuneView = new TuneView(self.childOpts(self.listEl, {
 				tune: model

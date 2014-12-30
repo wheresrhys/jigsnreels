@@ -48,5 +48,18 @@ module.exports = BB.Model.extend({
 		this.set('lastPracticed', new Date().toISOString());
 		this.trigger('practiced', this);
 		this.save();
+	},
+
+	getSrc: function () {
+
+		if (!this.src) {
+			var srcId = this.get('srcId');
+			var collection = (this.get('type') === 'set') ? sets : tunes;
+			this.src = collection.models.filter(function (model) {
+				return model.id === srcId;
+			})[0];
+		}
+
+		return this.src;
 	}
 });

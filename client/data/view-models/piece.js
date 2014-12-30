@@ -6,7 +6,6 @@ var PieceViewModel = module.exports = function (model) {
 		return new PieceViewModel(this);
 	}
 	this.model = model;
-	this.isCorrectResource = this.isCorrectResource.bind(this);
 	this.out = this.model.toJSON();
 	this.out.tunebook = this.out.tunebook.split(':')[1];
 	this.out.lastPracticed = this.out.lastPracticed && new Date(this.out.lastPracticed);
@@ -18,21 +17,9 @@ var PieceViewModel = module.exports = function (model) {
 
 PieceViewModel.prototype = {
 	withSrc: function () {
-		var collection = (this.model.get('type') === 'set') ? sets : tunes;
-		this.out.src = collection.models.filter(this.isCorrectResource)[0].viewModel().end();
+		this.out.src = this.model.getSrc().viewModel().end();
 		return this;
 	},
-
-	withTunebook: function () {
-		var collection = (this.model.get('type') === 'set') ? sets : tunes;
-		this.out.src = collection.models.filter(this.isCorrectResource)[0].viewModel().end();
-		return this;
-	},
-
-	isCorrectResource: function (model) {
-		return model.id === this.model.get('srcId');
-	},
-
 	end: function (standalone) {
 		if (standalone) {
 			return {

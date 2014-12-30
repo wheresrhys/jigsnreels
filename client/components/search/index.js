@@ -25,7 +25,11 @@ var debounce = function (fn, debounceDuration, context){
 var analyzeTerm = function (term) {
 	var obj = {};
 	obj.term = term
-		.replace(/\b[kK]\:([ABCDEFG][#b]?)?(maj|mix|dor|min|aeo|\+|-)?(\s|$)/, function ($0, root, mode) {
+		.replace(/\b[kK]\:(?:([ABCDEFG][#b]?)?(maj|mix|dor|min|aeo|\+|-)?)(\s|$)/, function ($0, root, mode) {
+			// as both root and mode are optional and 'either but not none' is hard to do in regex, doing it manually
+			if (!root && !mode) {
+				return $0;
+			}
 			obj.key = {
 				root: root,
 				modes: mode === '+' ? ['maj', 'mix'] :
@@ -73,18 +77,26 @@ var scoreForRhythm = function (model, rhythmCriteria) {
 	}) ? 1 : 0;
 }
 
-var TuneSearch = require('../../scaffolding/view').extend({
+var getSubjects = function (tune) {
+	return [tune];
+}
+
+var Search = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
-	name: 'tune-search',
+	name: 'search',
 	events: {
 		'keyup input[type="search"]': 'search'
 	},
 	initialize: function (opts) {
-		this.allTunes = opts.tunes || allTunes.models;
+		this.allItems = opts.items || allTunes.models;
+		this.getSubjects = opts.getSubjects || getSubjects;
 		this.parentEl = opts.parentEl;
 		this.parent = opts.parent;
 		this.limit = opts.limit || 20;
 		this.render = this.render.bind(this);
+		this.filterItem = this.filterItem.bind(this);
+		this.spreadItem = this.spreadItem.bind(this);
+		this.scoreItem = this.scoreItem.bind(this);
 		this.destroy = this.simpleDestroy.bind(this);
 		this.search = debounce(this.search, 200, this);
 		this.listenTo(this.parent, 'destroy', this.destroy);
@@ -96,36 +108,62 @@ var TuneSearch = require('../../scaffolding/view').extend({
 	},
 
 	search: function (ev) {
-		var criteria = analyzeTerm(ev.delegateTarget.value);
-		if (criteria.term.length < 3 && !criteria.key && !criteria.rhythm)  {
-			this.trigger('results', []);
+		this.criteria = analyzeTerm(ev.delegateTarget.value);
+		if (this.criteria.term.length < 3 && !this.criteria.key && !this.criteria.rhythm)  {
+			this.trigger('invalid');
 		} else {
-			this.trigger('results', this.getSortedResults(criteria).slice(0, this.limit));
+			var results = this.getSortedResults();
+			if (this.limit > 0) {
+				results = results.slice(0, this.limit);
+			}
+			this.trigger('results', results);
 		}
 	},
-	getSortedResults: function (criteria) {
-		var tunes = this.allTunes;
-		if (criteria.key || criteria.rhythm) {
-			tunes = tunes.filter(function (model) {
-				return scoreForKey(model, criteria.key) * scoreForRhythm(model, criteria.rhythm);
-			});
+	getSortedResults: function () {
+		var items = this.allItems.map(this.spreadItem);
+
+		if (this.criteria.key || this.criteria.rhythm) {
+			items = items.filter(this.filterItem);
 		}
 
 		var hash = {};
-		tunes.forEach(function (model) {
-			hash[model.id] = criteria.term ? liquidMetal.score(model.get('name'), criteria.term) : 1;
+		var self = this;
+		if (this.criteria.term.length > 2) {
+			items.forEach(this.scoreItem)
+
+			items = items
+				.filter(function (item) {
+					return item.score > 0;
+				})
+				.sort(function(item1, item2) {
+					return item1.score === item2.score ? 0 : item1.score > item2.score ? -1: 1
+				});
+		}
+
+		return items.map(function (item) {
+			return item.model;
 		});
 
-		return tunes.filter(function (model) {
-			return hash[model.id] > 0;
-		}).sort(function(model1, model2) {
-			var score1 = hash[model1.id];
-			var score2 = hash[model2.id];
-			return score1 === score2 ? 0 : score1 > score2 ? -1: 1
-		}).map(function (model) {
-			return model;
+	},
+	filterItem: function (item) {
+		var key = this.criteria.key;
+		var rhythm = this.criteria.rhythm;
+		item.subjects = item.subjects.filter(function (model) {
+			return scoreForKey(model, key) * scoreForRhythm(model, rhythm);
 		});
-
+		return !!item.subjects.length;
+	},
+	scoreItem: function (item) {
+		var term = this.criteria.term;
+		item.score = Math.max.apply(null, item.subjects.map(function (model) {
+			return liquidMetal.score(model.get('name'), term);
+		}));
+	},
+	spreadItem: function (model) {
+		return {
+			model: model,
+			subjects: this.getSubjects(model)
+		}
 	},
 	clear: function () {
 		this.render();
@@ -133,4 +171,4 @@ var TuneSearch = require('../../scaffolding/view').extend({
 
 });
 
-module.exports = TuneSearch;
+module.exports = Search;

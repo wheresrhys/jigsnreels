@@ -1,5 +1,5 @@
 var TuneView = require('../tune');
-var SearchView = require('../tune-search');
+var SearchView = require('../search');
 var tuneTpl = require('./tune.html');
 
 module.exports = require('../../scaffolding/view').extend({
@@ -24,10 +24,14 @@ module.exports = require('../../scaffolding/view').extend({
 			limit: 5
 		}));
 		this.listenTo(this.search, 'results', this.render)
+		this.listenTo(this.search, 'invalid', this.render)
 	},
 
 	render: function (results) {
 		this.listEl.innerHTML = '';
+		if (!results) {
+			return;
+		}
 		var html = '';
 		var self = this;
 		results.forEach(function (tune) {

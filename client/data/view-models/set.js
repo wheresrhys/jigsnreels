@@ -6,10 +6,8 @@ var SetViewModel = module.exports = function (model) {
 	}
 	this.model = model;
 	this.out = this.model.toJSON();
-	this.out.tunes = this.model.get('tunes').map(function (tuneId) {
-		return tunes.models.filter(function (tune) {
-			return tune.get('_id') === tuneId;
-		})[0].viewModel();
+	this.out.tunes = this.model.getTunes().map(function (model) {
+		return model.viewModel();
 	})
 }
 
