@@ -52,11 +52,7 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 	togglePiece: function (id, type, tunebook, add) {
 
 		if (add) {
-			return this.add({
-				srcId: id,
-				type: type,
-				tunebook: 'wheresrhys:' + tunebook
-			}).save();
+			return this.addPiece(id, type, tunebook, add);
 		}
 
 		this.models.forEach(function (piece) {
@@ -65,6 +61,13 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 			}
 		});
 		return Promise.resolve();
+	},
+	addPiece: function (id, type, tunebook) {
+		return this.add({
+			srcId: id,
+			type: type,
+			tunebook: 'wheresrhys:' + tunebook
+		}).save();
 	},
 	comparator: function (piece) {
 		var timeAgo = (now - new Date(piece.get('lastPieced'))) / (24 * 60 * 60 * 1000);
