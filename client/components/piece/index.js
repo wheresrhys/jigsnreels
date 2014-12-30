@@ -10,6 +10,7 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 	initialize: function (opts) {
 		this.piece = opts.piece;
+		this.opts = opts;
 		this.parentEl = opts.parentEl;
 		this.parent = opts.parent;
 		this.render = this.render.bind(this);

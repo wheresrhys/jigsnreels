@@ -1,4 +1,4 @@
-<li class="piece {% if isSticky %}piece--sticky{% endif %} piece--{{type}}" data-piece-id={{ _id }}>
+<li class="piece {% if isSticky %}piece--sticky{% endif %} piece--{{type}} piece--{{tunebook}}" data-piece-id={{ _id }}>
 	<div class="piece__basics">
 		<div class="piece__subject">
 			{% if type === 'set' %}
@@ -6,6 +6,7 @@
 					{% if src.name %}
 					<h3 class="piece__subject__name">{{ src.name | deTheify | safe }}</h3>
 					{% endif %}
+					<span>{{tunebook}}</span>
 					<a href="/sets/edit/{{src._id}}" class="piece__set__edit">edit</a>
 				</div>
 				<ol class="piece__set">
@@ -15,9 +16,8 @@
 				</ol>
 
 			{% else %}
-				{% if src.name %}
-					<h3 class="piece__subject__name">{{ src.name | deTheify | safe }}</h3>
-				{% endif %}
+				<h3 class="piece__subject__name">{{ src.name | deTheify | safe }}</h3>
+				<span>{{tunebook}}</span>
 				<p>{{ src.keys[0] }} {{src.rhythms[0] }} <button class="piece__view-abc" data-tune-id="{{ src._id }}"></button></p>
 			{% endif %}
 		</div>
