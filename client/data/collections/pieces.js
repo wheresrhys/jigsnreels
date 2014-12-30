@@ -74,6 +74,7 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 		if (isNaN(timeAgo)) {
 			return 0;
 		}
+		timeAgo = Math.round(timeAgo);
 		var score = (-timeAgo / 2) +
 			1 * piece.get('lastPieceQuality') +
 			-1 * piece.get('stickiness');
