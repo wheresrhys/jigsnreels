@@ -105,14 +105,14 @@
 	@include inlineIconButton(queue_music);
 }
 
-.set__tunebook {
+.set__tunebook i {
 	@include inlineIconButton('');
 	height: 16px;
 	width: 16px;
 	background-size: 16px;
 }
 @each $tunebook in mandolin, guitar, whistle {
-	.set__tunebook--#{$tunebook} {
+	.set__tunebook--#{$tunebook} i{
 		background-image: url('/assets/img/ic_#{$tunebook}_black.png');
 	}
 }
