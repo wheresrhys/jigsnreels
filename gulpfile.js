@@ -9,8 +9,8 @@ gulp.task('clean', function () {
 });
 
 gulp.task('img', function  () {
-	return gulp.src('client/scaffolding/global-styles/**/*.svg')
-		.pipe(gulp.dest('./public'));
+	return gulp.src('client/scaffolding/global-styles/img/*.*')
+		.pipe(gulp.dest('./public/img'));
 });
 
 gulp.task('jshint', function () {

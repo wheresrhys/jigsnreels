@@ -5,11 +5,64 @@ $strong-bg: #e7e7e7;
 $set-font-color: #306;
 $tune-font-color: #530;
 
+$green : #2a0;
+$red: #b00;
+$amber: #b90;
+$blue: #27d;
+
 @import "flexbox";
 
 @mixin icon ($name, $size, $color: black) {
 	background: url('/assets/img/ic_#{$name}_#{$color}.svg') no-repeat;
 	background-size: $size + px;
+}
+
+@mixin inlineIconButton ($name) {
+	border: none;
+	outline: none;
+	cursor: pointer;
+	height: 20px;
+	display: inline-block;
+	width: 20px;
+	@include icon($name, 20);
+	position: relative;
+	top: 5px;
+}
+
+@mixin actions($item-selectors) {
+	@include flexItem(0, 0, 60px);
+	@include flexContainer((
+		vertical: true,
+		stretch: true
+	));
+	position: relative;
+
+	#{$item-selectors} {
+		@include flexItem(0, 1, 35px);
+		border: none;
+		outline: none;
+		cursor: pointer;
+		min-height: 35px;
+		text-align: center;
+
+		&>i {
+			display: inline-block;
+			width: 18px;
+			height: 18px;
+			background-position: 0px center;
+		}
+	}
+}
+
+@mixin primaryAction($icon, $bg-color, $invert: false) {
+	background-color: $bg-color;
+	$color: white;
+	@if $invert {
+		$color: black;
+	}
+	i {
+		@include icon($icon, 18, $color);
+	}
 }
 
 * {

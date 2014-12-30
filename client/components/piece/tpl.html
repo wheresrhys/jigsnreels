@@ -16,9 +16,9 @@
 				</ol>
 
 			{% else %}
-				<h3 class="piece__subject__name">{{ src.name | deTheify | safe }}</h3>
+				<h3 class="piece__subject__name"><button class="piece__view-abc" data-tune-id="{{ src._id }}"></button>{{ src.name | deTheify | safe }}</h3>
 				<span>{{tunebook}}</span>
-				<p>{{ src.keys[0] }} {{src.rhythms[0] }} <button class="piece__view-abc" data-tune-id="{{ src._id }}"></button></p>
+				<p>{{ src.keys[0] }} {{src.rhythms[0] }} </p>
 			{% endif %}
 		</div>
 

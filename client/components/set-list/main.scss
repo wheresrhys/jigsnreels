@@ -1,0 +1,4 @@
+.set-list__list {
+	@include uiList();
+}
+@import "../set/main";
