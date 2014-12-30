@@ -1,5 +1,5 @@
 var TuneView = require('../tune');
-var SearchView = require('../tune-search');
+var SearchView = require('../search');
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
