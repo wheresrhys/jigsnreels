@@ -29,16 +29,6 @@ li.piece--sticky {
 	color: $tune-font-color
 }
 
-.piece__basics {
-	@include flexContainer((
-		stretch: true
-	))
-}
-
-.piece__subject {
-	@include flexItem(1, 1);
-}
-
 .piece__actions {
 	@include actions('.piece__practice');
 }
