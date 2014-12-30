@@ -13,6 +13,13 @@ module.exports = require('backbone-es6').Model.extend({
 		keys: [],
 		name: ''
 	},
+
+	initialize: function () {
+		var self = this;
+		this.listenTo(this, 'change', function () {
+			delete self.tunes;
+		})
+	},
 	tunebooks: function () {
 		var pieces = require('../collections/pieces');
 		return pieces.getTunebooksForResource(this).filter(function (tb) {
@@ -80,5 +87,19 @@ module.exports = require('backbone-es6').Model.extend({
 	delete: function () {
 		var id = this.get('_id');
 		this.destroy();
+	},
+
+
+	getTunes: function () {
+
+		if (!this.tunes) {
+			this.tunes = this.get('tunes').map(function (tuneId) {
+				return allTunes.models.filter(function (tune) {
+					return tune.get('_id') === tuneId;
+				})[0];
+			})
+		}
+
+		return this.tunes;
 	}
 }, {});

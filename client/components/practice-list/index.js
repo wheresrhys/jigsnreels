@@ -1,4 +1,5 @@
 var PieceView = require('../piece');
+var SearchView = require('../search');
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
@@ -23,6 +24,24 @@ module.exports = require('../../scaffolding/view').extend({
 		this.renderToDom(this.swig.render(this.tpl), true);
 		this.listEl = this.el.querySelector('.practice-list__list');
 		var self = this;
+		this.search = new SearchView(this.childOpts('search', {
+			limit: 5,
+			items: this.pieces.models,
+			getSubjects: function (piece) {
+				if (piece.get('type') === 'tune') {
+					return [piece.getSrc()];
+				} else {
+					return piece.getSrc().getTunes().concat([{
+						get: function (key) {
+							return key === 'name' ? piece.getSrc().get('name') : ''
+						}
+					}])
+				}
+			}
+		}));
+		this.listenTo(this.search, 'results', function(results) {
+			console.log(results);
+		})
 		this.pieces.getTunebook(this.tunebook).slice(0, this.length).forEach(function (piece) {
 			setTimeout(function () {
 				self.appendModel(piece);

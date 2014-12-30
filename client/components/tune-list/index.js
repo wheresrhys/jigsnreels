@@ -22,10 +22,14 @@ module.exports = require('../../scaffolding/view').extend({
 			limit: this.limit
 		}));
 		this.listenTo(this.search, 'results', this.render)
+		this.listenTo(this.search, 'null', this.render)
 	},
 
 	render: function (results) {
 		this.listEl.innerHTML = '';
+		if (!results) {
+			return;
+		}
 		var self = this;
 		results.forEach(function (model) {
 			// setTimeout(function () {

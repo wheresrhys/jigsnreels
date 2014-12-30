@@ -106,7 +106,7 @@ var Search = require('../../scaffolding/view').extend({
 	search: function (ev) {
 		this.criteria = analyzeTerm(ev.delegateTarget.value);
 		if (this.criteria.term.length < 3 && !this.criteria.key && !this.criteria.rhythm)  {
-			this.trigger('results', []);
+			this.trigger('null');
 		} else {
 			this.trigger('results', this.getSortedResults().slice(0, this.limit));
 		}

@@ -24,10 +24,14 @@ module.exports = require('../../scaffolding/view').extend({
 			limit: 5
 		}));
 		this.listenTo(this.search, 'results', this.render)
+		this.listenTo(this.search, 'null', this.render)
 	},
 
 	render: function (results) {
 		this.listEl.innerHTML = '';
+		if (!results) {
+			return;
+		}
 		var html = '';
 		var self = this;
 		results.forEach(function (tune) {
