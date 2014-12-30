@@ -1,4 +1,4 @@
-<li class="piece {% if isSticky %}piece--sticky{% endif %} piece--{{type}}" data-piece-id={{ _id }}>
+<li class="piece {% if isSticky %}piece--sticky{% endif %} piece--{{type}} piece--{{tunebook}}" data-piece-id={{ _id }}>
 	<div class="piece__basics">
 		<div class="piece__subject">
 			{% if type === 'set' %}
@@ -6,28 +6,27 @@
 					{% if src.name %}
 					<h3 class="piece__subject__name">{{ src.name | deTheify | safe }}</h3>
 					{% endif %}
+					<span>{{tunebook}}</span>
 					<a href="/sets/edit/{{src._id}}" class="piece__set__edit">edit</a>
 				</div>
 				<ol class="piece__set">
 					{% for tuneIndex, tune in src.tunes %}
-					<li><h4 class="piece__set__tune-name">{{ tune.name | deTheify | safe }}</h4>{{ src.keys[tuneIndex] }} {{tune.rhythms[0] }}
-					<button class="piece__view-abc" data-tune-id="{{ tune._id }}"></button></li>
+					<li><h4 class="piece__set__tune-name"><button class="piece__view-abc" data-tune-id="{{ tune._id }}"></button>{{ tune.name | deTheify | safe }}</h4></li>
 					{% endfor %}
 				</ol>
 
 			{% else %}
-				{% if src.name %}
-					<h3 class="piece__subject__name">{{ src.name | deTheify | safe }}</h3>
-				{% endif %}
-				<p>{{ src.keys[0] }} {{src.rhythms[0] }} <button class="piece__view-abc" data-tune-id="{{ src._id }}"></button></p>
+				<h3 class="piece__subject__name"><button class="piece__view-abc" data-tune-id="{{ src._id }}"></button>{{ src.name | deTheify | safe }}</h3>
+				<span>{{tunebook}}</span>
+				<p>{{ src.keys[0] }} {{src.rhythms[0] }} </p>
 			{% endif %}
 		</div>
 
 		<div class="piece__actions">
 			{% if lastPracticed %}<p class="piece__stats piece__stats--{{ lastPracticeQuality }}">{{ lastPracticed | daysAgo }}</p>{% endif %}
 			<button class="piece__practice piece__practice--good" data-practice-type="good"><i></i></button>
+			<button class="piece__practice piece__practice--neutral" data-practice-type="neutral"><i></i></button>
 			<button class="piece__practice piece__practice--bad" data-practice-type="bad"><i></i></button>
-			<button class="piece__practice piece__practice--neutral" data-practice-type="neutral"><i> -- </i></button>
 			<button class="piece__practice piece__practice--skip" data-practice-type="skip"><i></i></button>
 			<button class="piece__remove"><i> x </i></button>
 		</div>

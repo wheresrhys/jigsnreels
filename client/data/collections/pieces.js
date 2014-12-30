@@ -49,12 +49,22 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 			}
 		}) || this.models.push(piece);
 	},
-	addPiece: function (id, type, tunebook) {
-		return this.add({
-			srcId: id,
-			type: type,
-			tunebook: 'wheresrhys:' + tunebook
-		}).save();
+	togglePiece: function (id, type, tunebook, add) {
+
+		if (add) {
+			return this.add({
+				srcId: id,
+				type: type,
+				tunebook: 'wheresrhys:' + tunebook
+			}).save();
+		}
+
+		this.models.forEach(function (piece) {
+			if (piece.get('srcId') === id && piece.get('tunebook') === 'wheresrhys:' + tunebook) {
+				piece.destroy();
+			}
+		});
+		return Promise.resolve();
 	},
 	comparator: function (piece) {
 		var timeAgo = (now - new Date(piece.get('lastPieced'))) / (24 * 60 * 60 * 1000);
@@ -68,8 +78,9 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 		return score;
 	},
 	removeForSrc: function (src) {
+		var srcId = src.get('_id');
 		this.models.forEach(function (piece) {
-			if (piece.get('srcId') === src.get('_id')) {
+			if (piece.get('srcId') === srcId) {
 				piece.destroy();
 			}
 		});

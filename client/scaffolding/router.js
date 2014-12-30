@@ -1,7 +1,7 @@
-function isInternalLink(el) {
+function getInternalLink(el) {
 	while (el.parentNode && el.parentNode !== document) {
 		if (el.matches('a[href^="/"]')) {
-			return true;
+			return el;
 		}
 		el = el.parentNode;
 	}
@@ -36,12 +36,13 @@ var router = new Router();
 // Globally capture clicks. If they are internal and not in the pass
 // through list, route them through Backbone's navigate method.
 document.body.addEventListener('click', function (ev) {
-	if (isInternalLink(ev.target)) {
+	var el = getInternalLink(ev.target)
+	if (el) {
 		if (ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey) {
 			return;
 		}
 		ev.preventDefault();
-		router.navigate(ev.target.getAttribute('href'), { trigger: true })
+		router.navigate(el.getAttribute('href'), { trigger: true })
 		return false;
 	}
 });

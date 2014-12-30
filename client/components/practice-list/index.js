@@ -34,7 +34,8 @@ module.exports = require('../../scaffolding/view').extend({
 
 	appendModel: function (model) {
 		var pieceView = new PieceView(this.childOpts(this.listEl, {
-			piece: model
+			piece: model,
+			inTunebook: this.tunebook
 		})).render();
 		this.listenTo(pieceView, 'abc-open', this.enforceUniqueAbc);
 	},
@@ -45,7 +46,6 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	append: function () {
-		this.listEl.classList.toggle('alt');
 		this.appendModel(this.pieces.getTunebook(this.tunebook)[this.length - 1]);
 	}
 });

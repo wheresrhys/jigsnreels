@@ -8,6 +8,7 @@ var PieceViewModel = module.exports = function (model) {
 	this.model = model;
 	this.isCorrectResource = this.isCorrectResource.bind(this);
 	this.out = this.model.toJSON();
+	this.out.tunebook = this.out.tunebook.split(':')[1];
 	this.out.lastPracticed = this.out.lastPracticed && new Date(this.out.lastPracticed);
 	this.out.lastPracticeQuality = this.out.lastPracticeQuality === -1 ? 'bad' :
 																	this.out.lastPracticeQuality === 1 ? 'good': 'neutral';
@@ -17,6 +18,12 @@ var PieceViewModel = module.exports = function (model) {
 
 PieceViewModel.prototype = {
 	withSrc: function () {
+		var collection = (this.model.get('type') === 'set') ? sets : tunes;
+		this.out.src = collection.models.filter(this.isCorrectResource)[0].viewModel().end();
+		return this;
+	},
+
+	withTunebook: function () {
 		var collection = (this.model.get('type') === 'set') ? sets : tunes;
 		this.out.src = collection.models.filter(this.isCorrectResource)[0].viewModel().end();
 		return this;

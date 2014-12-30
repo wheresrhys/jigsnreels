@@ -5,25 +5,65 @@ $strong-bg: #e7e7e7;
 $set-font-color: #306;
 $tune-font-color: #530;
 
+$green : #2a0;
+$red: #b00;
+$amber: #b90;
+$blue: #27d;
+
 @import "flexbox";
 
-/*html:not([data-environment="development"]){
-	padding-top: 30px;
-	&::before {
-		display: block;
-		background: red;
-		content: 'PRODUCTION';
+@mixin icon ($name, $size, $color: black) {
+	background: url('/assets/img/ic_#{$name}_#{$color}.svg') no-repeat;
+	background-size: $size + px;
+}
+
+@mixin inlineIconButton ($name) {
+	border: none;
+	outline: none;
+	cursor: pointer;
+	height: 20px;
+	display: inline-block;
+	width: 20px;
+	@include icon($name, 20);
+	position: relative;
+	top: 5px;
+}
+
+@mixin actions($item-selectors) {
+	@include flexItem(0, 0, 60px);
+	@include flexContainer((
+		vertical: true,
+		stretch: true
+	));
+	position: relative;
+
+	#{$item-selectors} {
+		@include flexItem(0, 1, 35px);
+		border: none;
+		outline: none;
+		cursor: pointer;
+		min-height: 35px;
 		text-align: center;
-		font-weight: bold;
-		font-size: 20px;
-		height: 30px;
-		line-height: 30px;
-		position: fixed;
-		top: 0;
-		width: 100%;
-		z-index: 1;
+
+		&>i {
+			display: inline-block;
+			width: 18px;
+			height: 18px;
+			background-position: 0px center;
+		}
 	}
-}*/
+}
+
+@mixin primaryAction($icon, $bg-color, $invert: false) {
+	background-color: $bg-color;
+	$color: white;
+	@if $invert {
+		$color: black;
+	}
+	i {
+		@include icon($icon, 18, $color);
+	}
+}
 
 * {
 	margin: 0;
@@ -38,32 +78,17 @@ body {
 	margin: 0 auto;
 }
 
-@media screen and (min-width: 802px) {
-	body {
-		border-right: 1px solid $lines;
-		border-left: 1px solid $lines;
-	}
-}
 
 @mixin uiList {
 	list-style: none;
 
 	> li {
-		background: #fff;
-		border-bottom: 1px solid $lines;
-		&:nth-child(2n) {
-			background: $neutral-bg;
-		}
-	}
-
-	&.alt {
-		> li {
 		background: $neutral-bg;
-
-			&:nth-child(2n) {
-				background: #fff;
-			}
-		}
+		border: 1px solid $lines;
+		margin: 5px;
+		border-radius: 10px;
+		overflow: hidden;
+		box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.1);
 	}
 }
 

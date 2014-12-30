@@ -1,28 +1,39 @@
-<li class="set" data-set-id="_id" style="border: 1px solid red">
-	<h2>{{ name }}</h2>
-	<ol>
-		{% for tuneIndex, tune in tunes %}
-		<li>{{ tune.name }}, {{ keys[tuneIndex] }} {{tune.rhythms[0] }},
-			{% for tunebook in tune.tunebooks %}
+<li class="set" data-set-id="_id">
+	<div class="set__details">
+		<h2 class="set__name">{{ name }}
+
+			{% for tunebook in tunebooks %}
 				{% if tunebook.isListed %}
-					<span>{{tunebook.name}}</span>
+					<a href="/practice/{{tunebook.name}}" class="set__tunebook set__tunebook--{{tunebook.name}}"><i></i></a>
 				{% endif %}
 			{% endfor %}
+		</h2>
+		<ol class="set__tunes">
+			{% for tuneIndex, tune in tunes %}
+			<li><h4 class="set__tune-name"><button class="set__view-abc" data-tune-id="{{ tune._id }}"></button>{{ tune.name | deTheify | safe }}</h4>
+				<p>{{ keys[tuneIndex] }} {{tune.rhythms[0]  }}
+				{% for tuneTunebook in tune.tunebooks %}
+					{% if tuneTunebook.isListed%}
+						<a href="/practice/{{tuneTunebook.name}}" class="set__tunebook set__tunebook--{{tuneTunebook.name}}"><i></i></a>
+					{% endif %}
+				{% endfor %}
+				</p>
 
+			</li>
+			{% endfor %}
+		</ol>
+	</div>
+	<div class="set__actions">
+		<ul class="set__tunebook-togglers">
+			{% for tunebook in tunebooks %}
+				<fieldset class="set__tunebook-toggle">
+					<input {% if tunebook.isListed %}checked {% endif %}type="checkbox" value="{{tunebook.name}}">
+					<label>{{tunebook.name}}</label>
+				</fieldset>
+			{% endfor %}
+		</ul>
+		<button class="set__edit-tunebooks"><i></i></button>
+		<a href="/sets/edit/{{_id}}" class="set__edit"><i></i></a>
+	</div>
 
-		</li>
-		{% endfor %}
-	</ol>
-	<ul>
-		{% for tunebook in tunebooks %}
-		<li>
-			{% if tunebook.isListed %}
-				<span>{{tunebook.name}}</span>
-			{% else %}
-				<button class="set__tunebook-adder" data-tunebook-name="{{tunebook.name}}">{{tunebook.name}}</button>
-			{% endif %}
-		</li>
-		{% endfor %}
-	</ul>
-	<a href="/sets/edit/{{_id}}" class="set__edit">edit</a>
 </li>
