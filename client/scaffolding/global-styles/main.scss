@@ -30,15 +30,13 @@ $blue: #27d;
 }
 
 @mixin actions($item-selectors) {
-	@include flexItem(0, 0, 60px);
 	@include flexContainer((
-		vertical: true,
 		stretch: true
 	));
 	position: relative;
 
 	#{$item-selectors} {
-		@include flexItem(0, 1, 35px);
+		@include flexItem(0, 1, 60px);
 		border: none;
 		outline: none;
 		cursor: pointer;
