@@ -17,32 +17,42 @@ module.exports = require('../../scaffolding/view').extend({
 		this.appendModel = this.appendModel.bind(this);
 		this.listenTo(this.pieces, 'practiced', this.append);
 		this.listenTo(this.pieces, 'destroy', this.append);
-		this.render();
+		this.staticRender();
 	},
 
-	render: function () {
+	staticRender: function () {
 		this.renderToDom(this.swig.render(this.tpl), true);
 		this.listEl = this.el.querySelector('.practice-list__list');
-		var self = this;
 		this.search = new SearchView(this.childOpts('search', {
-			limit: 5,
-			items: this.pieces.models,
+			limit: -1,
+			items: this.pieces.getTunebook(this.tunebook),
 			getSubjects: function (piece) {
 				if (piece.get('type') === 'tune') {
 					return [piece.getSrc()];
 				} else {
 					return piece.getSrc().getTunes().concat([{
 						get: function (key) {
-							return key === 'name' ? piece.getSrc().get('name') : ''
+							return key === 'name' ? piece.getSrc().get('name') : []
 						}
 					}])
 				}
 			}
 		}));
-		this.listenTo(this.search, 'results', function(results) {
-			console.log(results);
-		})
-		this.pieces.getTunebook(this.tunebook).slice(0, this.length).forEach(function (piece) {
+		this.listenTo(this.search, 'results', this.render)
+		this.listenTo(this.search, 'invalid', this.render)
+		this.render();
+	},
+
+	render: function (results) {
+		var self = this;
+		// don't rerender when we're applying no filter to an already unfiltered list
+		if (!results && !this.filtered && this.listEl.innerHTML) {
+			return;
+		}
+		this.filtered = !!results;
+		this.listEl.innerHTML = '';
+		var pieces = results || this.pieces.getTunebook(this.tunebook).slice(0, this.length)
+		pieces.forEach(function (piece) {
 			setTimeout(function () {
 				self.appendModel(piece);
 			});

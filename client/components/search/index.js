@@ -25,7 +25,11 @@ var debounce = function (fn, debounceDuration, context){
 var analyzeTerm = function (term) {
 	var obj = {};
 	obj.term = term
-		.replace(/\b[kK]\:([ABCDEFG][#b]?)?(maj|mix|dor|min|aeo|\+|-)?(\s|$)/, function ($0, root, mode) {
+		.replace(/\b[kK]\:(?:([ABCDEFG][#b]?)?(maj|mix|dor|min|aeo|\+|-)?)(\s|$)/, function ($0, root, mode) {
+			// as both root and mode are optional and 'either but not none' is hard to do in regex, doing it manually
+			if (!root && !mode) {
+				return $0;
+			}
 			obj.key = {
 				root: root,
 				modes: mode === '+' ? ['maj', 'mix'] :
@@ -106,9 +110,13 @@ var Search = require('../../scaffolding/view').extend({
 	search: function (ev) {
 		this.criteria = analyzeTerm(ev.delegateTarget.value);
 		if (this.criteria.term.length < 3 && !this.criteria.key && !this.criteria.rhythm)  {
-			this.trigger('null');
+			this.trigger('invalid');
 		} else {
-			this.trigger('results', this.getSortedResults().slice(0, this.limit));
+			var results = this.getSortedResults();
+			if (this.limit > 0) {
+				results = results.slice(0, this.limit);
+			}
+			this.trigger('results', results);
 		}
 	},
 	getSortedResults: function () {

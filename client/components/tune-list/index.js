@@ -22,7 +22,7 @@ module.exports = require('../../scaffolding/view').extend({
 			limit: this.limit
 		}));
 		this.listenTo(this.search, 'results', this.render)
-		this.listenTo(this.search, 'null', this.render)
+		this.listenTo(this.search, 'invalid', this.render)
 	},
 
 	render: function (results) {
