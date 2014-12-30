@@ -78,32 +78,17 @@ body {
 	margin: 0 auto;
 }
 
-@media screen and (min-width: 802px) {
-	body {
-		border-right: 1px solid $lines;
-		border-left: 1px solid $lines;
-	}
-}
 
 @mixin uiList {
 	list-style: none;
 
 	> li {
-		background: #fff;
-		border-bottom: 1px solid $lines;
-		&:nth-child(2n) {
-			background: $neutral-bg;
-		}
-	}
-
-	&.alt {
-		> li {
 		background: $neutral-bg;
-
-			&:nth-child(2n) {
-				background: #fff;
-			}
-		}
+		border: 1px solid $lines;
+		margin: 5px;
+		border-radius: 10px;
+		overflow: hidden;
+		box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.1);
 	}
 }
 

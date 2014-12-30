@@ -46,7 +46,6 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	append: function () {
-		this.listEl.classList.toggle('alt');
 		this.appendModel(this.pieces.getTunebook(this.tunebook)[this.length - 1]);
 	}
 });
