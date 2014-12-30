@@ -7,23 +7,10 @@ $tune-font-color: #530;
 
 @import "flexbox";
 
-/*html:not([data-environment="development"]){
-	padding-top: 30px;
-	&::before {
-		display: block;
-		background: red;
-		content: 'PRODUCTION';
-		text-align: center;
-		font-weight: bold;
-		font-size: 20px;
-		height: 30px;
-		line-height: 30px;
-		position: fixed;
-		top: 0;
-		width: 100%;
-		z-index: 1;
-	}
-}*/
+@mixin icon ($name, $size, $color: black) {
+	background: url('/assets/img/ic_#{$name}_#{$color}.svg') no-repeat;
+	background-size: $size + px;
+}
 
 * {
 	margin: 0;

@@ -10,8 +10,7 @@
 				</div>
 				<ol class="piece__set">
 					{% for tuneIndex, tune in src.tunes %}
-					<li><h4 class="piece__set__tune-name">{{ tune.name | deTheify | safe }}</h4>{{ src.keys[tuneIndex] }} {{tune.rhythms[0] }}
-					<button class="piece__view-abc" data-tune-id="{{ tune._id }}"></button></li>
+					<li><h4 class="piece__set__tune-name"><button class="piece__view-abc" data-tune-id="{{ tune._id }}"></button>{{ tune.name | deTheify | safe }}</h4></li>
 					{% endfor %}
 				</ol>
 
@@ -26,8 +25,8 @@
 		<div class="piece__actions">
 			{% if lastPracticed %}<p class="piece__stats piece__stats--{{ lastPracticeQuality }}">{{ lastPracticed | daysAgo }}</p>{% endif %}
 			<button class="piece__practice piece__practice--good" data-practice-type="good"><i></i></button>
+			<button class="piece__practice piece__practice--neutral" data-practice-type="neutral"><i></i></button>
 			<button class="piece__practice piece__practice--bad" data-practice-type="bad"><i></i></button>
-			<button class="piece__practice piece__practice--neutral" data-practice-type="neutral"><i> -- </i></button>
 			<button class="piece__practice piece__practice--skip" data-practice-type="skip"><i></i></button>
 			<button class="piece__remove"><i> x </i></button>
 		</div>

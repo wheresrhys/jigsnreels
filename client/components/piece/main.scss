@@ -50,21 +50,20 @@ li.piece--sticky {
 .piece__stats {
 	line-height: 1.4;
 	padding-left: 20px;
-	background-size: 15px 15px;
 	background-repeat: no-repeat;
 	background-position: 2px 2px;
 }
 
 .piece__stats--good {
-	background-image: url('/assets/img/ic_thumb_up.svg');
+	@include icon(thumb_up, 15);
 }
 
 .piece__stats--bad {
-	background-image: url('/assets/img/ic_thumb_down.svg');
+	@include icon(thumb_down, 15);
 }
 
 .piece__stats--neutral {
-	background-image: url('/assets/img/ic_thumbs_up_down.svg');
+	@include icon(thumbs_up_down, 15);
 }
 
 .piece__practice {
@@ -79,9 +78,6 @@ li.piece--sticky {
 		display: inline-block;
 		width: 18px;
 		height: 18px;
-		color: #fff;
-		background-size: 18px;
-		background-repeat: no-repeat;
 		background-position: 0px center;
 	}
 }
@@ -91,7 +87,7 @@ li.piece--sticky {
 	background-color: #2a0;
 
 	i {
-		background-image: url('/assets/img/ic_thumb_up_white.svg');
+		@include icon(thumb_up, 18, white);
 	}
 }
 
@@ -99,7 +95,15 @@ li.piece--sticky {
 	background-color: #b00;
 
 	i {
-		background-image: url('/assets/img/ic_thumb_down_white.svg');
+		@include icon(thumb_down, 18, white);
+	}
+}
+
+.piece__practice--neutral {
+	background-color: #b90;
+
+	i {
+		@include icon(thumbs_up_down, 18, white);
 	}
 }
 
@@ -107,7 +111,7 @@ li.piece--sticky {
 	background-color: #27d;
 
 	i {
-		background-image: url('/assets/img/ic_not_interested_white.svg');
+		@include icon(schedule, 18, white);
 	}
 }
 
@@ -126,10 +130,8 @@ li.piece--sticky {
 		border-left: 1px solid $lines;
 		padding: 10px;
 
-		background-image: url('/assets/img/ic_chevron_right.svg');
+		@include icon(chevron_right, 18);
 		background-position: right 50%;
-		background-size: 18px;
-		background-repeat: no-repeat;
 
 		&:nth-child(1) {
 			background-color: rgba(46, 66, 114, 0.1)
@@ -164,8 +166,7 @@ li.piece--sticky {
 	height: 20px;
 	display: inline-block;
 	width: 20px;
-	background: url('/assets/img/ic_score.svg') no-repeat;
-	background-size: 20px;
+	@include icon(queue_music, 20);
 	position: relative;
 	top: 5px;
 }
