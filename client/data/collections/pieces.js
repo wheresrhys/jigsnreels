@@ -70,13 +70,13 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 		}).save();
 	},
 	comparator: function (piece) {
-		var timeAgo = (now - new Date(piece.get('lastPieced'))) / (24 * 60 * 60 * 1000);
+		var timeAgo = (now - new Date(piece.get('lastPracticed'))) / (24 * 60 * 60 * 1000);
 		if (isNaN(timeAgo)) {
 			return 0;
 		}
 		timeAgo = Math.round(timeAgo);
 		var score = (-timeAgo / 2) +
-			1 * piece.get('lastPieceQuality') +
+			1 * piece.get('lastPracticeQuality') +
 			-1 * piece.get('stickiness');
 		piece.score = score;
 		return score;

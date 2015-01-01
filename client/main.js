@@ -1,6 +1,13 @@
 'use strict';
+
+if (window.location.search.indexOf('debug=true') > -1) {
+	window.DEBUG = true;
+}
+
 require('./scaffolding/polyfills')
 require('./scaffolding/tpl');
+
+
 
 // We'll use this <body> reference to put some views in it below.
 var body = document.body;

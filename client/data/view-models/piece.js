@@ -1,6 +1,26 @@
 var tunes = require('../collections/tunes');
 var sets = require('../collections/sets');
 
+var now = new Date();
+var user = window.user;
+
+setTimeout(function () {
+	now = new Date();
+}, 1000);
+
+
+function debug (piece) {
+	var timeAgo = (now - new Date(piece.get('lastPracticed'))) / (24 * 60 * 60 * 1000);
+	if (isNaN(timeAgo)) {
+		return 0;
+	}
+	timeAgo = Math.round(timeAgo);
+	var score = (-timeAgo / 2) +
+		1 * piece.get('lastPracticeQuality') +
+		-1 * piece.get('stickiness');
+	return ['score', score, 'timeAgo', timeAgo, 'quality', piece.get('lastPracticeQuality'), 'sticky', piece.get('stickiness')].join(',');
+}
+
 var PieceViewModel = module.exports = function (model) {
 	if (!model) {
 		return new PieceViewModel(this);
@@ -12,6 +32,9 @@ var PieceViewModel = module.exports = function (model) {
 	this.out.lastPracticeQuality = this.out.lastPracticeQuality === -1 ? 'bad' :
 																	this.out.lastPracticeQuality === 1 ? 'good': 'neutral';
 	this.out.isSticky = this.out.stickiness > 1;
+	if (window.DEBUG) {
+		this.out.debug = debug(this.model);
+	}
 	this.promise = Promise.resolve();
 }
 
