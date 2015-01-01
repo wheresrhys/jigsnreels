@@ -5,8 +5,9 @@ module.exports = require('../../scaffolding/view').extend({
 	name: 'tune',
 	viewModel: require('../../data/view-models/tune'),
 	events: {
-		'click .tune__tunebook-adder': 'addToTunebook',
-		'click .tune__view-abc': 'viewAbc',
+		'click .tune__edit-tunebooks': 'displayTunebookTogglers',
+		'change .tune__tunebook-toggle input[type="checkbox"]': 'toggleTunebook',
+		'click .tune__view-abc': 'viewAbc'
 	},
 	initialize: function (opts) {
 		this.tune = opts.tune;
@@ -28,14 +29,17 @@ module.exports = require('../../scaffolding/view').extend({
 		));
 		return this;
 	},
+	displayTunebookTogglers: function () {
+		this.el.querySelector('.tune__tunebook-togglers').classList.toggle('active');
+	},
+	toggleTunebook: function (ev) {
+		require('../../data/collections/pieces')
+			.togglePiece(this.tune.id, 'tune', ev.delegateTarget.value, ev.delegateTarget.checked)
+			.then(this.render);
+	},
 	destroy: function () {
 		this.closeAbc();
 		this.simpleDestroy();
-	},
-	addToTunebook: function (ev) {
-		require('../../data/collections/pieces')
-			.addPiece(this.tune.id, 'tune', ev.delegateTarget.dataset.tunebookName)
-			.then(this.render);
 	},
 	viewAbc: function (ev) {
 		this.abcViewer = new AbcViewer(this.childOpts('abc', {

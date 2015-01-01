@@ -45,10 +45,18 @@ module.exports = require('../../scaffolding/view').extend({
 			var tuneView = new TuneView(self.childOpts(self.listEl, {
 				tune: model
 			})).render();
+			self.listenTo(tuneView, 'abc-open', self.enforceUniqueAbc);
 			// });
 		});
 
 		return this;
-	}
+	},
+
+
+
+	enforceUniqueAbc: function (set) {
+		this.abcViewer && this.abcViewer.destroy();
+		this.abcViewer = set.abcViewer;
+	},
 
 });
