@@ -17,8 +17,9 @@ function debug (piece) {
 	timeAgo = Math.round(timeAgo);
 	var score = (-timeAgo / 2) +
 		1 * piece.get('lastPracticeQuality') +
-		-1 * piece.get('stickiness');
-	return ['score', score, 'timeAgo', timeAgo, 'quality', piece.get('lastPracticeQuality'), 'sticky', piece.get('stickiness')].join(',');
+		-1 * piece.get('stickiness') +
+		-1 * piece.getSrc().getQuality() / 2;
+	return ['score', score, 'timeAgo', timeAgo, 'practice quality', piece.get('lastPracticeQuality'), 'quality', piece.getSrc().getQuality(), 'sticky', piece.get('stickiness')].join(',');
 }
 
 var PieceViewModel = module.exports = function (model) {

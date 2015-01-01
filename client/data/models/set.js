@@ -1,6 +1,10 @@
 'use strict';
 var allTunes = require('../collections/tunes');
 
+var sumQuality = function(prev, tune) {
+	return prev + tune.get('quality');
+};
+
 module.exports = require('backbone-es6').Model.extend({
 	idAttribute: '_id',
 	viewModel: require('../view-models/set'),
@@ -89,9 +93,7 @@ module.exports = require('backbone-es6').Model.extend({
 		this.destroy();
 	},
 
-
 	getTunes: function () {
-
 		if (!this.tunes) {
 			this.tunes = this.get('tunes').map(function (tuneId) {
 				return allTunes.models.filter(function (tune) {
@@ -99,7 +101,10 @@ module.exports = require('backbone-es6').Model.extend({
 				})[0];
 			})
 		}
-
 		return this.tunes;
+	},
+	getQuality: function () {
+		var tunes = this.getTunes()
+		return tunes.reduce(sumQuality, 0) / tunes.length;
 	}
 }, {});
