@@ -1,4 +1,3 @@
-var util = require('../../scaffolding/util');
 // keep an accurate enough reference to the current time;
 var now = new Date();
 var user = window.user;
@@ -9,7 +8,7 @@ setTimeout(function () {
 
 var tunebooksHash;
 
-var Pieces = module.exports = require('backbone-es6').Collection.extend({
+var Pieces = module.exports = require('../../scaffolding/collection').extend({
 	name: 'pieces',
 	url: function () {
 		return require('../../scaffolding/api').url('pieces', null, this.tunebook)
@@ -119,7 +118,7 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 
 				idHashes[piece.get('type') + 's'][piece.get('srcId')] = true;
 				if (piece.get('type') === 'set') {
-					util.find(setsCollection, piece.get('srcId')).get('tunes').forEach(function(tuneId) {
+					setsCollection.find(piece.get('srcId')).get('tunes').forEach(function(tuneId) {
 						idHashes.setTunes[tuneId] = true;
 					});
 				}
@@ -161,7 +160,7 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 			}));
 		}.bind(this));
 		return tuneIds.map(function (id) {
-			return util.find(tunesCollection, id);
+			return tunesCollection.find(id);
 		})
 	},
 	getGreedyTunes: function () {

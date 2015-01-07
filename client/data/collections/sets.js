@@ -1,4 +1,4 @@
-var Sets = require('backbone-es6').Collection.extend({
+var Sets = require('../../scaffolding/collection').extend({
 	name: 'sets',
 	url: require('../../scaffolding/api').url('sets'),
 	model: require('../models/set'),

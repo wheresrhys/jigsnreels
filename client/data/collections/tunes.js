@@ -1,4 +1,4 @@
-var Tunes = require('backbone-es6').Collection.extend({
+var Tunes = require('../../scaffolding/collection').extend({
 	name: 'tunes',
 	url: require('../../scaffolding/api').url('tunes'),
 	model: require('../models/tune'),

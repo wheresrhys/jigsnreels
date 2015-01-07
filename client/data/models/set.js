@@ -1,6 +1,5 @@
 'use strict';
 var allTunes = require('../collections/tunes');
-var util = require('../../scaffolding/util');
 
 var sumQuality = function(prev, tune) {
 	return prev + tune.get('quality');
@@ -48,11 +47,11 @@ module.exports = require('backbone-es6').Model.extend({
 	},
 	tuneNames: function () {
 		return this.get('tunes').map(function (tuneId) {
-			return util.find(allTunes, tuneId).get('name');
+			return allTunes.find(tuneId).get('name');
 		});
 	},
 	appendTune: function (tuneId) {
-		var tune = util.find(allTunes, tuneId);
+		var tune = allTunes.find(tuneId);
 
 		var tunes = this.get('tunes').length ? this.get('tunes') : [];
 		var keys = this.get('keys').length ? this.get('keys') : [];
@@ -93,7 +92,7 @@ module.exports = require('backbone-es6').Model.extend({
 	getTunes: function () {
 		if (!this.tunes) {
 			this.tunes = this.get('tunes').map(function (tuneId) {
-				return util.find(allTunes, tuneId);
+				return allTunes.find(tuneId);
 			})
 		}
 		return this.tunes;

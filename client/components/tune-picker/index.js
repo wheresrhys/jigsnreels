@@ -19,9 +19,6 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	staticRender: function () {
-		console.log(allPieces.getOrphanedTunes().map(function (tune) {
-					return tune.viewModel().withTunebooks().end();
-				}));
 		this.renderToDom(this.swig.render(this.tpl, {
 			locals: {
 				tunes: allPieces.getOrphanedTunes().map(function (tune) {
