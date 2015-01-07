@@ -2,6 +2,7 @@
 var tunes = require('../collections/tunes');
 var sets = require('../collections/sets');
 var BB = require('backbone-es6');
+var util = require('../../scaffolding/util');
 
 module.exports = BB.Model.extend({
 	idAttribute: '_id',
@@ -55,9 +56,7 @@ module.exports = BB.Model.extend({
 		if (!this.src) {
 			var srcId = this.get('srcId');
 			var collection = (this.get('type') === 'set') ? sets : tunes;
-			this.src = collection.models.filter(function (model) {
-				return model.id === srcId;
-			})[0];
+			this.src = util.find(collection, srcId);
 		}
 
 		return this.src;
