@@ -99,39 +99,45 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 		})
 	},
 	getIdsByTunebook: function (opts) {
-		var optionless = !opts;
-		if (tunebooksHash && optionless) {
+		if (tunebooksHash) {
 			return tunebooksHash;
 		}
 
-		opts = opts || {};
+		tunebooksHash = {};
 
-		var workingHash = {};
 		var setsCollection = require('./sets');
 		var self = this;
 		user.tunebooks.forEach(function (tunebook) {
-			var idsHash = {};
+			var idHashes = {
+				tunes: {},
+				sets: {},
+				setTunes: {}
+			};
 			self.models.filter(function (piece) {
 				return piece.get('tunebook') === 'wheresrhys:' + tunebook;
 			}).forEach(function (piece) {
 
-				if (!opts.excludes || !opts.excludes[piece.get('type')]) {
-					idsHash[piece.get('srcId')] = true;
-				}
-
-				if (piece.get('type') === 'set' && (!opts.excludes || !opts.excludes.setTune)) {
-					util.find(setsCollection, piece.get('srcId')).get('tunes').forEach(function(tune) {
-						idsHash[tune] = true;
+				idHashes[piece.get('type') + 's'][piece.get('srcId')] = true;
+				if (piece.get('type') === 'set') {
+					util.find(setsCollection, piece.get('srcId')).get('tunes').forEach(function(tuneId) {
+						idHashes.setTunes[tuneId] = true;
 					});
 				}
 			})
-			workingHash[tunebook] = Object.keys(idsHash);
+			tunebooksHash[tunebook] = {
+				tunes: Object.keys(idHashes.tunes),
+				sets: Object.keys(idHashes.sets),
+				setTunes: Object.keys(idHashes.setTunes)
+			}
 		});
 
-		if (optionless) {
-			tunebooksHash = workingHash;
-		}
-		return workingHash;
+		return tunebooksHash;
+	},
+
+	isInTunebook: function (tunebook, id) {
+		return tunebooksHash[tunebook].tunes.indexOf(id) > -1 ||
+			tunebooksHash[tunebook].sets.indexOf(id) > -1 ||
+			tunebooksHash[tunebook].setTunes.indexOf(id) > -1;
 	},
 
 	getTunebooksForResource: function (model) {
@@ -139,44 +145,27 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 		return user.tunebooks.map(function (tunebook) {
 			return {
 				name: tunebook,
-				isListed: tunebooksHash[tunebook].indexOf(model.id) > -1
+				isListed: this.isInTunebook(tunebook, model.id)
 			}
-		});
+		}.bind(this));
 	},
 	getOrphanedTunes: function () {
 
 		var tunesCollection = require('./tunes');
-
-		var tunes = this.getIdsByTunebook({
-			excludes: {
-				set: true,
-				setTune: true
-			}
-		});
-		var setTunes = this.getIdsByTunebook({
-			excludes: {
-				tune: true,
-				set: true
-			}
-		});
 		var tuneIds = [];
 
-		Object.keys(tunes).forEach(function (tunebook) {
-			tuneIds = tuneIds.concat(tunes[tunebook].filter(function (id) {
-				return setTunes[tunebook].indexOf(id) === -1;
+		user.tunebooks.forEach(function (tunebook) {
+			tunebook = this.getIdsByTunebook()[tunebook];
+			tuneIds = tuneIds.concat(tunebook.tunes.filter(function (id) {
+				return tunebook.setTunes.indexOf(id) === -1;
 			}));
-		});
+		}.bind(this));
 		return tuneIds.map(function (id) {
 			return util.find(tunesCollection, id);
 		})
 	},
 	getGreedyTunes: function () {
 
-	},
-	isInTunebook: function (model, tunebook, type) {
-		return this.models.some(function (piece) {
-			return piece.get('srcId') === model.id && piece.get('tunebook') === 'wheresrhys:' + tunebook;
-		})
 	},
 	hasSetInTunebook: function (model, sets) {
 		return sets.some(function (set) {
