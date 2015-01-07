@@ -1,6 +1,7 @@
 var TuneView = require('../tune');
 var SearchView = require('../search');
 var tuneTpl = require('./tune.html');
+var allPieces = require('../../data/collections/pieces')
 
 module.exports = require('../../scaffolding/view').extend({
 	tpl: require('./tpl.html'),
@@ -18,7 +19,16 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	staticRender: function () {
-		this.renderToDom(this.swig.render(this.tpl), true);
+		console.log(allPieces.getOrphanedTunes().map(function (tune) {
+					return tune.viewModel().withTunebooks().end();
+				}));
+		this.renderToDom(this.swig.render(this.tpl, {
+			locals: {
+				tunes: allPieces.getOrphanedTunes().map(function (tune) {
+					return tune.viewModel().withTunebooks().end();
+				})
+			}
+		}), true);
 		this.listEl = this.el.querySelector('.tune-picker__results');
 		this.search = new SearchView(this.childOpts('search', {
 			limit: 5
@@ -35,7 +45,11 @@ module.exports = require('../../scaffolding/view').extend({
 		var html = '';
 		var self = this;
 		results.forEach(function (tune) {
-			html += self.swig.render(tuneTpl, tune.viewModel().withTunebooks().end(true))
+			html += self.swig.render(tuneTpl, {
+				locals: {
+					tune: tune.viewModel().withTunebooks().end()
+				}
+			})
 		});
 		this.listEl.innerHTML = html;
 		return this;

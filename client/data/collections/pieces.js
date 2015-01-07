@@ -98,11 +98,15 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 			return piece.get('tunebook') === 'wheresrhys:' + tunebook;
 		})
 	},
-	getIdsByTunebook: function () {
-		if (tunebooksHash) {
+	getIdsByTunebook: function (opts) {
+		var optionless = !opts;
+		if (tunebooksHash && optionless) {
 			return tunebooksHash;
 		}
-		tunebooksHash = {};
+
+		opts = opts || {};
+
+		var workingHash = {};
 		var setsCollection = require('./sets');
 		var self = this;
 		user.tunebooks.forEach(function (tunebook) {
@@ -110,8 +114,12 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 			self.models.filter(function (piece) {
 				return piece.get('tunebook') === 'wheresrhys:' + tunebook;
 			}).forEach(function (piece) {
-				idsHash[piece.get('srcId')] = true;
-				if (piece.get('type') === 'set') {
+
+				if (!opts.excludes || !opts.excludes[piece.get('type')]) {
+					idsHash[piece.get('srcId')] = true;
+				}
+
+				if (piece.get('type') === 'set' && (!opts.excludes || !opts.excludes.setTune)) {
 					setsCollection.models.filter(function (set) {
 						return set.id === piece.get('srcId');
 					})[0].get('tunes').forEach(function(tune) {
@@ -119,19 +127,55 @@ var Pieces = module.exports = require('backbone-es6').Collection.extend({
 					});
 				}
 			})
-			tunebooksHash[tunebook] = Object.keys(idsHash);
+			workingHash[tunebook] = Object.keys(idsHash);
 		});
-		return tunebooksHash;
+
+		if (optionless) {
+			tunebooksHash = workingHash;
+		}
+		return workingHash;
 	},
 
 	getTunebooksForResource: function (model) {
-		var tuneBooksHash = this.getIdsByTunebook();
+		this.getIdsByTunebook();
 		return user.tunebooks.map(function (tunebook) {
 			return {
 				name: tunebook,
 				isListed: tunebooksHash[tunebook].indexOf(model.id) > -1
 			}
 		});
+	},
+	getOrphanedTunes: function () {
+
+		var tunesCollection = require('./tunes');
+
+		var tunes = this.getIdsByTunebook({
+			excludes: {
+				set: true,
+				setTune: true
+			}
+		});
+		var setTunes = this.getIdsByTunebook({
+			excludes: {
+				tune: true,
+				set: true
+			}
+		});
+		var tuneIds = [];
+
+		Object.keys(tunes).forEach(function (tunebook) {
+			tuneIds = tuneIds.concat(tunes[tunebook].filter(function (id) {
+				return setTunes[tunebook].indexOf(id) === -1;
+			}));
+		});
+		return tuneIds.map(function (id) {
+			return tunesCollection.models.filter(function (model) {
+				return model.id === id;
+			})[0];
+		})
+	},
+	getGreedyTunes: function () {
+
 	},
 	isInTunebook: function (model, tunebook, type) {
 		return this.models.some(function (piece) {

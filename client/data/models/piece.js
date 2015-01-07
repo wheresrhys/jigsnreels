@@ -41,7 +41,7 @@ module.exports = BB.Model.extend({
 		} else if (score > 1){
 			this.set('stickiness', this.get('stickiness') > 1 ? 1 : 0);
 		} else {
-			this.set('stickiness', Math.max(0, Math.min(this.get('stickiness') -0.5, 1)));
+			this.set('stickiness', Math.max(0, Math.min(this.get('stickiness') - 0.5, 1)));
 		}
 
 		this.set('lastPracticeQuality', score);
