@@ -1,4 +1,12 @@
 <div class="set-editor">
-	<div class="set-editor__tune-picker"></div>
+	<div class="set-editor__tune-search">
+		<div class="set-editor__tune-search__input"></div>
+		<ol class="set-editor__tune-search__results"></ol>
+	</div>
 	<div class="set-editor__editable-set"></div>
+	<ul class="set-editor__tune-suggestions">
+		{% for tune in tuneSuggestions %}
+			{% include 'tune.html' with tune only %}
+		{% endfor %}
+	</ul>
 </div>

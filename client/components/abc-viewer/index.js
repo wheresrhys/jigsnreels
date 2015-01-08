@@ -3,6 +3,7 @@
 var swig = require('swig/index');
 var allTunes = require('../../data/collections/tunes');
 var ABC = require('abc');
+
 var abcConf = {
 	scale: 0.6,
 	paddingtop: 0,
@@ -21,9 +22,7 @@ module.exports = require('../../scaffolding/view').extend({
 		this.tpl = require('./tpl-full.html');
 		this.parentEl = opts.parentEl;
 		this.parent = opts.parent;
-		this.tune = allTunes.filter(function (tune) {
-			return tune.get('_id') === opts.tuneId;
-		})[0];
+		this.tune = allTunes.find(opts.tuneId);
 		this.opts = opts;
 
 		this.render = this.render.bind(this);

@@ -47,15 +47,11 @@ module.exports = require('backbone-es6').Model.extend({
 	},
 	tuneNames: function () {
 		return this.get('tunes').map(function (tuneId) {
-			return allTunes.filter(function (tune) {
-				return tune.get('_id') === tuneId;
-			})[0].get('name');
+			return allTunes.find(tuneId).get('name');
 		});
 	},
 	appendTune: function (tuneId) {
-		var tune = allTunes.filter(function (tune) {
-			return tune.get('_id') === tuneId;
-		})[0];
+		var tune = allTunes.find(tuneId);
 
 		var tunes = this.get('tunes').length ? this.get('tunes') : [];
 		var keys = this.get('keys').length ? this.get('keys') : [];
@@ -96,9 +92,7 @@ module.exports = require('backbone-es6').Model.extend({
 	getTunes: function () {
 		if (!this.tunes) {
 			this.tunes = this.get('tunes').map(function (tuneId) {
-				return allTunes.models.filter(function (tune) {
-					return tune.get('_id') === tuneId;
-				})[0];
+				return allTunes.find(tuneId);
 			})
 		}
 		return this.tunes;

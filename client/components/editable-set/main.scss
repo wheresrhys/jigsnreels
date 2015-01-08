@@ -1,0 +1,100 @@
+@mixin set () {
+	@include flexContainer((
+		stretch: true,
+		wrap: true
+	));
+
+	> li {
+		@include flexItem(3, 1, 120px);
+		list-style: none;
+		max-width: 300px;
+		box-sizing: border-box;
+		border-left: 1px solid $lines;
+		padding: 0 10px 5px;
+
+		@include icon(chevron_right, 18);
+		background-position: right 50%;
+
+
+		&:nth-child(1) {
+			background-color: rgba(46, 66, 114, 0.1);
+		}
+		&:nth-child(2) {
+			background-color: rgba(46, 66, 114, 0.15);
+		}
+		&:nth-child(3) {
+			background-color: rgba(46, 66, 114, 0.2);
+		}
+		&:nth-child(4) {
+			background-color: rgba(46, 66, 114, 0.25);
+		}
+		&:nth-child(5) {
+			background-color: rgba(46, 66, 114, 0.3);
+		}
+		&:nth-child(6) {
+			background-color: rgba(46, 66, 114, 0.35);
+		}
+		&:nth-child(7) {
+			background-color: rgba(46, 66, 114, 0.4);
+		}
+	}
+}
+
+.editable-set {
+	background: $neutral-bg;
+	border: 1px solid $lines;
+	margin: 5px;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.1);
+}
+
+.editable-set__name {
+	padding: 10px;
+	border-bottom: 1px solid $lines;
+	position: relative;
+	box-sizing: border-box;
+	padding-right: 30px;
+	color: $set-font-color;
+}
+
+
+.editable-set__details {
+}
+
+.editable-set__actions {
+	@include actions('&>button, &>input');
+}
+
+.editable-set__edit {
+	@include primaryAction(mode_edit, $blue);
+}
+
+.editable-set__edit-tunebooks {
+	@include primaryAction(my_library_add, $green);
+}
+
+.editable-set__tunebook-togglers {
+	position: absolute;
+	min-width: 200px;
+	max-height: 200%;
+	background: $neutral-bg;
+	bottom: 100%;
+	list-style: none;
+	overflow-x: scroll;
+	overflow-y: hidden;
+	display:none;
+
+	&.active {
+		display: block;
+	}
+}
+
+
+.editable-set__tunes {
+	@include set();
+}
+
+.editable-set__view-abc {
+	@include inlineIconButton(queue_music);
+}
