@@ -2,7 +2,7 @@
 	<h2 class="set-editor__tune--name">{{ tune.name }}</h2>
 			{% for tunebook in tune.tunebooks %}
 				{% if tunebook.isListed === 'tune' %}
-					<span class="tune__tunebook tune__tunebook--{{tunebook.name}}"><i></i>{{tunebook.isListed}}</span>
+					<span class="tune__tunebook tune__tunebook--{{tunebook.name}}"><i></i></span>
 				{% endif %}
 			{% endfor %}
 			({{tune.rhythms}} in {{tune.keys}})

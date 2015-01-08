@@ -45,7 +45,7 @@ module.exports = require('../../scaffolding/view').extend({
 		this.set.appendTune(tuneId);
 		var pieces = require('../../data/collections/pieces');
 		if (!pieces.isKnown(tuneId)) {
-			this.abcViewer = new AbcViewer(this.childOpts('abc-viewer', {
+			this.abcViewer = new AbcViewer(this.childOpts('abc', {
 				tuneId: tuneId,
 				isDismissable: true
 			}));
@@ -55,7 +55,7 @@ module.exports = require('../../scaffolding/view').extend({
 	viewTune: function (ev) {
 		ev.preventDefault();
 		this.abcViewer && this.abcViewer.destroy();
-		this.abcViewer = new AbcViewer(this.childOpts('abc-viewer', {
+		this.abcViewer = new AbcViewer(this.childOpts('abc', {
 			tuneId: ev.delegateTarget.parentNode.dataset.tuneId,
 			isDismissable: true
 		}));
@@ -84,6 +84,10 @@ module.exports = require('../../scaffolding/view').extend({
 		this.set.save();
 	},
 	afterSave: function () {
+		if (this.isEditing) {
+			require('../../scaffolding/router').navigate('/practice' + destination, { trigger: true });
+			return;
+		}
 		var tunebooks = [];
 		window.user.tunebooks.forEach(function (tunebook) {
 			if (window.confirm('Create practice for ' + tunebook + ' for ' + this.set.tuneNames().join(', '))) {
@@ -99,6 +103,7 @@ module.exports = require('../../scaffolding/view').extend({
 			var destination = tunebooks.length > 1 ? '' : '/' + tunebooks[0];
 			require('../../scaffolding/router').navigate('/practice' + destination, { trigger: true })
 		} else {
+			this.isEditing = false;
 			this.freshSet();
 			require('../../scaffolding/router').navigate('/sets/edit', { trigger: false })
 		}
@@ -138,6 +143,7 @@ module.exports = require('../../scaffolding/view').extend({
 						});
 				}
 			} else {
+				this.isEditing = false;
 				this.set = new SetModel();
 				this.listenToOnce(this.set, 'sync', function () {
 					self.afterSave();

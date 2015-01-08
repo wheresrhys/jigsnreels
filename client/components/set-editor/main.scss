@@ -1,4 +1,4 @@
-.set-editor__tune {
+.set-editor__tune-suggestions .set-editor__tune {
 	background: $neutral-bg;
 	border: 1px solid $lines;
 	margin: 5px;
@@ -12,3 +12,23 @@
 		visibility: hidden;
 	}
 }
+
+.set-editor__tune-search {
+	position: relative;
+}
+
+.set-editor__tune-search__results {
+	z-index: 1;
+	position: absolute;
+	background: white;
+	box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.1);
+	list-style: none;
+
+	.set-editor__tune {
+		margin: 5px;
+	}
+}
+
+@import "../editable-set/main";
+
+
