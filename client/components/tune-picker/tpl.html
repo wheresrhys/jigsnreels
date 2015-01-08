@@ -1,9 +1,0 @@
-<div class="tune-picker">
-	<div class="tune-picker__search"></div>
-	<ol class="tune-picker__results"></ol>
-	<ul class="tune-picker__suggestions">
-		{% for tune in tunes %}
-			{% include 'tune.html' with tune only %}
-		{% endfor %}
-	</ul>
-</div>

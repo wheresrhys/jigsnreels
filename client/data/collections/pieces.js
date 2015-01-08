@@ -148,6 +148,12 @@ var Pieces = module.exports = require('../../scaffolding/collection').extend({
 			}
 		}.bind(this));
 	},
+
+	isKnown: function (tuneId) {
+		return this.getTunebooksForResource({id: tuneId}).some(function (listing) {
+			return listing.isListed;
+		})
+	},
 	getOrphanedTunes: function () {
 
 		var tunesCollection = require('./tunes');

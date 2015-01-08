@@ -1,5 +1,5 @@
-<li class="tune-picker__tune" data-tune-id="{{tune._id}}">
-	<h2 class="tune-picker__tune--name">{{ tune.name }}</h2>
+<li class="set-editor__tune" {% if isSuggestion %}data-suggestion="true"{% endif %} data-tune-id="{{tune._id}}">
+	<h2 class="set-editor__tune--name">{{ tune.name }}</h2>
 			{% for tunebook in tune.tunebooks %}
 				{% if tunebook.isListed === 'tune' %}
 					<span class="tune__tunebook tune__tunebook--{{tunebook.name}}"><i></i>{{tunebook.isListed}}</span>

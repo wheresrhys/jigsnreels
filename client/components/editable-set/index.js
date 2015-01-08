@@ -17,7 +17,6 @@ module.exports = require('../../scaffolding/view').extend({
 
 	initialize: function (opts) {
 		this.isEditing = !!opts.id;
-		this.tunes = require('../../data/collections/tunes')
 		this.parentEl = opts.parentEl;
 		this.parent = opts.parent;
 		this.render = this.render.bind(this);
@@ -44,10 +43,13 @@ module.exports = require('../../scaffolding/view').extend({
 
 	appendTune: function (tuneId) {
 		this.set.appendTune(tuneId);
-		this.abcViewer = new AbcViewer(this.childOpts('abc-viewer', {
-			tuneId: tuneId,
-			isDismissable: true
-		}));
+		var pieces = require('../../data/collections/pieces');
+		if (!pieces.isKnown(tuneId)) {
+			this.abcViewer = new AbcViewer(this.childOpts('abc-viewer', {
+				tuneId: tuneId,
+				isDismissable: true
+			}));
+		}
 	},
 
 	viewTune: function (ev) {
