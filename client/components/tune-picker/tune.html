@@ -1,8 +1,10 @@
-<li class="tune-picker__tune" data-tune-id="{{_id}}" style="border: 1px solid red">
-	<h2>{{ tune.name }}, {{tune.score}}, {{tune.keys}}, {{tune.rhythms}}</h2>
-		{% for tunebook in tune.tunebooks %}
-			{% if tunebook.isListed %}
-				<span>{{tunebook.name}}</span>
-			{% endif %}
-		{% endfor %}
+<li class="tune-picker__tune" data-tune-id="{{tune._id}}">
+	<h2 class="tune-picker__tune--name">{{ tune.name }}</h2>
+			{% for tunebook in tune.tunebooks %}
+				{% if tunebook.isListed === 'tune' %}
+					<span class="tune__tunebook tune__tunebook--{{tunebook.name}}"><i></i>{{tunebook.isListed}}</span>
+				{% endif %}
+			{% endfor %}
+			({{tune.rhythms}} in {{tune.keys}})
+
 </li>

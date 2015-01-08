@@ -22,7 +22,11 @@ module.exports = require('../../scaffolding/view').extend({
 		this.renderToDom(this.swig.render(this.tpl, {
 			locals: {
 				tunes: allPieces.getOrphanedTunes().map(function (tune) {
-					return tune.viewModel().withTunebooks().end();
+					return tune.viewModel().withTunebooks().withPiece().end();
+				}).sort(function (tune1, tune2) {
+					var p1 = tune1.piece.lastPracticeQuality;
+					var p2 = tune1.piece.lastPracticeQuality;
+					return p1 === p2 ? 0 : p1 > p2 ? -1 : 1;
 				})
 			}
 		}), true);

@@ -13,7 +13,7 @@
 			<li><h4 class="set__tune-name"><button class="set__view-abc" data-tune-id="{{ tune._id }}"></button>{{ tune.name | deTheify | safe }}</h4>
 				<p>{{ keys[tuneIndex] }} {{tune.rhythms[0]  }}
 				{% for tuneTunebook in tune.tunebooks %}
-					{% if tuneTunebook.isListed%}
+					{% if tuneTunebook.isListed %}
 						<a href="/practice/{{tuneTunebook.name}}" class="set__tunebook set__tunebook--{{tuneTunebook.name}}"><i></i></a>
 					{% endif %}
 				{% endfor %}

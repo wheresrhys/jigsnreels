@@ -134,9 +134,9 @@ var Pieces = module.exports = require('../../scaffolding/collection').extend({
 	},
 
 	isInTunebook: function (tunebook, id) {
-		return tunebooksHash[tunebook].tunes.indexOf(id) > -1 ||
-			tunebooksHash[tunebook].sets.indexOf(id) > -1 ||
-			tunebooksHash[tunebook].setTunes.indexOf(id) > -1;
+		return 	tunebooksHash[tunebook].tunes.indexOf(id) > -1 ? 'tune' :
+						tunebooksHash[tunebook].sets.indexOf(id) > -1 ? 'set' :
+						tunebooksHash[tunebook].setTunes.indexOf(id) > -1 ? 'setTune' : false
 	},
 
 	getTunebooksForResource: function (model) {
