@@ -51,10 +51,17 @@ module.exports = require('../../scaffolding/view').extend({
 				var setView = new SetView(self.childOpts(self.listEl, {
 					set: model
 				})).render();
+				self.listenTo(setView, 'abc-open', self.enforceUniqueAbc);
 			});
 		});
 
 		return this;
-	}
+
+	},
+
+	enforceUniqueAbc: function (set) {
+		this.abcViewer && this.abcViewer.destroy();
+		this.abcViewer = set.abcViewer;
+	},
 
 });
