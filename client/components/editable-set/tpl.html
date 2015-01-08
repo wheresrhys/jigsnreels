@@ -22,20 +22,14 @@
 			</ol>
 		</div>
 		<div class="editable-set__actions">
-	<!-- 		<ul class="editable-set__tunebook-togglers">
-				{% for tunebook in tunebooks %}
-					<fieldset class="editable-set__tunebook-toggle">
-						<input {% if tunebook.isListed %}checked {% endif %}type="checkbox" value="{{tunebook.name}}">
-						<label>{{tunebook.name}}</label>
-					</fieldset>
-				{% endfor %}
-			</ul>
-			<button class="editable-set__edit-tunebooks"><i></i></button> -->
 			{% if isEditing %}
 			<input type="submit" value="save changes">
 			<input class="editable-set__delete" type="button" value="delete set">
 			{% else %}
-			<input type="submit" value="save new set">
+				<input type="submit" value="new set">
+				{% for tunebook in tunebooks %}
+				<input type="submit" value="{{tunebook}}" data-tunebook="{{tunebook}}">
+				{% endfor %}
 			{% endif %}
 		</div>
 		{% endif %}

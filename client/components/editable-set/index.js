@@ -8,7 +8,7 @@ module.exports = require('../../scaffolding/view').extend({
 	events: {
 		'change .editable-set__tune__key-selector': 'changeKey',
 		'change .editable-set__set-name': 'addName',
-		'submit .editable-set__form': 'save',
+		'click .editable-set__form input[type="submit"]': 'save',
 		'click .editable-set__delete': 'delete',
 		'click .editable-set__tune__delete': 'deleteTune',
 		'click .editable-set__tune__move-up': 'moveTuneUp',
@@ -33,7 +33,8 @@ module.exports = require('../../scaffolding/view').extend({
 			locals: {
 				set: this.set.viewModel()
 							.end(),
-				isEditing: this.isEditing
+				isEditing: this.isEditing,
+				tunebooks: window.user.tunebooks
 			}
 		}), true);
 
@@ -81,27 +82,20 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 	save: function (ev) {
 		ev.preventDefault();
-		this.set.save();
+		this.set.save().then(function (set) {
+			this.afterSave(ev.delegateTarget.dataset.tunebook);
+		}.bind(this));
 	},
-	afterSave: function () {
+	afterSave: function (tunebook) {
 		if (this.isEditing) {
 			require('../../scaffolding/router').navigate('/practice' + destination, { trigger: true });
 			return;
 		}
-		var tunebooks = [];
-		window.user.tunebooks.forEach(function (tunebook) {
-			if (window.confirm('Create practice for ' + tunebook + ' for ' + this.set.tuneNames().join(', '))) {
-				tunebooks.push(tunebook);
-			}
-		}.bind(this));
 
-		if (tunebooks.length) {
+		if (tunebook) {
 			var pieces = require('../../data/collections/pieces');
-			tunebooks.forEach(function (tunebook) {
-				pieces.addPiece(this.set, 'set', tunebook)
-			}.bind(this));
-			var destination = tunebooks.length > 1 ? '' : '/' + tunebooks[0];
-			require('../../scaffolding/router').navigate('/practice' + destination, { trigger: true })
+			pieces.addPiece(this.set, 'set', tunebook)
+			require('../../scaffolding/router').navigate('/practice/' + tunebook, { trigger: true })
 		} else {
 			this.isEditing = false;
 			this.freshSet();
@@ -134,9 +128,6 @@ module.exports = require('../../scaffolding/view').extend({
 					this.set.set({_id: id}).fetch()
 						.then(function () {
 							self.render();
-							self.listenToOnce(self.set, 'sync', function () {
-								self.afterSave();
-							});
 							self.listenTo(self.set, 'change', self.render);
 						}, function (err) {
 							require('../../scaffolding/router').navigate('/sets', { trigger: true })
@@ -145,9 +136,6 @@ module.exports = require('../../scaffolding/view').extend({
 			} else {
 				this.isEditing = false;
 				this.set = new SetModel();
-				this.listenToOnce(this.set, 'sync', function () {
-					self.afterSave();
-				});
 				this.listenTo(this.set, 'change', this.render);
 			}
 			this.render();
