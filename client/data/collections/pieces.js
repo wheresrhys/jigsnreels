@@ -48,22 +48,31 @@ var Pieces = module.exports = require('../../scaffolding/collection').extend({
 			}
 		}) || this.models.push(piece);
 	},
-	togglePiece: function (id, type, tunebook, add) {
+	togglePiece: function (src, type, tunebook, add) {
 
 		if (add) {
-			return this.addPiece(id, type, tunebook, add);
+			return this.addPiece(src, type, tunebook, add);
 		}
 
 		this.models.forEach(function (piece) {
-			if (piece.get('srcId') === id && piece.get('tunebook') === 'wheresrhys:' + tunebook) {
+			if (piece.get('srcId') === src.id && piece.get('tunebook') === 'wheresrhys:' + tunebook) {
 				piece.destroy();
 			}
 		});
 		return Promise.resolve();
 	},
-	addPiece: function (id, type, tunebook) {
+	addPiece: function (src, type, tunebook) {
+		if (type === 'set') {
+			var setTuneIds = src.get('tunes');
+			this.models.forEach(function (piece) {
+				if (setTuneIds.indexOf(piece.get('srcId')) > -1 && piece.get('tunebook') === 'wheresrhys:' + tunebook) {
+					piece.destroy();
+				}
+			});
+		}
+
 		return this.add({
-			srcId: id,
+			srcId: src.id,
 			type: type,
 			tunebook: 'wheresrhys:' + tunebook
 		}).save();

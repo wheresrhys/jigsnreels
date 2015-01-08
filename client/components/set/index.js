@@ -37,7 +37,7 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 	toggleTunebook: function (ev) {
 		require('../../data/collections/pieces')
-			.togglePiece(this.set.id, 'set', ev.delegateTarget.value, ev.delegateTarget.checked)
+			.togglePiece(this.set, 'set', ev.delegateTarget.value, ev.delegateTarget.checked)
 			.then(this.render);
 	},
 	viewAbc: function (ev) {

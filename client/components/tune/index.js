@@ -34,7 +34,7 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 	toggleTunebook: function (ev) {
 		require('../../data/collections/pieces')
-			.togglePiece(this.tune.id, 'tune', ev.delegateTarget.value, ev.delegateTarget.checked)
+			.togglePiece(this.tune, 'tune', ev.delegateTarget.value, ev.delegateTarget.checked)
 			.then(this.render);
 	},
 	destroy: function () {

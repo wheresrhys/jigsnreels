@@ -83,11 +83,32 @@ module.exports = require('../../scaffolding/view').extend({
 		ev.preventDefault();
 		this.set.save();
 	},
+	afterSave: function () {
+		var tunebooks = [];
+		window.user.tunebooks.forEach(function (tunebook) {
+			if (window.confirm('Create practice for ' + tunebook + ' for ' + this.set.tuneNames().join(', '))) {
+				tunebooks.push(tunebook);
+			}
+		}.bind(this));
+
+		if (tunebooks.length) {
+			var pieces = require('../../data/collections/pieces');
+			tunebooks.forEach(function (tunebook) {
+				pieces.addPiece(this.set, 'set', tunebook)
+			}.bind(this));
+			var destination = tunebooks.length > 1 ? '' : '/' + tunebooks[0];
+			require('../../scaffolding/router').navigate('/practice' + destination, { trigger: true })
+		} else {
+			this.freshSet();
+			require('../../scaffolding/router').navigate('/sets/edit', { trigger: false })
+		}
+	},
 	delete: function (ev) {
 		if (window.confirm('Are you sure you want to delete the set ' + this.set.get('name').toUpperCase() + ': ' + this.set.tuneNames().join(', '))) {
 			this.set.delete();
 		}
 	},
+
 
 	freshSet: function (id) {
 		var self = this;
@@ -109,7 +130,7 @@ module.exports = require('../../scaffolding/view').extend({
 						.then(function () {
 							self.render();
 							self.listenToOnce(self.set, 'sync', function () {
-								require('../../scaffolding/router').navigate('/practice', { trigger: true });
+								self.afterSave();
 							});
 							self.listenTo(self.set, 'change', self.render);
 						}, function (err) {
@@ -118,7 +139,9 @@ module.exports = require('../../scaffolding/view').extend({
 				}
 			} else {
 				this.set = new SetModel();
-				this.listenToOnce(this.set, 'sync', this.freshSet);
+				this.listenToOnce(this.set, 'sync', function () {
+					self.afterSave();
+				});
 				this.listenTo(this.set, 'change', this.render);
 			}
 			this.render();
