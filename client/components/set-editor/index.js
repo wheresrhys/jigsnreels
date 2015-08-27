@@ -58,9 +58,9 @@ module.exports = require('../../scaffolding/view').extend({
 			return;
 		}
 		var html = '';
-		var self = this;
+		var it = this;
 		results.forEach(function (tune) {
-			html += self.swig.render(tuneTpl, {
+			html += it.swig.render(tuneTpl, {
 				locals: {
 					tune: tune.viewModel().withTunebooks().end()
 				}

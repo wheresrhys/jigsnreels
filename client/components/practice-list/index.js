@@ -44,7 +44,7 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	render: function (results) {
-		var self = this;
+		var it = this;
 		// don't rerender when we're applying no filter to an already unfiltered list
 		if (!results && !this.filtered && this.listEl.innerHTML) {
 			return;
@@ -54,7 +54,7 @@ module.exports = require('../../scaffolding/view').extend({
 		var pieces = results || this.pieces.getTunebook(this.tunebook).slice(0, this.length)
 		pieces.forEach(function (piece) {
 			setTimeout(function () {
-				self.appendModel(piece);
+				it.appendModel(piece);
 			});
 		});
 

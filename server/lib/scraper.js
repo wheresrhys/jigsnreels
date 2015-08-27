@@ -47,7 +47,7 @@ TuneGetter.prototype = {
 	getNewTunes: function () {
 		this.count = 0;
 		var pageCount;
-		var self = this;
+		var it = this;
 
 		debug('fetching first page');
 
@@ -55,14 +55,14 @@ TuneGetter.prototype = {
 			var page = res.body;
 			var promises = [];
 
-			promises.push(self.processTuneList(res));
+			promises.push(it.processTuneList(res));
 
 			if (page.indexOf('Page 1 of ') > -1) {
 				pageCount = /Page 1 of (\d+)/.exec(page)[1];
 
 				while (pageCount > 1) {
 					debug('fetching ' +  pageCount + ' page');
-					promises.push(self.request('https://thesession.org/members/61738/tunebook?page=' + pageCount).then(self.processTuneList));
+					promises.push(it.request('https://thesession.org/members/61738/tunebook?page=' + pageCount).then(it.processTuneList));
 					pageCount--;
 				}
 			}
@@ -96,7 +96,7 @@ TuneGetter.prototype = {
 	},
 
 	storeTune: function (tune) {
-		var self = this;
+		var it = this;
 
 		return Tune.createNewFromSession(tune)
 			.then(function(newTune) {
@@ -104,7 +104,7 @@ TuneGetter.prototype = {
 					debug('full details already exist for tune %s, %s', newTune.sessionId, newTune.name);
 					return newTune;
 				} else {
-					return self.retrieveTuneInfo(newTune);
+					return it.retrieveTuneInfo(newTune);
 				}
 			});
 
@@ -112,11 +112,11 @@ TuneGetter.prototype = {
 
 	retrieveTuneInfo: function (tune) {
 		debug('retrieving full details for tune %s, %s', tune.sessionId, tune.name);
-		var self = this;
+		var it = this;
 
 		return this.request('https://thesession.org/tunes/' + tune.sessionId + '/abc')
 			.then(function (res) {
-				self.storeAbc(tune, res.body);
+				it.storeAbc(tune, res.body);
 			})
 			.catch(function (err) {
 				debug(tune, err);

@@ -110,7 +110,7 @@ module.exports = require('../../scaffolding/view').extend({
 
 
 	freshSet: function (id) {
-		var self = this;
+		var it = this;
 		// typeof id === 'string' ensures it's the first call of this function when editing
 		if (!this.isEditing || typeof id === 'string') {
 			this.set && this.stopListening(this.set, 'change');
@@ -127,8 +127,8 @@ module.exports = require('../../scaffolding/view').extend({
 					this.set = new SetModel()
 					this.set.set({_id: id}).fetch()
 						.then(function () {
-							self.render();
-							self.listenTo(self.set, 'change', self.render);
+							it.render();
+							it.listenTo(it.set, 'change', it.render);
 						}, function (err) {
 							require('../../scaffolding/router').navigate('/sets', { trigger: true })
 						});

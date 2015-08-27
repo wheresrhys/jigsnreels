@@ -22,8 +22,8 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	render: function () {
-		var self = this;
-		this.renderToDom(self.swig.render(self.tpl, this.piece.viewModel().withSrc().end(true)));
+		var it = this;
+		this.renderToDom(it.swig.render(it.tpl, this.piece.viewModel().withSrc().end(true)));
 		return this;
 	},
 	practice: function (ev) {

@@ -19,9 +19,9 @@ module.exports = require('backbone-es6').Model.extend({
 	},
 
 	initialize: function () {
-		var self = this;
+		var it = this;
 		this.listenTo(this, 'change', function () {
-			delete self.tunes;
+			delete it.tunes;
 		})
 	},
 	tunebooks: function () {

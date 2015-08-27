@@ -39,12 +39,12 @@ module.exports = require('../../scaffolding/view').extend({
 			}
 		}))
 		var abc = this.opts.snippetOnly ? this.getSnippet() : this.tune.get('abc');
-		var self = this;
+		var it = this;
 		setTimeout(function () {
-			ABC.renderAbc(self.el.querySelector('.abc-viewer__score'), abc, {}, abcConf, {});
+			ABC.renderAbc(it.el.querySelector('.abc-viewer__score'), abc, {}, abcConf, {});
 		});
-		// if (self.snippetOnly) {
-		//	 snippetsStore.cacheScore(self.arrangement, self.el[0].innerHTML);
+		// if (it.snippetOnly) {
+		//	 snippetsStore.cacheScore(it.arrangement, it.el[0].innerHTML);
 		// }
 		// return this;
 	},
@@ -55,7 +55,7 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	// renderScore: function () {
-	//	 var self = this;
+	//	 var it = this;
 	//	 this.abc = 'X:1' +
 	//	 //'\nT:' + scoreGenerator.name +
 	//	 '\nM:' + this.scoreGenerator.meter +
@@ -65,27 +65,27 @@ module.exports = require('../../scaffolding/view').extend({
 	//	 '\n' + this.abc;
 
 	//	 setTimeout(function () {
-	//		 ABCJS.renderAbc(self.el[0], self.abc, {}, self.conf, {});
+	//		 ABCJS.renderAbc(it.el[0], it.abc, {}, it.conf, {});
 
 
 	//	 }, 100);
 	// }
 
 	getSnippet: function () {
-		// var self = this;
+		// var it = this;
 
 		// this.el.addClass('score-snippet');
 
 		// snippetsStore.getCachedScore(this.arrangement, function (obj) {
-		//	 self.el.html(obj.score);
-		//	 self.el[0].style.width = self.el.find('svg')[0].getAttribute('width') + 'px';
+		//	 it.el.html(obj.score);
+		//	 it.el[0].style.width = it.el.find('svg')[0].getAttribute('width') + 'px';
 		// }, function () {
-		//	 self.abc = self.abc.replace(/^\|*:?/, '');
-		//	 self.abc = self.abc.split('|');
-		//	 self.abc = self.abc.slice(0, (self.abc[0].length < 4 ? 4 : 3)).join('|');
-		//	 self.conf.scale = 0.5;
-		//	 self.conf.staffwidth = 450;
-		//	 self.renderScore();
+		//	 it.abc = it.abc.replace(/^\|*:?/, '');
+		//	 it.abc = it.abc.split('|');
+		//	 it.abc = it.abc.slice(0, (it.abc[0].length < 4 ? 4 : 3)).join('|');
+		//	 it.conf.scale = 0.5;
+		//	 it.conf.staffwidth = 450;
+		//	 it.renderScore();
 		// });
 	}
 
@@ -131,20 +131,20 @@ module.exports = require('../../scaffolding/view').extend({
 //	 },
 
 //	 getSnippet: function () {
-//		 var self = this;
+//		 var it = this;
 
 //		 this.el.addClass('score-snippet');
 
 //		 snippetsStore.getCachedScore(this.arrangement, function (obj) {
-//			 self.el.html(obj.score);
-//			 self.el[0].style.width = self.el.find('svg')[0].getAttribute('width') + 'px';
+//			 it.el.html(obj.score);
+//			 it.el[0].style.width = it.el.find('svg')[0].getAttribute('width') + 'px';
 //		 }, function () {
-//			 self.abc = self.abc.replace(/^\|*:?/, '');
-//			 self.abc = self.abc.split('|');
-//			 self.abc = self.abc.slice(0, (self.abc[0].length < 4 ? 4 : 3)).join('|');
-//			 self.conf.scale = 0.5;
-//			 self.conf.staffwidth = 450;
-//			 self.renderScore();
+//			 it.abc = it.abc.replace(/^\|*:?/, '');
+//			 it.abc = it.abc.split('|');
+//			 it.abc = it.abc.slice(0, (it.abc[0].length < 4 ? 4 : 3)).join('|');
+//			 it.conf.scale = 0.5;
+//			 it.conf.staffwidth = 450;
+//			 it.renderScore();
 //		 });
 //	 },
 

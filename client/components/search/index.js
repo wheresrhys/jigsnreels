@@ -127,7 +127,7 @@ var Search = require('../../scaffolding/view').extend({
 		}
 
 		var hash = {};
-		var self = this;
+		var it = this;
 		if (this.criteria.term.length > 2) {
 			items.forEach(this.scoreItem)
 

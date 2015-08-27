@@ -80,7 +80,7 @@
 	-webkit-flex: $grow $shrink $default;
 	-ms-flex: $grow $shrink $default;
 	flex: $grow $shrink $default;
-	-webkit-align-self: auto;
+	-webkit-align-it: auto;
 	-ms-flex-item-align: auto;
-	align-self: auto;
+	align-it: auto;
 }

@@ -28,7 +28,7 @@ module.exports = require('../../scaffolding/view').extend({
 	},
 
 	render: function (results) {
-		var self = this;
+		var it = this;
 		// don't rerender when we're applying no filter to an already unfiltered list
 		if (!results && !this.filtered && this.listEl.innerHTML) {
 			return;
@@ -42,10 +42,10 @@ module.exports = require('../../scaffolding/view').extend({
 		}).slice(0, this.limit);
 		tunes.forEach(function (model) {
 			// setTimeout(function () {
-			var tuneView = new TuneView(self.childOpts(self.listEl, {
+			var tuneView = new TuneView(it.childOpts(it.listEl, {
 				tune: model
 			})).render();
-			self.listenTo(tuneView, 'abc-open', self.enforceUniqueAbc);
+			it.listenTo(tuneView, 'abc-open', it.enforceUniqueAbc);
 			// });
 		});
 

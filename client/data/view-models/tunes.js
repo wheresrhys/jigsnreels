@@ -17,7 +17,7 @@ var TunesViewModel = module.exports = function (collection) {
 TunesViewModel.prototype = {
 
 	childDo: function (methods) {
-		var self = this;
+		var it = this;
 		if (!(methods instanceof Array)) {
 			methods = [methods];
 		}

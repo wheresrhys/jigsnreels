@@ -19,9 +19,9 @@ var tuneSchema = mongoose.Schema({
 
 
 tuneSchema.statics.createNewFromSession = function (tune) {
-	var self = this;
+	var it = this;
 	return this.findOne({sessionId: tune.sessionId }).exec().then(function (foundTune) {
-		return foundTune ? Promise.resolve(foundTune) : self.create(tune);
+		return foundTune ? Promise.resolve(foundTune) : it.create(tune);
 	});
 };
 

@@ -16,7 +16,7 @@ var Pieces = module.exports = require('../../scaffolding/collection').extend({
 	model: require('../models/piece'),
 
 	initialize: function (opts) {
-		var self = this;
+		var it = this;
 		var sets = require('./sets');
 		this.isInTunebook = this.isInTunebook.bind(this);
 		this.listenTo(sets, 'newPiece', function () {
@@ -26,7 +26,7 @@ var Pieces = module.exports = require('../../scaffolding/collection').extend({
 		});
 		this.listenTo(sets, 'destroy', this.removeForSrc.bind(this));
 		this.on('practiced', function (piece) {
-			self.reInsert(piece);
+			it.reInsert(piece);
 		});
 		this.on('add', function () {
 			//TODO edit the tunebookshash rather than clearing it
@@ -39,11 +39,11 @@ var Pieces = module.exports = require('../../scaffolding/collection').extend({
 	},
 	reInsert: function (piece) {
 		var score = this.comparator(piece);
-		var self = this;
-		self.models.splice(self.models.indexOf(piece), 1);
+		var it = this;
+		it.models.splice(it.models.indexOf(piece), 1);
 		this.models.some(function (compare, index) {
 			if (compare.score > score) {
-				self.models.splice(index, 1, piece);
+				it.models.splice(index, 1, piece);
 				return true;
 			}
 		}) || this.models.push(piece);
@@ -114,14 +114,14 @@ var Pieces = module.exports = require('../../scaffolding/collection').extend({
 		tunebooksHash = {};
 
 		var setsCollection = require('./sets');
-		var self = this;
+		var it = this;
 		user.tunebooks.forEach(function (tunebook) {
 			var idHashes = {
 				tunes: {},
 				sets: {},
 				setTunes: {}
 			};
-			self.models.filter(function (piece) {
+			it.models.filter(function (piece) {
 				return piece.get('tunebook') === 'wheresrhys:' + tunebook;
 			}).forEach(function (piece) {
 
