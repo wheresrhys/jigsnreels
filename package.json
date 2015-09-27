@@ -17,7 +17,7 @@
     "es6-promise": "^2.0.0",
     "express": "^4.0",
     "haikro": "^1.7.0",
-    "mongoose": "^3.8.19",
+    "mongoose": "^4.0.0",
     "request-then": "^1.0.0",
     "swig": "^1.4.2"
   },
