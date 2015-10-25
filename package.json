@@ -43,10 +43,8 @@
     "nock": "^2.15.0",
     "node-sass": "^3.4.0",
     "promised-mongo": "^1.2.0",
-    "request-then": "^1.1.0",
     "sinon": "^1.17.2",
     "supertest": "^1.1.0",
-    "swig": "^1.4.2",
     "swigify": "0.0.3"
   }
 }
