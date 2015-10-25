@@ -132,7 +132,7 @@ describe(format('api - %ss', modelName), function () {
 	});
 
 	it('should update record', function (done) {
-		Model.create([{}])
+		Model.create({})
 			.then(function (piece) {
 				setTimeout(function () {
 					request(app)
@@ -152,16 +152,16 @@ describe(format('api - %ss', modelName), function () {
 	});
 	it('should delete record', function (done) {
 		Model.create([{}, {}])
-			.then(function (piece1, piece2) {
+			.then(function (pieces) {
 				request(app)
-					.delete(format('/api/%ss/%s', modelName, piece1._id))
+					.delete(format('/api/%ss/%s', modelName, pieces[0]._id))
 					.expect(200)
 					.end(function (err, res) {
 						expect(res.body).toEqual({});
 						Model.find().exec()
 							.then(function (results) {
 								expect(results.length).toEqual(1);
-								expect(results[0]._id.toString()).toEqual(piece2._id.toString());
+								expect(results[0]._id.toString()).toEqual(pieces[1]._id.toString());
 								done();
 							});
 					});

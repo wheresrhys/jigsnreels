@@ -34,12 +34,12 @@ describe(format('api - %ss', modelName), function () {
 
 	it('should get a record', function (done) {
 		Model.create([{}, {}])
-			.then(function (tune1) {
+			.then(function (tunes) {
 				request(app)
-					.get(format('/api/%ss/%s', modelName, tune1._id))
+					.get(format('/api/%ss/%s', modelName, tunes[0]._id))
 					.expect(200)
 					.end(function (err, res) {
-						expect(res.body._id).toEqual(tune1._id.toString());
+						expect(res.body._id).toEqual(tunes[0]._id.toString());
 						done();
 					});
 			});
@@ -82,7 +82,7 @@ describe(format('api - %ss', modelName), function () {
 	});
 
 	it('should update record', function (done) {
-		Model.create([{}])
+		Model.create({})
 			.then(function (tune) {
 				setTimeout(function () {
 					request(app)
@@ -99,18 +99,18 @@ describe(format('api - %ss', modelName), function () {
 			});
 	});
 
-	xit('should delete record', function (done) {
+	it.skip('should delete record', function (done) {
 		Model.create([{}, {}])
-			.then(function (tune1, tune2) {
+			.then(function (tunes) {
 				request(app)
-					.delete(format('/api/%ss/%s', modelName, tune1._id))
+					.delete(format('/api/%ss/%s', modelName, tunes[0]._id))
 					.expect(200)
 					.end(function (err, res) {
 						expect(res.body).toEqual({});
 						Model.find().exec()
 							.then(function (results) {
 								expect(results.length).toEqual(1);
-								expect(results[0]._id.toString()).toEqual(tune2._id.toString());
+								expect(results[0]._id.toString()).toEqual(tunes[1]._id.toString());
 								done();
 							});
 					});
